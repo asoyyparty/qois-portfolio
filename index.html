@@ -19,11 +19,13 @@
 
   <!-- Navbar -->
   <nav class="navbar container">
-    <div
-      style="font-weight: 600; font-size: 16px; letter-spacing: -0.5px; background: linear-gradient(90deg, #fff, #a0a5b1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-      Qois Abdul Qudus
-    </div>
-    <div class="nav-links">
+    <a href="#" class="nav-brand">Qois Abdul Qudus</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
       <a href="#about">About</a>
       <a href="#projects">Projects</a>
       <a href="#experience">Experience</a>
@@ -33,6 +35,7 @@
       <a href="https://github.com/doelkussoy" target="_blank">GitHub</a>
     </div>
   </nav>
+  <div class="nav-backdrop" id="navBackdrop"></div>
 
   <!-- Hero Section -->
   <header id="about" class="hero container">
@@ -44,18 +47,18 @@
       </p>
 
       <!-- Key Quick Stats -->
-      <div style="display: flex; gap: 24px; margin-top: 28px; margin-bottom: 36px; flex-wrap: wrap;">
-        <div>
-          <div style="font-size: 26px; font-weight: 700; color: var(--color-ink); letter-spacing: -0.5px;">3+ Tahun</div>
-          <div style="font-size: 13px; color: var(--color-ink-subtle); margin-top: 2px;">Pengalaman IT</div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">3+ Tahun</div>
+          <div class="stat-label">Pengalaman IT</div>
         </div>
-        <div style="border-left: 1px solid var(--glass-border); padding-left: 24px;">
-          <div style="font-size: 26px; font-weight: 700; color: var(--color-ink); letter-spacing: -0.5px;">11+ Proyek</div>
-          <div style="font-size: 13px; color: var(--color-ink-subtle); margin-top: 2px;">Enterprise & Web</div>
+        <div class="stat-item">
+          <div class="stat-num">11+ Proyek</div>
+          <div class="stat-label">Enterprise & Web</div>
         </div>
-        <div style="border-left: 1px solid var(--glass-border); padding-left: 24px;">
-          <div style="font-size: 26px; font-weight: 700; color: var(--color-primary-hover); letter-spacing: -0.5px;">AWS Certified</div>
-          <div style="font-size: 13px; color: var(--color-ink-subtle); margin-top: 2px;">Cloud Practitioner</div>
+        <div class="stat-item">
+          <div class="stat-num highlight">AWS Certified</div>
+          <div class="stat-label">Cloud Practitioner</div>
         </div>
       </div>
       <div class="hero-actions">
@@ -688,8 +691,9 @@
     </p>
   </footer>
 
-  <!-- Filter Script -->
+  <!-- Filter & Mobile Nav Script -->
   <script>
+    // Filter Projects Script
     const filterButtons = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
 
@@ -707,6 +711,38 @@
           }
         });
       });
+    });
+
+    // Mobile Navigation Drawer Script
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    const navBackdrop = document.getElementById('navBackdrop');
+    const navLinkItems = navLinks.querySelectorAll('a');
+
+    function toggleMenu() {
+      navToggle.classList.toggle('active');
+      navLinks.classList.toggle('active');
+      navBackdrop.classList.toggle('active');
+      document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+    }
+
+    function closeMenu() {
+      navToggle.classList.remove('active');
+      navLinks.classList.remove('active');
+      navBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (navToggle) {
+      navToggle.addEventListener('click', toggleMenu);
+    }
+
+    if (navBackdrop) {
+      navBackdrop.addEventListener('click', closeMenu);
+    }
+
+    navLinkItems.forEach(link => {
+      link.addEventListener('click', closeMenu);
     });
   </script>
 </body>
