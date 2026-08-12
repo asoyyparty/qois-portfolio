@@ -1,0 +1,1782 @@
+/**
+ * Portfolio Admin Panel System
+ * Enables dynamic modification of all sections, local storage persistence,
+ * theme customizer, JSON backup/restore, and interactive forms.
+ */
+
+(function () {
+  'use strict';
+
+  const STORAGE_KEY = 'qois_portfolio_data';
+  const AUTH_KEY = 'qois_portfolio_admin_auth';
+
+  // Default initial portfolio data matching original index.html content
+  const DEFAULT_DATA = {
+    settings: {
+      password: 'admin123',
+      primaryColor: '#5e6ad2',
+      primaryHoverColor: '#828fff',
+      pageTitle: 'Doel Kussoy - IT Officer & Systems Developer',
+      metaDescription: 'Portofolio Profesional Doel Kussoy - IT Infrastructure Officer, Fullstack Web & Android Developer.'
+    },
+    hero: {
+      name: 'Doel Kussoy',
+      headline: 'IT Infrastructure Officer & Systems Developer',
+      bio: 'Spesialis infrastruktur IT dan pengembang sistem digital berstandar industri. Berpengalaman menangani operasional jaringan CCTV & keamanan pabrik 24/7, serta merancang arsitektur aplikasi web enterprise, full-stack web development, dan solusi Android interaktif yang skalabel.',
+      profileImage: 'profile.png',
+      stats: [
+        { num: '3+ Tahun', label: 'Pengalaman IT', highlight: false },
+        { num: '11+ Proyek', label: 'Enterprise & Web', highlight: false },
+        { num: 'AWS Certified', label: 'Cloud Practitioner', highlight: true }
+      ],
+      buttons: [
+        { label: 'Contact Me', url: 'mailto:qoisabdulquduss@gmail.com', type: 'primary', target: '_self' },
+        { label: 'LinkedIn', url: 'https://www.linkedin.com/in/qoisabdulqudus', type: 'secondary', target: '_blank' },
+        { label: 'GitHub', url: 'https://github.com/doelkussoy', type: 'secondary', target: '_blank' }
+      ]
+    },
+    filterCategories: [
+      { id: 'all', label: 'All Projects' },
+      { id: 'enterprise', label: 'Enterprise Systems (CBA)' },
+      { id: 'web', label: 'Web Applications' },
+      { id: 'mobile', label: 'Mobile & Game Dev' }
+    ],
+    projects: [
+      {
+        id: 'p1',
+        title: 'Factory Network Control System',
+        company: 'PT Centa Brasindo Abadi Chemical Industry',
+        badge: 'Aug 2026 – Present',
+        category: 'enterprise',
+        image: 'networkfactory.png',
+        description: 'Aplikasi monitoring & kontrol perangkat jaringan pabrik berbasis web (LAN). Memantau topologi dan kondisi perangkat jaringan secara real-time, grafik SLA, serta sistem alert otomatis.',
+        techStack: ['Network Infrastructure', 'LAN Control', 'Real-time Monitoring'],
+        linkUrl: 'https://networkfactory.cbapabrik.com/',
+        linkText: 'Visit App ↗'
+      },
+      {
+        id: 'p2',
+        title: 'IT Asset Management (ITAM) Enterprise',
+        company: 'PT Centa Brasindo Abadi Chemical Industry',
+        badge: 'Jun 2026 – Present',
+        category: 'enterprise',
+        image: 'itam.png',
+        description: 'Sistem Manajemen Aset IT & Helpdesk komprehensif berbasis Laravel 12. Membantu pelacakan aset IT, alokasi IP address, manajemen lisensi software, serta operasional layanan ticketing helpdesk.',
+        techStack: ['Laravel 12', 'ITAM Enterprise', 'Helpdesk Ticketing'],
+        linkUrl: 'https://itam.cbapabrik.com/',
+        linkText: 'Visit App ↗'
+      },
+      {
+        id: 'p3',
+        title: 'P3K Digital Monitoring System',
+        company: 'PT Centa Brasindo Abadi Chemical Industry',
+        badge: 'May 2026 – Present',
+        category: 'enterprise',
+        image: 'kotakp3k.png',
+        description: 'Solusi manajemen inventaris cerdas yang mentransformasi pemantauan kotak P3K konvensional di seluruh area pabrik menjadi platform digital yang efisien, transparan, dan akurat.',
+        techStack: ['Safety & EHS', 'Inventory Tracking', 'Digital Monitoring'],
+        linkUrl: 'https://kotakp3k.cbapabrik.com/',
+        linkText: 'Visit App ↗'
+      },
+      {
+        id: 'p4',
+        title: 'Sistem Sarana Prasarana',
+        company: 'PT Centa Brasindo Abadi Chemical Industry',
+        badge: 'Apr 2026 – Present',
+        category: 'enterprise',
+        image: 'saranaprasarana.png',
+        description: 'Aplikasi web internal perusahaan untuk memantau dan mencatat pemeliharaan fasilitas serta infrastruktur pabrik. Memudahkan tim maintenance mencatat inspeksi, kondisi aset, dan mencetak kartu riwayat pemeliharaan secara digital.',
+        techStack: ['Facility Maintenance', 'Asset Management', 'Enterprise Web App'],
+        linkUrl: 'https://saranaprasarana.cbapabrik.com/',
+        linkText: 'Visit App ↗'
+      },
+      {
+        id: 'p5',
+        title: 'Patroli Keamanan Pabrik',
+        company: 'PT Centa Brasindo Abadi Chemical Industry',
+        badge: 'Sep 2025 – Present',
+        category: 'enterprise',
+        image: 'patroli.png',
+        description: 'Sistem pencatatan log patroli keamanan terpusat. Petugas mencatat jadwal shift, rute patroli, timestamp, dan laporan kejadian yang dilengkapi bukti foto serta tanda tangan digital.',
+        techStack: ['Security Operations', 'Digital Signatures', 'Audit Trail'],
+        linkUrl: 'https://patrolikeamanan.cbapabrik.com/',
+        linkText: 'Visit App ↗'
+      },
+      {
+        id: 'p6',
+        title: 'Tracking Bongkar Muat',
+        company: 'PT Centa Brasindo Abadi Chemical Industry',
+        badge: 'Aug 2025 – Present',
+        category: 'enterprise',
+        image: 'tracking.png',
+        description: 'Aplikasi pelacakan logistik real-time untuk mengonsolidasi dan mengoptimalkan alur kerja kendaraan di pabrik. Memantau durasi setiap tahapan dari gate check-in hingga pemuatan barang secara transparan.',
+        techStack: ['Logistics Tracking', 'Workflow Optimization', 'Real-time Monitoring'],
+        linkUrl: 'https://tracking.cbapabrik.com/',
+        linkText: 'Visit App ↗'
+      },
+      {
+        id: 'p7',
+        title: 'E-Raport System (Kinerja Karyawan)',
+        company: 'PT Centa Brasindo Abadi Chemical Industry',
+        badge: 'Dec 2024 – Present',
+        category: 'enterprise',
+        image: 'eraport.png',
+        description: 'Sistem pelacakan kinerja karyawan HR yang mengelola kehadiran, pengajuan cuti, keterlambatan, riwayat training, serta evaluasi berkala dengan fitur ekspor laporan resmi.',
+        techStack: ['HR Tech', 'Performance Assessment', 'Enterprise Reporting'],
+        linkUrl: 'https://eraport.cbapabrik.com/',
+        linkText: 'Visit App ↗'
+      },
+      {
+        id: 'p8',
+        title: 'Esthetic Cafe - Food Ordering Platform',
+        company: 'Independent Project',
+        badge: 'May 2025 – Aug 2025',
+        category: 'web',
+        image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop',
+        description: 'Platform pemesanan makanan berbasis web dengan fitur live order tracking dan admin panel manajemen menu, memungkinkan pelanggan memesan secara mandiri tanpa pelayanan manual.',
+        techStack: ['Node.js', 'Laravel', 'Order Tracking'],
+        linkUrl: 'https://estheticcafe.my.id',
+        linkText: 'Visit Website ↗'
+      },
+      {
+        id: 'p9',
+        title: 'SerenityHub - Website Pengaduan Kota Serang',
+        company: 'Universitas Bina Bangsa & Serang City Gov',
+        badge: 'May 2024 – Sep 2024',
+        category: 'web',
+        image: 'serenityhub.png',
+        description: 'Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Serang. Warga dapat mengirim laporan, melacak status penanganan, dan berkomunikasi dengan dinas terkait.',
+        techStack: ['JavaScript', 'MongoDB', 'Civic Tech'],
+        linkUrl: 'https://serenityhub.cbapabrik.com/',
+        linkText: 'Visit Platform ↗'
+      },
+      {
+        id: 'p10',
+        title: 'BBQ Al-Kahfi Serang - Company Profile',
+        company: 'Yayasan Al-Kahfi Serang',
+        badge: 'Jan 2024 – Mar 2024',
+        category: 'web',
+        image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop',
+        description: 'Website company profile yang modern, responsif, dan mobile-first, dirancang untuk meningkatkan kredibilitas brand dan menyajikan navigasi yang intuitif.',
+        techStack: ['PHP', 'MySQL', 'UI/UX Design'],
+        linkUrl: 'https://bbqalkahfiserang.com/',
+        linkText: 'Visit Website ↗'
+      },
+      {
+        id: 'p11',
+        title: 'Petualangan Barudak - Ethnomathematics Edu-Game',
+        company: 'Universitas Bina Bangsa & Research Publication',
+        badge: 'May 2024 – Aug 2024',
+        category: 'mobile',
+        image: 'barudak.jpg',
+        description: 'Game edukasi Android interaktif yang mengajarkan konsep geometri melalui kebudayaan lokal Banten. Dipublikasikan secara resmi dalam Histogram: Jurnal Pendidikan Matematika (2024).',
+        techStack: ['Unity 3D', 'Android C#', 'Research Paper'],
+        linkUrl: 'https://garuda.kemdiktisaintek.go.id/documents/detail/4509823',
+        linkText: 'View Publication ↗'
+      }
+    ],
+    experience: [
+      {
+        id: 'exp1',
+        meta: 'Nov 2024 – Present (1 thn 10 bln) • Cikande',
+        title: 'Information Technology Officer',
+        company: 'PT Centa Brasindo Abadi Chemical Industry',
+        description: 'Menangani IT secara end-to-end. Mengelola jaringan CCTV & infrastruktur pengawasan pabrik 24/7 agar selalu online dan sesuai standar. Merancang serta memelihara aplikasi web internal operasional pabrik (pemeliharaan fasilitas, security patrol logging, monitoring logistik, dan asesmen kinerja karyawan), serta mengelola dukungan teknis hardware, software, dan jaringan.'
+      },
+      {
+        id: 'exp2',
+        meta: 'Aug 2023 – Jan 2024 (6 bln) • Bandung',
+        title: 'Back End & Front End Web Developer (Internship)',
+        company: 'Dicoding Indonesia',
+        description: 'Program magang 6 bulan sebagai Fullstack Developer. Membangun fitur frontend yang responsif dan layanan backend (API & database), serta aktif mengikuti siklus kerja Agile dan code review profesional bersama tim engineering.'
+      },
+      {
+        id: 'exp3',
+        meta: 'Aug 2022 – Present (4 thn) • Cilegon',
+        title: 'Brand Ambassador',
+        company: 'Uwais Hijab',
+        description: 'Pekerjaan freelance modeling untuk brand modest fashion, berfokus pada photoshoot dan konten kampanye. Melatih kemampuan kolaborasi dengan tim kreatif serta kerja adaptif sesuai tenggat waktu.'
+      },
+      {
+        id: 'exp4',
+        meta: 'Jan 2022 – Jan 2023 (1 thn) • Serang',
+        title: 'Direct Sales Area',
+        company: 'PT Smartfren Telecom Tbk',
+        description: 'Peran sales lapangan dalam memasarkan produk Smartfren secara langsung kepada pelanggan. Memberikan fondasi yang kuat dalam komunikasi dan pencapaian target sebelum sepenuhnya fokus di bidang IT.'
+      },
+      {
+        id: 'exp5',
+        meta: 'Oct 2020 – Present (5 thn 11 bln) • Kota Serang',
+        title: 'Information Technology & Private Teacher',
+        company: 'Yayasan Al-Kahfi',
+        description: 'Pekerjaan freelance jangka panjang. Membangun dan memelihara beberapa aplikasi web untuk operasional yayasan, sekaligus memberikan bimbingan belajar secara privat untuk siswa.'
+      }
+    ],
+    education: [
+      {
+        id: 'edu1',
+        meta: 'Oct 2020 – Oct 2024 (4 thn)',
+        title: 'Sarjana Komputer (S.Kom)',
+        company: 'Universitas Bina Bangsa',
+        description: 'Bachelor\'s degree in Computer Science. Mempelajari rekayasa perangkat lunak, arsitektur komputasi, dan penyelesaian masalah berbasis teknologi.'
+      }
+    ],
+    certifications: [
+      {
+        id: 'cert1',
+        meta: 'Amazon Web Services (AWS) • Dicoding',
+        title: 'Cloud Practitioner Essentials (Belajar Dasar AWS Cloud)',
+        description: 'Arsitektur komputasi awan AWS, keamanan cloud, layanan komputasi, dan manajemen infrastruktur cloud modern.',
+        linkUrl: 'https://www.linkedin.com/in/qoisabdulqudus/details/certifications/',
+        linkText: 'Show Credential ↗'
+      },
+      {
+        id: 'cert2',
+        meta: 'Kemendikbudristek • Dicoding Indonesia',
+        title: 'SIB Dicoding X Kampus Merdeka Angkatan 5',
+        description: 'Studi Independen Bersertifikat intensif 6 bulan berfokus pada Fullstack Web Development & Microservices.',
+        linkUrl: 'https://www.linkedin.com/in/qoisabdulqudus/details/certifications/',
+        linkText: 'Show Credential ↗'
+      },
+      {
+        id: 'cert3',
+        meta: 'Dicoding Indonesia • ID: 6RPNG7NO8Z2M',
+        title: 'Belajar Dasar AI (Artificial Intelligence)',
+        description: 'Konsep dasar kecerdasan buatan, Machine Learning, pemrosesan data AI, dan penerapannya dalam solusi modern.',
+        linkUrl: 'https://www.dicoding.com/certificates/6RPNG7NO8Z2M',
+        linkText: 'Verify Credential ↗'
+      },
+      {
+        id: 'cert4',
+        meta: 'Dicoding Indonesia • ID: 2VX35034JPYQ',
+        title: 'Belajar Penerapan Data Science dengan Microsoft Fabric',
+        description: 'Penerapan analisis data science, pipeline data analytics, dan visualisasi tingkat lanjut menggunakan ekosistem Microsoft Fabric.',
+        linkUrl: 'https://www.dicoding.com/certificates/2VX35034JPYQ',
+        linkText: 'Verify Credential ↗'
+      },
+      {
+        id: 'cert5',
+        meta: 'Dicoding Indonesia • ID: MEPJ2O0QWP3V',
+        title: 'Introduction to Financial Literacy',
+        description: 'Prinsip literasi keuangan, pengelolaan anggaran proyek, dan perencanaan strategi finansial jangka panjang (DBS Foundation).',
+        linkUrl: 'https://www.dicoding.com/certificates/MEPJ2O0QWP3V',
+        linkText: 'Verify Credential ↗'
+      },
+      {
+        id: 'cert6',
+        meta: 'Dicoding Indonesia',
+        title: 'Memulai Dasar Pemrograman untuk Menjadi Pengembang Software',
+        description: 'Fondasi rekayasa perangkat lunak, logika algoritma, alur kerja pengembangan software, dan best practices sintaks.',
+        linkUrl: 'https://www.linkedin.com/in/qoisabdulqudus/details/certifications/',
+        linkText: 'Show Credential ↗'
+      },
+      {
+        id: 'cert7',
+        meta: 'Dicoding Indonesia',
+        title: 'Belajar Dasar Visualisasi Data',
+        description: 'Teknik analisis data, perancangan grafik intuitif, serta penyajian informasi dan wawasan data yang efektif.',
+        linkUrl: 'https://www.linkedin.com/in/qoisabdulqudus/details/certifications/',
+        linkText: 'Show Credential ↗'
+      },
+      {
+        id: 'cert8',
+        meta: 'Dicoding Indonesia',
+        title: 'Memulai Pemrograman dengan Python',
+        description: 'Penguasaan dasar bahasa pemrograman Python, struktur data, pemrosesan variabel, dan skrip otomatisasi.',
+        linkUrl: 'https://www.linkedin.com/in/qoisabdulqudus/details/certifications/',
+        linkText: 'Show Credential ↗'
+      },
+      {
+        id: 'cert9',
+        meta: 'Dicoding Indonesia',
+        title: 'Belajar Dasar Git dengan GitHub',
+        description: 'Manajemen versi kode terdistribusi, branching strategy, pull requests, dan kolaborasi tim engineering berbasis GitHub.',
+        linkUrl: 'https://www.linkedin.com/in/qoisabdulqudus/details/certifications/',
+        linkText: 'Show Credential ↗'
+      },
+      {
+        id: 'cert10',
+        meta: 'Dicoding Indonesia',
+        title: 'Belajar Membuat Aplikasi Web dengan React',
+        description: 'Pengembangan komponen frontend interaktif, React Hooks, manajemen state, dan konsumsi RESTful APIs.',
+        linkUrl: 'https://www.linkedin.com/in/qoisabdulqudus/details/certifications/',
+        linkText: 'Show Credential ↗'
+      }
+    ],
+    socials: [
+      { id: 's1', platform: 'LinkedIn', handle: 'qoisabdulqudus', url: 'https://www.linkedin.com/in/qoisabdulqudus', iconType: 'linkedin' },
+      { id: 's2', platform: 'GitHub', handle: 'doelkussoy', url: 'https://github.com/doelkussoy', iconType: 'github' },
+      { id: 's3', platform: 'Website', handle: 'qoisabdulqudus.netlify.app', url: 'https://qoisabdulqudus.netlify.app', iconType: 'website' },
+      { id: 's4', platform: 'WhatsApp / Call', handle: '+62 851-9530-0828', url: 'https://wa.me/6285195300828', iconType: 'whatsapp' },
+      { id: 's5', platform: 'Email', handle: 'qoisabdulquduss@gmail.com', url: 'mailto:qoisabdulquduss@gmail.com', iconType: 'email' },
+      { id: 's6', platform: 'Telegram', handle: '@doelkussoy', url: 'https://t.me/doelkussoy', iconType: 'telegram' },
+      { id: 's7', platform: 'Instagram', handle: '@doelkussoy', url: 'https://instagram.com/doelkussoy', iconType: 'instagram' },
+      { id: 's8', platform: 'X (Twitter)', handle: '@doelkussoy', url: 'https://x.com/doelkussoy', iconType: 'twitter' }
+    ],
+    footer: {
+      text: '© 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten, Indonesia.'
+    }
+  };
+
+  // State
+  let currentData = null;
+
+  // Retrieve site data from localStorage or default
+  function getSiteData() {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return { ...DEFAULT_DATA, ...parsed };
+      }
+    } catch (e) {
+      console.error('Failed to parse stored portfolio data:', e);
+    }
+    return JSON.parse(JSON.stringify(DEFAULT_DATA));
+  }
+
+  // Save site data to localStorage and trigger re-render
+  function saveSiteData(data) {
+    currentData = data;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    renderAll();
+    showToast('Semua perubahan berhasil disimpan!', 'success');
+  }
+
+  // Toast Helper
+  function showToast(message, type = 'success') {
+    let container = document.getElementById('admin-toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'admin-toast-container';
+      container.className = 'admin-toast-container';
+      document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `admin-toast ${type}`;
+    toast.innerHTML = `<span>${type === 'success' ? '✓' : '⚠️'}</span> <span>${message}</span>`;
+    container.appendChild(toast);
+
+    requestAnimationFrame(() => toast.classList.add('show'));
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  // SVG Icon Map for Social Cards
+  const SOCIAL_ICONS = {
+    linkedin: '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>',
+    github: '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>',
+    website: '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2zm6.93 6h-2.95a15.65 15.65 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.93 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.81 2h2.95c.32 1.3.79 2.5 1.38 3.56A8.03 8.03 0 0 1 5.07 16zm2.95-8H5.07a8.03 8.03 0 0 1 3.53-3.56A15.65 15.65 0 0 0 7.22 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM4.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.84 5.56c.59-1.06 1.06-2.26 1.38-3.56h2.95a8.03 8.03 0 0 1-3.53 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>',
+    whatsapp: '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.84 9.84 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.2 8.2 0 0 1-5.82 2.41c-1.47 0-2.91-.39-4.17-1.14l-.3-.18-3.1 1.02.83-3.02-.2-.31a8.21 8.21 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.64c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.66.81-.81.98-.15.17-.3.19-.55.07a6.94 6.94 0 0 1-2.05-1.26 7.64 7.64 0 0 1-1.42-1.77c-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.41-.56-.42h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08s.89 2.42 1.01 2.58c.13.17 1.76 2.68 4.26 3.76.6.26 1.06.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/></svg>',
+    email: '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
+    telegram: '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.69-.52.36-1 .54-1.43.53-.47-.01-1.37-.26-2.04-.48-.82-.27-1.47-.42-1.42-.88.03-.24.36-.49.99-.75 3.88-1.69 6.47-2.8 7.78-3.34 3.7-1.54 4.47-1.81 4.97-1.82.11 0 .35.03.5.14.13.1.17.24.19.34.02.14.02.29-.01.44z"/></svg>',
+    instagram: '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>',
+    twitter: '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>'
+  };
+
+  // DOM RENDERERS
+
+  function renderTheme() {
+    if (!currentData || !currentData.settings) return;
+    const { primaryColor, primaryHoverColor, pageTitle, metaDescription } = currentData.settings;
+
+    if (primaryColor) {
+      document.documentElement.style.setProperty('--color-primary', primaryColor);
+    }
+    if (primaryHoverColor) {
+      document.documentElement.style.setProperty('--color-primary-hover', primaryHoverColor);
+    }
+    if (pageTitle) {
+      document.title = pageTitle;
+    }
+    if (metaDescription) {
+      const metaEl = document.querySelector('meta[name="description"]');
+      if (metaEl) metaEl.setAttribute('content', metaDescription);
+    }
+  }
+
+  function renderHero() {
+    const heroWrapper = document.getElementById('about');
+    if (!heroWrapper || !currentData.hero) return;
+
+    const { name, headline, bio, profileImage, stats, buttons } = currentData.hero;
+
+    // Brand Name in Navbar
+    const navBrand = document.querySelector('.nav-brand');
+    if (navBrand) navBrand.textContent = name || 'Doel Kussoy';
+
+    let statsHtml = '';
+    if (stats && Array.isArray(stats)) {
+      statsHtml = stats.map(s => `
+        <div class="stat-item">
+          <div class="stat-num ${s.highlight ? 'highlight' : ''}">${escapeHtml(s.num)}</div>
+          <div class="stat-label">${escapeHtml(s.label)}</div>
+        </div>
+      `).join('');
+    }
+
+    let buttonsHtml = '';
+    if (buttons && Array.isArray(buttons)) {
+      buttonsHtml = buttons.map(b => `
+        <a href="${escapeHtml(b.url)}" target="${b.target || '_self'}" class="btn btn-${b.type || 'secondary'}">${escapeHtml(b.label)}</a>
+      `).join('');
+    }
+
+    heroWrapper.innerHTML = `
+      <div class="hero-content">
+        <h1 class="display-xl">${escapeHtml(name)}</h1>
+        <h2 class="headline" style="margin-top: 16px;">${escapeHtml(headline)}</h2>
+        <p class="body-lg" style="line-height: 1.8; margin-top: 20px;">
+          ${escapeHtml(bio)}
+        </p>
+
+        <div class="hero-stats">
+          ${statsHtml}
+        </div>
+        <div class="hero-actions">
+          ${buttonsHtml}
+        </div>
+      </div>
+      <div class="hero-image-wrapper">
+        <div class="profile-glow"></div>
+        <img src="${escapeHtml(profileImage)}" alt="${escapeHtml(name)}" class="profile-img" decoding="async" fetchpriority="high">
+      </div>
+    `;
+  }
+
+  function renderProjects() {
+    const projectsSection = document.getElementById('projects');
+    if (!projectsSection || !currentData.projects) return;
+
+    const categories = currentData.filterCategories || [];
+    const projects = currentData.projects;
+
+    let filterBtnsHtml = categories.map((cat, idx) => `
+      <button class="filter-btn ${idx === 0 ? 'active' : ''}" data-filter="${cat.id}">
+        ${escapeHtml(cat.label)} ${cat.id === 'all' ? `(${projects.length})` : ''}
+      </button>
+    `).join('');
+
+    let projectCardsHtml = projects.map(p => {
+      const pills = (p.techStack || []).map(pill => `<span class="tech-pill">${escapeHtml(pill)}</span>`).join('');
+      return `
+        <div class="card project-card" data-category="${escapeHtml(p.category || 'web')}">
+          <div class="project-img-wrapper">
+            <span class="project-badge">${escapeHtml(p.badge || '')}</span>
+            <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)}" class="project-img" loading="lazy" decoding="async">
+          </div>
+          <div class="project-content">
+            <h3 class="card-title">${escapeHtml(p.title)}</h3>
+            <div class="associated-tag">${escapeHtml(p.company || '')}</div>
+            <p style="color: var(--color-ink-muted); font-size: 14px; margin-bottom: 16px;">
+              ${escapeHtml(p.description || '')}
+            </p>
+            <div class="tech-stack">
+              ${pills}
+            </div>
+            ${p.linkUrl ? `
+              <a href="${escapeHtml(p.linkUrl)}" target="_blank" class="project-link-btn">
+                ${escapeHtml(p.linkText || 'Visit App ↗')}
+              </a>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    projectsSection.innerHTML = `
+      <h2 class="display-lg" style="margin-bottom: 16px;">Featured Projects</h2>
+      <p style="color: var(--color-ink-muted); margin-bottom: 32px;">Kumpulan proyek aplikasi sistem industri, web platforms, dan mobile game development yang telah saya bangun.</p>
+
+      <div class="filter-container">
+        ${filterBtnsHtml}
+      </div>
+
+      <div class="grid-2">
+        ${projectCardsHtml}
+      </div>
+    `;
+
+    // Re-bind filter events
+    bindProjectFilters();
+  }
+
+  function bindProjectFilters() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('active')) return;
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+
+        projectCards.forEach(card => {
+          const isMatch = filter === 'all' || card.dataset.category === filter;
+          if (isMatch) {
+            card.style.display = 'flex';
+            requestAnimationFrame(() => card.classList.remove('is-hidden'));
+          } else {
+            card.classList.add('is-hidden');
+            setTimeout(() => {
+              if (card.classList.contains('is-hidden')) {
+                card.style.display = 'none';
+              }
+            }, 300);
+          }
+        });
+      });
+    });
+  }
+
+  function renderExperience() {
+    const expSection = document.getElementById('experience');
+    if (!expSection || !currentData.experience) return;
+
+    let itemsHtml = currentData.experience.map(item => `
+      <div class="card">
+        <div class="card-meta">${escapeHtml(item.meta || '')}</div>
+        <h3 class="card-title">${escapeHtml(item.title || '')}</h3>
+        <div style="color: var(--color-ink); margin-bottom: 16px; font-weight: 500;">${escapeHtml(item.company || '')}</div>
+        <p style="color: var(--color-ink-muted); font-size: 14px; line-height: 1.7;">
+          ${escapeHtml(item.description || '')}
+        </p>
+      </div>
+    `).join('');
+
+    expSection.innerHTML = `
+      <h2 class="display-lg" style="margin-bottom: 48px;">Work Experience</h2>
+      <div class="grid-2">
+        ${itemsHtml}
+      </div>
+    `;
+  }
+
+  function renderEducation() {
+    const eduSection = document.getElementById('education');
+    if (!eduSection || !currentData.education) return;
+
+    let itemsHtml = currentData.education.map(item => `
+      <div class="card">
+        <div class="card-meta">${escapeHtml(item.meta || '')}</div>
+        <h3 class="card-title">${escapeHtml(item.title || '')}</h3>
+        <div style="color: var(--color-ink); margin-bottom: 16px; font-weight: 500;">${escapeHtml(item.company || '')}</div>
+        <p style="color: var(--color-ink-muted); font-size: 14px; line-height: 1.7;">
+          ${escapeHtml(item.description || '')}
+        </p>
+      </div>
+    `).join('');
+
+    eduSection.innerHTML = `
+      <h2 class="display-lg" style="margin-bottom: 48px;">Education</h2>
+      <div class="grid-2">
+        ${itemsHtml}
+      </div>
+    `;
+  }
+
+  function renderCertifications() {
+    const certSection = document.getElementById('certifications');
+    if (!certSection || !currentData.certifications) return;
+
+    const certs = currentData.certifications;
+    let itemsHtml = certs.map(cert => `
+      <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div class="card-meta">${escapeHtml(cert.meta || '')}</div>
+          <h3 class="card-title" style="font-size: 18px; margin-top: 4px;">${escapeHtml(cert.title || '')}</h3>
+          <p style="color: var(--color-ink-muted); font-size: 14px; margin-top: 8px;">
+            ${escapeHtml(cert.description || '')}
+          </p>
+        </div>
+        ${cert.linkUrl ? `
+          <a href="${escapeHtml(cert.linkUrl)}" target="_blank" class="project-link-btn" style="margin-top: 20px; align-self: flex-start;">
+            ${escapeHtml(cert.linkText || 'Show Credential ↗')}
+          </a>
+        ` : ''}
+      </div>
+    `).join('');
+
+    certSection.innerHTML = `
+      <h2 class="display-lg" style="margin-bottom: 16px;">Certifications & Licenses (${certs.length})</h2>
+      <p style="color: var(--color-ink-muted); margin-bottom: 32px;">Sertifikasi resmi dan kredensial profesional yang telah divalidasi oleh institusi global & nasional.</p>
+      <div class="grid-2">
+        ${itemsHtml}
+      </div>
+    `;
+  }
+
+  function renderSocials() {
+    const contactSection = document.getElementById('contact');
+    if (!contactSection || !currentData.socials) return;
+
+    let itemsHtml = currentData.socials.map(s => {
+      const iconSvg = SOCIAL_ICONS[s.iconType] || SOCIAL_ICONS.website;
+      return `
+        <a href="${escapeHtml(s.url)}" target="_blank" class="social-card">
+          <div class="social-icon">
+            ${iconSvg}
+          </div>
+          <div class="social-info">
+            <h4>${escapeHtml(s.platform)}</h4>
+            <p>${escapeHtml(s.handle)}</p>
+          </div>
+        </a>
+      `;
+    }).join('');
+
+    contactSection.innerHTML = `
+      <h2 class="display-lg" style="margin-bottom: 16px;">Connect & Socials</h2>
+      <p style="color: var(--color-ink-muted); margin-bottom: 32px;">Mari terhubung melalui jejaring profesional dan media sosial saya.</p>
+      <div class="social-grid">
+        ${itemsHtml}
+      </div>
+    `;
+  }
+
+  function renderFooter() {
+    const footerEl = document.querySelector('footer');
+    if (!footerEl || !currentData.footer) return;
+
+    footerEl.innerHTML = `
+      <p style="color: var(--color-ink-subtle); font-size: 14px;">
+        ${escapeHtml(currentData.footer.text || '')}
+      </p>
+    `;
+  }
+
+  function renderAll() {
+    renderTheme();
+    renderHero();
+    renderProjects();
+    renderExperience();
+    renderEducation();
+    renderCertifications();
+    renderSocials();
+    renderFooter();
+  }
+
+  // ADMIN PANEL UI SYSTEM
+
+  let activeTab = 'hero';
+
+  function initAdminUI() {
+    // Inject Floating Admin Button
+    const fab = document.createElement('button');
+    fab.className = 'admin-fab';
+    fab.id = 'admin-fab-btn';
+    fab.title = 'Buka Panel Admin';
+    fab.innerHTML = `
+      <svg class="admin-fab-icon" viewBox="0 0 24 24">
+        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+      </svg>
+      <span>Admin Panel</span>
+    `;
+    document.body.appendChild(fab);
+
+    // Inject Backdrop Container for Modal/Login
+    const backdrop = document.createElement('div');
+    backdrop.className = 'admin-modal-backdrop';
+    backdrop.id = 'admin-modal-backdrop';
+    document.body.appendChild(backdrop);
+
+    fab.addEventListener('click', () => {
+      openAdminModal();
+    });
+  }
+
+  function isAuthorized() {
+    return sessionStorage.getItem(AUTH_KEY) === 'true';
+  }
+
+  function openAdminModal() {
+    const backdrop = document.getElementById('admin-modal-backdrop');
+    if (!backdrop) return;
+
+    backdrop.innerHTML = '';
+    backdrop.classList.add('active');
+
+    if (!isAuthorized()) {
+      renderLoginCard(backdrop);
+    } else {
+      renderAdminPanel(backdrop);
+    }
+  }
+
+  function closeAdminModal() {
+    const backdrop = document.getElementById('admin-modal-backdrop');
+    if (backdrop) {
+      backdrop.classList.remove('active');
+    }
+  }
+
+  function renderLoginCard(container) {
+    container.innerHTML = `
+      <div class="admin-login-card">
+        <h3 class="admin-login-title">🔐 Panel Admin Security</h3>
+        <p class="admin-login-subtitle">Masukkan Kata Sandi / PIN Admin untuk melanjutkan</p>
+        <div class="admin-form-group">
+          <input type="password" id="admin-pass-input" class="admin-input" placeholder="Masukkan Kata Sandi (default: admin123)" autofocus>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="button" class="admin-btn admin-btn-secondary" style="flex:1;" id="admin-login-cancel">Batal</button>
+          <button type="button" class="admin-btn admin-btn-primary" style="flex:1;" id="admin-login-submit">Masuk</button>
+        </div>
+      </div>
+    `;
+
+    const passInput = document.getElementById('admin-pass-input');
+    const submitBtn = document.getElementById('admin-login-submit');
+    const cancelBtn = document.getElementById('admin-login-cancel');
+
+    function handleLogin() {
+      const pwd = passInput.value;
+      const expected = currentData.settings?.password || 'admin123';
+      if (pwd === expected) {
+        sessionStorage.setItem(AUTH_KEY, 'true');
+        showToast('Login berhasil!', 'success');
+        renderAdminPanel(container);
+      } else {
+        showToast('Kata sandi salah!', 'danger');
+        passInput.value = '';
+        passInput.focus();
+      }
+    }
+
+    submitBtn.addEventListener('click', handleLogin);
+    passInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') handleLogin();
+    });
+    cancelBtn.addEventListener('click', closeAdminModal);
+  }
+
+  function renderAdminPanel(container) {
+    container.innerHTML = `
+      <div class="admin-panel-container">
+        <!-- Header -->
+        <div class="admin-header">
+          <div class="admin-header-title">
+            <span>⚙️ Panel Pengelola Tampilan</span>
+            <span class="admin-header-badge">Live Editor</span>
+          </div>
+          <div class="admin-header-actions">
+            <button class="admin-btn admin-btn-secondary" id="admin-logout-btn" title="Keluar Mode Admin">Logout</button>
+            <button class="admin-close-btn" id="admin-close-btn" title="Tutup Modal">&times;</button>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="admin-body">
+          <!-- Sidebar Navigation -->
+          <div class="admin-sidebar">
+            <button class="admin-tab-btn ${activeTab === 'hero' ? 'active' : ''}" data-tab="hero">👤 Hero & Profil</button>
+            <button class="admin-tab-btn ${activeTab === 'projects' ? 'active' : ''}" data-tab="projects">🚀 Projects (${currentData.projects.length})</button>
+            <button class="admin-tab-btn ${activeTab === 'experience' ? 'active' : ''}" data-tab="experience">💼 Pengalaman</button>
+            <button class="admin-tab-btn ${activeTab === 'education' ? 'active' : ''}" data-tab="education">🎓 Pendidikan</button>
+            <button class="admin-tab-btn ${activeTab === 'certifications' ? 'active' : ''}" data-tab="certifications">📜 Sertifikasi</button>
+            <button class="admin-tab-btn ${activeTab === 'socials' ? 'active' : ''}" data-tab="socials">🌐 Kontak & Sosmed</button>
+            <button class="admin-tab-btn ${activeTab === 'theme' ? 'active' : ''}" data-tab="theme">🎨 Tema & Tampilan</button>
+            <button class="admin-tab-btn ${activeTab === 'backup' ? 'active' : ''}" data-tab="backup">⚙️ Backup & Pengaturan</button>
+          </div>
+
+          <!-- Main Content Area -->
+          <div class="admin-content" id="admin-content-area">
+            <!-- Dynamic Content Form -->
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('admin-close-btn').addEventListener('click', closeAdminModal);
+    document.getElementById('admin-logout-btn').addEventListener('click', () => {
+      sessionStorage.removeItem(AUTH_KEY);
+      showToast('Sudah keluar dari mode admin', 'success');
+      closeAdminModal();
+    });
+
+    const tabBtns = container.querySelectorAll('.admin-tab-btn');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeTab = btn.dataset.tab;
+        renderActiveTabContent();
+      });
+    });
+
+    renderActiveTabContent();
+  }
+
+  function renderActiveTabContent() {
+    const area = document.getElementById('admin-content-area');
+    if (!area) return;
+
+    if (activeTab === 'hero') renderTabHero(area);
+    else if (activeTab === 'projects') renderTabProjects(area);
+    else if (activeTab === 'experience') renderTabExperience(area);
+    else if (activeTab === 'education') renderTabEducation(area);
+    else if (activeTab === 'certifications') renderTabCertifications(area);
+    else if (activeTab === 'socials') renderTabSocials(area);
+    else if (activeTab === 'theme') renderTabTheme(area);
+    else if (activeTab === 'backup') renderTabBackup(area);
+  }
+
+  // TAB EDITORS
+
+  // 1. HERO TAB
+  function renderTabHero(container) {
+    const hero = currentData.hero || {};
+    const stats = hero.stats || [];
+
+    let statsInputsHtml = stats.map((st, i) => `
+      <div class="admin-row" style="margin-bottom:12px; align-items:center;">
+        <div>
+          <label class="admin-label">Angka Stat #${i + 1}</label>
+          <input type="text" class="admin-input" id="hero-stat-num-${i}" value="${escapeHtml(st.num || '')}">
+        </div>
+        <div>
+          <label class="admin-label">Label Stat #${i + 1}</label>
+          <input type="text" class="admin-input" id="hero-stat-label-${i}" value="${escapeHtml(st.label || '')}">
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-top:20px;">
+          <input type="checkbox" id="hero-stat-high-${i}" ${st.highlight ? 'checked' : ''}>
+          <label for="hero-stat-high-${i}" style="color:#d0d5e0; font-size:13px;">Highlight Accent</label>
+        </div>
+      </div>
+    `).join('');
+
+    container.innerHTML = `
+      <h3 class="admin-section-title">👤 Kelola Hero & Profil Utama</h3>
+      <p class="admin-section-desc">Ubah nama lengkap, headline profesi, deskripsi bio, stat angka cepat, dan foto profil Anda.</p>
+
+      <form id="hero-form">
+        <div class="admin-row">
+          <div class="admin-form-group">
+            <label class="admin-label">Nama Lengkap</label>
+            <input type="text" id="hero-name" class="admin-input" value="${escapeHtml(hero.name || '')}">
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-label">Headline Profesioanal</label>
+            <input type="text" id="hero-headline" class="admin-input" value="${escapeHtml(hero.headline || '')}">
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-label">Bio Singkat / Ringkasan Diri</label>
+          <textarea id="hero-bio" class="admin-textarea">${escapeHtml(hero.bio || '')}</textarea>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-label">Foto Profil (URL atau Upload File Gambar)</label>
+          <input type="text" id="hero-profile-img-url" class="admin-input" value="${escapeHtml(hero.profileImage || '')}" placeholder="Contoh: profile.png atau https://...">
+          <div class="admin-img-preview-box">
+            <img src="${escapeHtml(hero.profileImage || 'profile.png')}" id="hero-profile-img-preview" class="admin-img-preview" alt="Preview">
+            <div class="admin-file-input-wrapper">
+              <button type="button" class="admin-btn admin-btn-secondary">📁 Upload Gambar Baru</button>
+              <input type="file" id="hero-img-file-input" accept="image/*">
+            </div>
+          </div>
+        </div>
+
+        <h4 style="color:#fff; font-size:16px; margin: 24px 0 12px 0;">📊 Quick Stats</h4>
+        ${statsInputsHtml}
+
+        <div style="margin-top: 32px;">
+          <button type="submit" class="admin-btn admin-btn-primary">💾 Simpan Perubahan Hero</button>
+        </div>
+      </form>
+    `;
+
+    // Handle File Upload Preview
+    const fileInput = document.getElementById('hero-img-file-input');
+    const urlInput = document.getElementById('hero-profile-img-url');
+    const imgPreview = document.getElementById('hero-profile-img-preview');
+
+    fileInput.addEventListener('change', function () {
+      if (this.files && this.files[0]) {
+        processImageFile(this.files[0], (base64Url) => {
+          urlInput.value = base64Url;
+          imgPreview.src = base64Url;
+        });
+      }
+    });
+
+    urlInput.addEventListener('input', function () {
+      imgPreview.src = this.value;
+    });
+
+    // Form Submit
+    document.getElementById('hero-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      currentData.hero.name = document.getElementById('hero-name').value;
+      currentData.hero.headline = document.getElementById('hero-headline').value;
+      currentData.hero.bio = document.getElementById('hero-bio').value;
+      currentData.hero.profileImage = document.getElementById('hero-profile-img-url').value;
+
+      stats.forEach((st, i) => {
+        st.num = document.getElementById(`hero-stat-num-${i}`).value;
+        st.label = document.getElementById(`hero-stat-label-${i}`).value;
+        st.highlight = document.getElementById(`hero-stat-high-${i}`).checked;
+      });
+
+      saveSiteData(currentData);
+    });
+  }
+
+  // 2. PROJECTS TAB
+  function renderTabProjects(container) {
+    const projects = currentData.projects || [];
+    const categories = currentData.filterCategories || [];
+
+    let projectCardsHtml = projects.map((p, index) => {
+      const categoryOptions = categories.filter(c => c.id !== 'all').map(c => `
+        <option value="${c.id}" ${p.category === c.id ? 'selected' : ''}>${escapeHtml(c.label)}</option>
+      `).join('');
+
+      return `
+        <div class="admin-card-item" data-index="${index}">
+          <div class="admin-card-header">
+            <div class="admin-card-item-title">
+              <span>🚀 #${index + 1} - ${escapeHtml(p.title || 'Proyek Tanpa Judul')}</span>
+            </div>
+            <div class="admin-card-actions">
+              ${index > 0 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-project-up-btn" data-index="${index}" title="Naikkan">⬆️</button>` : ''}
+              ${index < projects.length - 1 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-project-down-btn" data-index="${index}" title="Turunkan">⬇️</button>` : ''}
+              <button type="button" class="admin-btn admin-btn-danger admin-btn-icon delete-project-btn" data-index="${index}" title="Hapus Proyek">🗑️ Hapus</button>
+            </div>
+          </div>
+
+          <div class="admin-row">
+            <div class="admin-form-group">
+              <label class="admin-label">Judul Proyek</label>
+              <input type="text" class="admin-input proj-title" value="${escapeHtml(p.title || '')}">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Perusahaan / Instansi Associated</label>
+              <input type="text" class="admin-input proj-company" value="${escapeHtml(p.company || '')}">
+            </div>
+          </div>
+
+          <div class="admin-row">
+            <div class="admin-form-group">
+              <label class="admin-label">Badge Periode (Waktu)</label>
+              <input type="text" class="admin-input proj-badge" value="${escapeHtml(p.badge || '')}">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Kategori Filter</label>
+              <select class="admin-select proj-category">
+                ${categoryOptions}
+              </select>
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-label">Deskripsi Singkat</label>
+            <textarea class="admin-textarea proj-desc">${escapeHtml(p.description || '')}</textarea>
+          </div>
+
+          <div class="admin-row">
+            <div class="admin-form-group">
+              <label class="admin-label">Tech Stack (pisahkan dengan koma)</label>
+              <input type="text" class="admin-input proj-tech" value="${escapeHtml((p.techStack || []).join(', '))}">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Tautan Proyek (URL)</label>
+              <input type="text" class="admin-input proj-link-url" value="${escapeHtml(p.linkUrl || '')}">
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-label">Gambar Proyek (URL atau Upload File)</label>
+            <input type="text" class="admin-input proj-img-url" value="${escapeHtml(p.image || '')}">
+            <div class="admin-img-preview-box">
+              <img src="${escapeHtml(p.image || '')}" class="admin-img-preview proj-img-preview" alt="Preview">
+              <div class="admin-file-input-wrapper">
+                <button type="button" class="admin-btn admin-btn-secondary">📁 Upload Gambar Proyek</button>
+                <input type="file" class="proj-img-file-input" accept="image/*">
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+        <div>
+          <h3 class="admin-section-title">🚀 Kelola Proyek Portfolio (${projects.length})</h3>
+          <p class="admin-section-desc">Tambah, ubah, urutkan, atau hapus proyek aplikasi yang ditampilkan di portofolio.</p>
+        </div>
+        <button type="button" class="admin-btn admin-btn-primary" id="add-project-btn">➕ Tambah Proyek Baru</button>
+      </div>
+
+      <form id="projects-form">
+        <div id="projects-list-container">
+          ${projectCardsHtml}
+        </div>
+
+        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+          <button type="submit" class="admin-btn admin-btn-primary">💾 Simpan Semua Proyek</button>
+        </div>
+      </form>
+    `;
+
+    // Bind Image Upload & Reorder & Delete Events
+    const listContainer = document.getElementById('projects-list-container');
+
+    listContainer.querySelectorAll('.admin-card-item').forEach(card => {
+      const fileInput = card.querySelector('.proj-img-file-input');
+      const urlInput = card.querySelector('.proj-img-url');
+      const imgPreview = card.querySelector('.proj-img-preview');
+
+      fileInput.addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+          processImageFile(this.files[0], (base64Url) => {
+            urlInput.value = base64Url;
+            imgPreview.src = base64Url;
+          });
+        }
+      });
+
+      urlInput.addEventListener('input', function () {
+        imgPreview.src = this.value;
+      });
+    });
+
+    // Delete Button
+    listContainer.querySelectorAll('.delete-project-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const idx = parseInt(this.dataset.index, 10);
+        if (confirm('Yakin ingin menghapus proyek ini?')) {
+          currentData.projects.splice(idx, 1);
+          renderTabProjects(container);
+          showToast('Proyek berhasil dihapus', 'danger');
+        }
+      });
+    });
+
+    // Move Up / Down
+    listContainer.querySelectorAll('.move-project-up-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const idx = parseInt(this.dataset.index, 10);
+        if (idx > 0) {
+          const temp = currentData.projects[idx];
+          currentData.projects[idx] = currentData.projects[idx - 1];
+          currentData.projects[idx - 1] = temp;
+          renderTabProjects(container);
+        }
+      });
+    });
+
+    listContainer.querySelectorAll('.move-project-down-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const idx = parseInt(this.dataset.index, 10);
+        if (idx < currentData.projects.length - 1) {
+          const temp = currentData.projects[idx];
+          currentData.projects[idx] = currentData.projects[idx + 1];
+          currentData.projects[idx + 1] = temp;
+          renderTabProjects(container);
+        }
+      });
+    });
+
+    // Add Project Button
+    document.getElementById('add-project-btn').addEventListener('click', () => {
+      currentData.projects.unshift({
+        id: 'p_' + Date.now(),
+        title: 'Proyek Baru',
+        company: 'Instansi / Klien',
+        badge: 'Aug 2026 – Present',
+        category: 'enterprise',
+        image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop',
+        description: 'Deskripsi proyek baru yang menarik...',
+        techStack: ['HTML', 'CSS', 'JavaScript'],
+        linkUrl: 'https://',
+        linkText: 'Visit App ↗'
+      });
+      renderTabProjects(container);
+      showToast('Proyek baru ditambahkan ke daftar!', 'success');
+    });
+
+    // Form Submit (Save all projects)
+    document.getElementById('projects-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const cardNodes = listContainer.querySelectorAll('.admin-card-item');
+      const updatedProjects = [];
+
+      cardNodes.forEach((card, i) => {
+        const orig = currentData.projects[i] || {};
+        const techStr = card.querySelector('.proj-tech').value || '';
+        const techStack = techStr.split(',').map(s => s.trim()).filter(Boolean);
+
+        updatedProjects.push({
+          id: orig.id || ('p_' + Date.now() + '_' + i),
+          title: card.querySelector('.proj-title').value,
+          company: card.querySelector('.proj-company').value,
+          badge: card.querySelector('.proj-badge').value,
+          category: card.querySelector('.proj-category').value,
+          description: card.querySelector('.proj-desc').value,
+          techStack: techStack,
+          linkUrl: card.querySelector('.proj-link-url').value,
+          linkText: orig.linkText || 'Visit App ↗',
+          image: card.querySelector('.proj-img-url').value
+        });
+      });
+
+      currentData.projects = updatedProjects;
+      saveSiteData(currentData);
+    });
+  }
+
+  // 3. EXPERIENCE TAB
+  function renderTabExperience(container) {
+    const experience = currentData.experience || [];
+    renderGenericListEditor(container, {
+      title: '💼 Kelola Pengalaman Kerja',
+      desc: 'Tambah, ubah, atau hapus riwayat pengalaman karir pekerjaan Anda.',
+      items: experience,
+      onSave: (newList) => {
+        currentData.experience = newList;
+        saveSiteData(currentData);
+      },
+      newItemTemplate: {
+        id: 'exp_' + Date.now(),
+        meta: '2026 – Present • Kota',
+        title: 'Posisi / Jabatan Baru',
+        company: 'Nama Perusahaan',
+        description: 'Tuliskan tanggung jawab dan pencapaian Anda di posisi ini...'
+      }
+    });
+  }
+
+  // 4. EDUCATION TAB
+  function renderTabEducation(container) {
+    const education = currentData.education || [];
+    renderGenericListEditor(container, {
+      title: '🎓 Kelola Riwayat Pendidikan',
+      desc: 'Kelola daftar riwayat pendidikan formal dan gelar yang Anda tempuh.',
+      items: education,
+      onSave: (newList) => {
+        currentData.education = newList;
+        saveSiteData(currentData);
+      },
+      newItemTemplate: {
+        id: 'edu_' + Date.now(),
+        meta: '2020 – 2024',
+        title: 'Gelar / Program Studi',
+        company: 'Universitas / Institusi',
+        description: 'Penjelasan mengenai studi dan pencapaian akademik...'
+      }
+    });
+  }
+
+  // 5. CERTIFICATIONS TAB
+  function renderTabCertifications(container) {
+    const certs = currentData.certifications || [];
+    let itemsHtml = certs.map((c, i) => `
+      <div class="admin-card-item" data-index="${i}">
+        <div class="admin-card-header">
+          <div class="admin-card-item-title">
+            <span>📜 #${i + 1} - ${escapeHtml(c.title || 'Sertifikat')}</span>
+          </div>
+          <div class="admin-card-actions">
+            ${i > 0 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon cert-up-btn" data-index="${i}">⬆️</button>` : ''}
+            ${i < certs.length - 1 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon cert-down-btn" data-index="${i}">⬇️</button>` : ''}
+            <button type="button" class="admin-btn admin-btn-danger admin-btn-icon cert-del-btn" data-index="${i}">🗑️</button>
+          </div>
+        </div>
+
+        <div class="admin-row">
+          <div class="admin-form-group">
+            <label class="admin-label">Penerbit / Meta (mis: Dicoding • ID: 123)</label>
+            <input type="text" class="admin-input cert-meta" value="${escapeHtml(c.meta || '')}">
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-label">Nama Sertifikasi</label>
+            <input type="text" class="admin-input cert-title" value="${escapeHtml(c.title || '')}">
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-label">Keterangan Singkat</label>
+          <textarea class="admin-textarea cert-desc">${escapeHtml(c.description || '')}</textarea>
+        </div>
+
+        <div class="admin-row">
+          <div class="admin-form-group">
+            <label class="admin-label">Link Verifikasi / Kredensial (URL)</label>
+            <input type="text" class="admin-input cert-link" value="${escapeHtml(c.linkUrl || '')}">
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-label">Teks Tombol Link (mis: Verify Credential ↗)</label>
+            <input type="text" class="admin-input cert-link-text" value="${escapeHtml(c.linkText || 'Show Credential ↗')}">
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    container.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+        <div>
+          <h3 class="admin-section-title">📜 Kelola Sertifikasi & Lisensi (${certs.length})</h3>
+          <p class="admin-section-desc">Atur kredensial profesional dan sertifikasi resmi Anda.</p>
+        </div>
+        <button type="button" class="admin-btn admin-btn-primary" id="add-cert-btn">➕ Tambah Sertifikat</button>
+      </div>
+
+      <form id="cert-form">
+        <div id="cert-list-container">
+          ${itemsHtml}
+        </div>
+        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+          <button type="submit" class="admin-btn admin-btn-primary">💾 Simpan Semua Sertifikasi</button>
+        </div>
+      </form>
+    `;
+
+    const listContainer = document.getElementById('cert-list-container');
+
+    listContainer.querySelectorAll('.cert-del-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const idx = parseInt(this.dataset.index, 10);
+        currentData.certifications.splice(idx, 1);
+        renderTabCertifications(container);
+      });
+    });
+
+    listContainer.querySelectorAll('.cert-up-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const idx = parseInt(this.dataset.index, 10);
+        if (idx > 0) {
+          const temp = currentData.certifications[idx];
+          currentData.certifications[idx] = currentData.certifications[idx - 1];
+          currentData.certifications[idx - 1] = temp;
+          renderTabCertifications(container);
+        }
+      });
+    });
+
+    listContainer.querySelectorAll('.cert-down-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const idx = parseInt(this.dataset.index, 10);
+        if (idx < currentData.certifications.length - 1) {
+          const temp = currentData.certifications[idx];
+          currentData.certifications[idx] = currentData.certifications[idx + 1];
+          currentData.certifications[idx + 1] = temp;
+          renderTabCertifications(container);
+        }
+      });
+    });
+
+    document.getElementById('add-cert-btn').addEventListener('click', () => {
+      currentData.certifications.unshift({
+        id: 'cert_' + Date.now(),
+        meta: 'Penerbit Sertifikat',
+        title: 'Nama Sertifikasi Baru',
+        description: 'Penjelasan kompetensi atau materi sertifikasi...',
+        linkUrl: 'https://',
+        linkText: 'Verify Credential ↗'
+      });
+      renderTabCertifications(container);
+    });
+
+    document.getElementById('cert-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const cardNodes = listContainer.querySelectorAll('.admin-card-item');
+      const updated = [];
+
+      cardNodes.forEach((card, i) => {
+        const orig = currentData.certifications[i] || {};
+        updated.push({
+          id: orig.id || ('cert_' + Date.now() + '_' + i),
+          meta: card.querySelector('.cert-meta').value,
+          title: card.querySelector('.cert-title').value,
+          description: card.querySelector('.cert-desc').value,
+          linkUrl: card.querySelector('.cert-link').value,
+          linkText: card.querySelector('.cert-link-text').value
+        });
+      });
+
+      currentData.certifications = updated;
+      saveSiteData(currentData);
+    });
+  }
+
+  // 6. SOCIALS TAB
+  function renderTabSocials(container) {
+    const socials = currentData.socials || [];
+    let itemsHtml = socials.map((s, i) => `
+      <div class="admin-card-item" data-index="${i}">
+        <div class="admin-card-header">
+          <div class="admin-card-item-title">
+            <span>🌐 #${i + 1} - ${escapeHtml(s.platform)}</span>
+          </div>
+          <div class="admin-card-actions">
+            <button type="button" class="admin-btn admin-btn-danger admin-btn-icon soc-del-btn" data-index="${i}">🗑️</button>
+          </div>
+        </div>
+
+        <div class="admin-row">
+          <div class="admin-form-group">
+            <label class="admin-label">Nama Platform / Media</label>
+            <input type="text" class="admin-input soc-platform" value="${escapeHtml(s.platform || '')}">
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-label">Username / Teks Tampilan</label>
+            <input type="text" class="admin-input soc-handle" value="${escapeHtml(s.handle || '')}">
+          </div>
+        </div>
+
+        <div class="admin-row">
+          <div class="admin-form-group">
+            <label class="admin-label">Tautan / Link URL</label>
+            <input type="text" class="admin-input soc-url" value="${escapeHtml(s.url || '')}">
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-label">Ikon Sosial</label>
+            <select class="admin-select soc-icon">
+              <option value="linkedin" ${s.iconType === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
+              <option value="github" ${s.iconType === 'github' ? 'selected' : ''}>GitHub</option>
+              <option value="website" ${s.iconType === 'website' ? 'selected' : ''}>Website</option>
+              <option value="whatsapp" ${s.iconType === 'whatsapp' ? 'selected' : ''}>WhatsApp / Telepon</option>
+              <option value="email" ${s.iconType === 'email' ? 'selected' : ''}>Email</option>
+              <option value="telegram" ${s.iconType === 'telegram' ? 'selected' : ''}>Telegram</option>
+              <option value="instagram" ${s.iconType === 'instagram' ? 'selected' : ''}>Instagram</option>
+              <option value="twitter" ${s.iconType === 'twitter' ? 'selected' : ''}>X (Twitter)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    container.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+        <div>
+          <h3 class="admin-section-title">🌐 Kelola Kontak & Sosial Media</h3>
+          <p class="admin-section-desc">Atur link kontak dan jejaring sosial yang tampil di bagian bawah portofolio.</p>
+        </div>
+        <button type="button" class="admin-btn admin-btn-primary" id="add-soc-btn">➕ Tambah Tautan Kontak</button>
+      </div>
+
+      <form id="soc-form">
+        <div id="soc-list-container">
+          ${itemsHtml}
+        </div>
+        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+          <button type="submit" class="admin-btn admin-btn-primary">💾 Simpan Kontak & Sosial</button>
+        </div>
+      </form>
+    `;
+
+    const listContainer = document.getElementById('soc-list-container');
+
+    listContainer.querySelectorAll('.soc-del-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const idx = parseInt(this.dataset.index, 10);
+        currentData.socials.splice(idx, 1);
+        renderTabSocials(container);
+      });
+    });
+
+    document.getElementById('add-soc-btn').addEventListener('click', () => {
+      currentData.socials.push({
+        id: 'soc_' + Date.now(),
+        platform: 'Platform Baru',
+        handle: '@username',
+        url: 'https://',
+        iconType: 'website'
+      });
+      renderTabSocials(container);
+    });
+
+    document.getElementById('soc-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const cardNodes = listContainer.querySelectorAll('.admin-card-item');
+      const updated = [];
+
+      cardNodes.forEach((card, i) => {
+        const orig = currentData.socials[i] || {};
+        updated.push({
+          id: orig.id || ('soc_' + Date.now() + '_' + i),
+          platform: card.querySelector('.soc-platform').value,
+          handle: card.querySelector('.soc-handle').value,
+          url: card.querySelector('.soc-url').value,
+          iconType: card.querySelector('.soc-icon').value
+        });
+      });
+
+      currentData.socials = updated;
+      saveSiteData(currentData);
+    });
+  }
+
+  // 7. THEME TAB
+  function renderTabTheme(container) {
+    const settings = currentData.settings || {};
+    const footer = currentData.footer || {};
+
+    container.innerHTML = `
+      <h3 class="admin-section-title">🎨 Kustomisasi Tema & Tampilan</h3>
+      <p class="admin-section-desc">Sesuaikan warna aksen utama, judul tab browser, serta footer halaman.</p>
+
+      <form id="theme-form">
+        <div class="admin-row">
+          <div class="admin-form-group">
+            <label class="admin-label">Warna Utama Aksen (Primary Color)</label>
+            <div class="admin-color-picker-group">
+              <input type="color" id="theme-primary-color" class="admin-color-input" value="${settings.primaryColor || '#5e6ad2'}">
+              <input type="text" id="theme-primary-color-hex" class="admin-input" value="${settings.primaryColor || '#5e6ad2'}">
+            </div>
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-label">Warna Utama Hover (Primary Hover)</label>
+            <div class="admin-color-picker-group">
+              <input type="color" id="theme-hover-color" class="admin-color-input" value="${settings.primaryHoverColor || '#828fff'}">
+              <input type="text" id="theme-hover-color-hex" class="admin-input" value="${settings.primaryHoverColor || '#828fff'}">
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-label">Judul Halaman Browser (Page Title)</label>
+          <input type="text" id="theme-page-title" class="admin-input" value="${escapeHtml(settings.pageTitle || '')}">
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-label">Deskripsi Meta SEO (Meta Description)</label>
+          <textarea id="theme-meta-desc" class="admin-textarea">${escapeHtml(settings.metaDescription || '')}</textarea>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-label">Teks Footer Halaman</label>
+          <input type="text" id="theme-footer-text" class="admin-input" value="${escapeHtml(footer.text || '')}">
+        </div>
+
+        <div style="margin-top: 32px;">
+          <button type="submit" class="admin-btn admin-btn-primary">💾 Simpan Pengaturan Tema</button>
+        </div>
+      </form>
+    `;
+
+    const pickerPrimary = document.getElementById('theme-primary-color');
+    const hexPrimary = document.getElementById('theme-primary-color-hex');
+    const pickerHover = document.getElementById('theme-hover-color');
+    const hexHover = document.getElementById('theme-hover-color-hex');
+
+    pickerPrimary.addEventListener('input', () => hexPrimary.value = pickerPrimary.value);
+    hexPrimary.addEventListener('input', () => pickerPrimary.value = hexPrimary.value);
+
+    pickerHover.addEventListener('input', () => hexHover.value = pickerHover.value);
+    hexHover.addEventListener('input', () => pickerHover.value = hexHover.value);
+
+    document.getElementById('theme-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      currentData.settings.primaryColor = hexPrimary.value;
+      currentData.settings.primaryHoverColor = hexHover.value;
+      currentData.settings.pageTitle = document.getElementById('theme-page-title').value;
+      currentData.settings.metaDescription = document.getElementById('theme-meta-desc').value;
+      currentData.footer.text = document.getElementById('theme-footer-text').value;
+
+      saveSiteData(currentData);
+    });
+  }
+
+  // 8. BACKUP & SETTINGS TAB
+  function renderTabBackup(container) {
+    const settings = currentData.settings || {};
+
+    container.innerHTML = `
+      <h3 class="admin-section-title">⚙️ Backup, Restore & Keamanan Admin</h3>
+      <p class="admin-section-desc">Ubah kata sandi admin atau lakukan backup/restore data situs dalam format file JSON.</p>
+
+      <!-- Password Change Section -->
+      <div class="admin-card-item" style="margin-bottom: 32px;">
+        <h4 style="color:#fff; font-size:16px; margin-bottom:12px;">🔑 Ubah Kata Sandi Admin</h4>
+        <form id="pass-change-form">
+          <div class="admin-row">
+            <div class="admin-form-group">
+              <label class="admin-label">Kata Sandi Baru</label>
+              <input type="password" id="new-admin-pass" class="admin-input" placeholder="Masukkan password baru">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Konfirmasi Kata Sandi Baru</label>
+              <input type="password" id="confirm-admin-pass" class="admin-input" placeholder="Ulangi password baru">
+            </div>
+          </div>
+          <button type="submit" class="admin-btn admin-btn-secondary" style="margin-top:8px;">🔒 Perbarui Password</button>
+        </form>
+      </div>
+
+      <!-- Backup Export/Import Section -->
+      <div class="admin-card-item">
+        <h4 style="color:#fff; font-size:16px; margin-bottom:12px;">💾 Export & Import Data Website (JSON)</h4>
+        <p style="color:#a0a5b1; font-size:13.5px; margin-bottom:20px;">
+          Anda dapat mendownload seluruh konfigurasi dan konten portofolio dalam file JSON, atau mengunggah file JSON cadangan untuk memulihkan tampilan.
+        </p>
+
+        <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
+          <button type="button" class="admin-btn admin-btn-primary" id="export-json-btn">📥 Export Backup (Download JSON)</button>
+          
+          <div class="admin-file-input-wrapper">
+            <button type="button" class="admin-btn admin-btn-secondary">📤 Import Backup (Upload JSON)</button>
+            <input type="file" id="import-json-file" accept=".json">
+          </div>
+
+          <button type="button" class="admin-btn admin-btn-danger" id="reset-default-btn">🔄 Reset ke Data Original Initial</button>
+        </div>
+      </div>
+    `;
+
+    // Password Change Handler
+    document.getElementById('pass-change-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const p1 = document.getElementById('new-admin-pass').value;
+      const p2 = document.getElementById('confirm-admin-pass').value;
+
+      if (!p1) {
+        showToast('Password tidak boleh kosong!', 'danger');
+        return;
+      }
+      if (p1 !== p2) {
+        showToast('Konfirmasi password tidak cocok!', 'danger');
+        return;
+      }
+
+      currentData.settings.password = p1;
+      saveSiteData(currentData);
+      showToast('Kata sandi admin berhasil diperbarui!', 'success');
+      document.getElementById('new-admin-pass').value = '';
+      document.getElementById('confirm-admin-pass').value = '';
+    });
+
+    // Export JSON
+    document.getElementById('export-json-btn').addEventListener('click', () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `portfolio_backup_${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast('File backup JSON berhasil di-download!', 'success');
+    });
+
+    // Import JSON
+    document.getElementById('import-json-file').addEventListener('change', function () {
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            const imported = JSON.parse(e.target.result);
+            if (imported.hero && imported.projects) {
+              currentData = { ...DEFAULT_DATA, ...imported };
+              saveSiteData(currentData);
+              showToast('Data berhasil di-import dari JSON!', 'success');
+              renderActiveTabContent();
+            } else {
+              showToast('Format file JSON tidak valid!', 'danger');
+            }
+          } catch (err) {
+            showToast('Gagal membaca file JSON!', 'danger');
+          }
+        };
+        reader.readAsText(this.files[0]);
+      }
+    });
+
+    // Reset Defaults
+    document.getElementById('reset-default-btn').addEventListener('click', () => {
+      if (confirm('Apakah Anda yakin ingin mengembalikan seluruh konten ke tampilan awal bawaan?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        currentData = JSON.parse(JSON.stringify(DEFAULT_DATA));
+        renderAll();
+        showToast('Konten telah di-reset ke data bawaan awal!', 'success');
+        renderActiveTabContent();
+      }
+    });
+  }
+
+  // HELPER EDITOR FOR LISTS (Experience & Education)
+  function renderGenericListEditor(container, opts) {
+    const items = opts.items || [];
+
+    let itemsHtml = items.map((item, i) => `
+      <div class="admin-card-item" data-index="${i}">
+        <div class="admin-card-header">
+          <div class="admin-card-item-title">
+            <span>#${i + 1} - ${escapeHtml(item.title || 'Item')}</span>
+          </div>
+          <div class="admin-card-actions">
+            ${i > 0 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-item-up-btn" data-index="${i}">⬆️</button>` : ''}
+            ${i < items.length - 1 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-item-down-btn" data-index="${i}">⬇️</button>` : ''}
+            <button type="button" class="admin-btn admin-btn-danger admin-btn-icon del-item-btn" data-index="${i}">🗑️</button>
+          </div>
+        </div>
+
+        <div class="admin-row">
+          <div class="admin-form-group">
+            <label class="admin-label">Periode / Lokasi Meta</label>
+            <input type="text" class="admin-input item-meta" value="${escapeHtml(item.meta || '')}">
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-label">Judul / Posisi / Gelar</label>
+            <input type="text" class="admin-input item-title" value="${escapeHtml(item.title || '')}">
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-label">Nama Perusahaan / Institusi</label>
+          <input type="text" class="admin-input item-company" value="${escapeHtml(item.company || '')}">
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-label">Deskripsi Rincian</label>
+          <textarea class="admin-textarea item-desc">${escapeHtml(item.description || '')}</textarea>
+        </div>
+      </div>
+    `).join('');
+
+    container.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+        <div>
+          <h3 class="admin-section-title">${opts.title} (${items.length})</h3>
+          <p class="admin-section-desc">${opts.desc}</p>
+        </div>
+        <button type="button" class="admin-btn admin-btn-primary" id="add-list-item-btn">➕ Tambah Item</button>
+      </div>
+
+      <form id="generic-list-form">
+        <div id="generic-list-container">
+          ${itemsHtml}
+        </div>
+        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+          <button type="submit" class="admin-btn admin-btn-primary">💾 Simpan Perubahan</button>
+        </div>
+      </form>
+    `;
+
+    const listContainer = document.getElementById('generic-list-container');
+
+    listContainer.querySelectorAll('.del-item-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const idx = parseInt(this.dataset.index, 10);
+        items.splice(idx, 1);
+        opts.onSave(items);
+        renderGenericListEditor(container, opts);
+      });
+    });
+
+    listContainer.querySelectorAll('.move-item-up-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const idx = parseInt(this.dataset.index, 10);
+        if (idx > 0) {
+          const temp = items[idx];
+          items[idx] = items[idx - 1];
+          items[idx - 1] = temp;
+          opts.onSave(items);
+          renderGenericListEditor(container, opts);
+        }
+      });
+    });
+
+    listContainer.querySelectorAll('.move-item-down-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const idx = parseInt(this.dataset.index, 10);
+        if (idx < items.length - 1) {
+          const temp = items[idx];
+          items[idx] = items[idx + 1];
+          items[idx + 1] = temp;
+          opts.onSave(items);
+          renderGenericListEditor(container, opts);
+        }
+      });
+    });
+
+    document.getElementById('add-list-item-btn').addEventListener('click', () => {
+      items.unshift({ ...opts.newItemTemplate, id: 'item_' + Date.now() });
+      opts.onSave(items);
+      renderGenericListEditor(container, opts);
+    });
+
+    document.getElementById('generic-list-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const cardNodes = listContainer.querySelectorAll('.admin-card-item');
+      const updated = [];
+
+      cardNodes.forEach((card, i) => {
+        const orig = items[i] || {};
+        updated.push({
+          id: orig.id || ('item_' + Date.now() + '_' + i),
+          meta: card.querySelector('.item-meta').value,
+          title: card.querySelector('.item-title').value,
+          company: card.querySelector('.item-company').value,
+          description: card.querySelector('.item-desc').value
+        });
+      });
+
+      opts.onSave(updated);
+    });
+  }
+
+  // IMAGE HELPER (Base64 Reader & Compressor)
+  function processImageFile(file, callback) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = new Image();
+      img.onload = function () {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 1200;
+        const MAX_HEIGHT = 1200;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        callback(dataUrl);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // INITIALIZATION ON DOM READY
+  document.addEventListener('DOMContentLoaded', () => {
+    currentData = getSiteData();
+    renderAll();
+    initAdminUI();
+  });
+
+})();

@@ -3,7 +3,7 @@ Mengelola dan memastikan kelancaran operasional infrastruktur IT perusahaan, men
 Terlibat aktif dalam riset dan publikasi jurnal (fokus pada teknologi pendidikan, game-based learning, dan ethnomathematics). Menerapkan pendekatan komputasi pada pemecahan masalah.
 Pengembangan arsitektur backend yang tangguh untuk sistem internal, fokus pada efisiensi *query* dan keamanan data.
 Eksplorasi teknologi interaktif untuk mendukung implementasi riset *game-based learning* dan *ethnomathematics*.
-&copy; 2026 Qois Abdul Qudus. Designed with Linear Aesthetics.
+&copy; 2026 Doel Kussoy. Designed with Linear Aesthetics.
 31:       Membangun ekosistem teknologi yang stabil dan mengembangkan solusi web yang inovatif. 32:       Berpengalaman dalam mengelola infrastruktur IT dan menciptakan aplikasi modern.33:
 Saya bekerja di berbagai bidang IT, mulai dari mengelola infrastruktur jaringan dan CCTV hingga membangun sistem internal berbasis web dan Android. Saat ini saya adalah IT Officer di PT Centa Brasindo Abadi, tempat saya menangani segala hal dari dukungan infrastruktur hingga pengembangan aplikasi (fasilitas, keamanan, logistik). Saya juga pernah magang sebagai Fullstack Developer di Dicoding Indonesia. Saya senang memahami cara kerja sistem secara *end-to-end* dan terus belajar, terutama di bidang AI.
 Menangani IT secara menyeluruh (*end-to-end*). Mengelola infrastruktur CCTV & pengawasan pabrik, menangani masalah *hardware/software*, serta membangun dan memelihara sistem internal berbasis web untuk pemeliharaan fasilitas, logistik, dan penilaian kinerja karyawan.
@@ -12,11 +12,11 @@ Program magang Kampus Merdeka SIB Angkatan 5. Membangun fitur *frontend* respons
 Pekerjaan *freelance modeling* dan kampanye konten. Mengajarkan saya adaptasi dengan tim kreatif dan bekerja dengan tenggat waktu yang ketat.
 Lulus dengan gelar Sarjana Komputer. Mempelajari fundamental ilmu komputer, pemrograman, dan rekayasa perangkat lunak.
 Berbagai aplikasi operasional pabrik yang digunakan sehari-hari, meliputi sistem pelacakan pemeliharaan fasilitas, *security patrol logging*, monitoring logistik, dan sistem asesmen karyawan.
-&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.
+&copy; 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten.
 Game edukasi interaktif berbasis Android berorientasi pada etnomatematika Banten. Telah dipublikasikan secara resmi sebagai jurnal penelitian akademik.
 Freelance pengembang sistem web untuk yayasan dan merangkap sebagai tutor privat yang mengajar murid secara langsung.
 Memiliki beberapa sertifikasi pendukung seperti: AWS Cloud Practitioner Essentials, dan sertifikasi SIB Kampus Merdeka Dicoding.
-&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.
+&copy; 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten.
 Saya mengelola infrastruktur IT dan membangun ekosistem digital. Dari pengawasan jaringan & CCTV hingga pengembangan sistem internal pabrik, *fullstack web*, dan aplikasi Android interaktif.
 Kumpulan proyek aplikasi sistem industri, aplikasi web, dan pengembangan game yang telah saya bangun.
 An internal web app for tracking facility and infrastructure maintenance across the plant. The maintenance team uses it to log inspections, record asset condition, and print maintenance history cards, replacing paper-based tracking.
@@ -30,7 +30,7 @@ Mengelola infrastruktur IT *end-to-end*, pemeliharaan CCTV & server 24/7, serta 
 Membangun antarmuka frontend yang responsif serta mengembangkan arsitektur layanan backend dan API dalam siklus *Agile*.
 Pengembangan sistem web yayasan serta mengajar bimbingan privat untuk siswa.
 Sarjana Komputer. Memiliki sertifikasi AWS Cloud Practitioner Essentials & Dicoding SIB Kampus Merdeka.
-&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.
+&copy; 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten.
 34:         Saya mengelola infrastruktur IT dan membangun ekosistem digital. Dari pengawasan jaringan & CCTV hingga pengembangan sistem internal pabrik, *fullstack web*, dan aplikasi Android interaktif.35:
 -        Saya mengelola infrastruktur IT dan membangun ekosistem digital. Dari pengawasan jaringan & CCTV hingga pengembangan sistem internal pabrik, *fullstack web*, dan aplikasi Android interaktif.+        Saya mengelola infrastruktur IT dan membangun ekosistem digital. Dari pengawasan jaringan & CCTV hingga+        pengembangan sistem internal pabrik, *fullstack web*, dan aplikasi Android interaktif.
 Kumpulan proyek aplikasi sistem industri, aplikasi web, dan pengembangan game yang telah saya bangun.
@@ -44,12 +44,12 @@ Kumpulan proyek aplikasi sistem industri, aplikasi+      web, dan pengembangan g
 -            A company profile site for a local business, built to be clean, responsive, and mobile first. Focused on brand credibility and intuitive user navigation.+            A company profile site for a local business, built to be clean, responsive, and mobile first. Focused on+            brand credibility and intuitive user navigation.
 +          Mengelola infrastruktur IT *end-to-end*, pemeliharaan CCTV & server 24/7, serta membangun dan memelihara 4+          aplikasi web internal operasional pabrik.
 -          Membangun antarmuka frontend yang responsif serta mengembangkan arsitektur layanan backend dan API dalam siklus *Agile*.+          Membangun antarmuka frontend yang responsif serta mengembangkan arsitektur layanan backend dan API dalam+          siklus *Agile*.
-&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.
+&copy; 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten.
 38:         Saya mengelola infrastruktur IT dan membangun ekosistem digital. Dari pengawasan jaringan & CCTV hingga39:         pengembangan sistem internal pabrik, *fullstack web*, dan aplikasi Android interaktif.40:
 Kumpulan proyek aplikasi sistem industri, aplikasi57:       web, dan pengembangan game yang telah saya bangun.
 280:           Pengembangan sistem web yayasan serta mengajar bimbingan privat untuk siswa.281:
 290:           Sarjana Komputer. Memiliki sertifikasi AWS Cloud Practitioner Essentials & Dicoding SIB Kampus Merdeka.291:
-300:       &copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.301:
+300:       &copy; 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten.301:
 Kumpulan proyek aplikasi sistem industri, aplikasi      web, dan pengembangan game yang telah saya bangun.
 An internal web app for tracking facility and infrastructure maintenance across the plant. The maintenance            team uses it to log inspections, record asset condition, and print maintenance history cards, replacing            paper-based tracking.
 A system for logging security patrols. Officers record shift schedules, patrol routes, timestamps, and            reports with photo evidence and digital signatures, all stored centrally instead of in paper logbooks.
@@ -63,9 +63,9 @@ Membangun antarmuka frontend yang responsif serta mengembangkan arsitektur layan
 Pengembangan sistem web yayasan serta mengajar bimbingan privat untuk siswa.
 Sarjana Komputer. Memiliki sertifikasi AWS Cloud Practitioner Essentials & Dicoding SIB Kampus Merdeka.
 Mari terhubung melalui jejaring profesional dan media sosial saya.
-&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.
+&copy; 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten.
 Mari terhubung melalui jejaring profesional dan media sosial saya.
-364:       &copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.365:
+364:       &copy; 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten.365:
 I manage end-to-end IT infrastructure and build scalable digital solutions—ranging from surveillance network operations and plant security systems to enterprise web platforms and interactive Android applications.
 A curated collection of industrial enterprise systems, web applications, and mobile game developments.
 An internal enterprise web application for tracking plant-wide facility and infrastructure maintenance. Enables maintenance teams to log inspections, track asset conditions, and generate historical maintenance records—replacing manual paper workflows.
@@ -80,7 +80,7 @@ Developed responsive frontend user interfaces and designed robust backend API mi
 Building and maintaining web platforms for foundation management while delivering one-on-one technical instruction for students.
 Graduated with a Bachelor's Degree in Computer Science. Certified AWS Cloud Practitioner & Kampus Merdeka SIB Alumnus.
 Feel free to reach out via professional networks or social channels.
-&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten, Indonesia.
+&copy; 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten, Indonesia.
 Koleksi pilihan proyek sistem industri, aplikasi web, dan pengembangan game mobile.
 Aplikasi web internal perusahaan untuk memantau dan mencatat pemeliharaan fasilitas serta infrastruktur di seluruh area pabrik. Memudahkan tim maintenance mencatat inspeksi, kondisi aset, dan mencetak kartu riwayat pemeliharaan secara digital.
 Platform digital terpusat untuk pencatatan patroli keamanan. Petugas mencatat jadwal shift, rute patroli, stempel waktu, dan laporan kejadian lengkap dengan bukti foto serta tanda tangan digital.
@@ -91,13 +91,13 @@ Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Sera
 Membangun dan memelihara platform web untuk operasional yayasan sekaligus memberikan bimbingan teknis secara langsung untuk para siswa.
 Lulus dengan gelar Sarjana Komputer. Pemegang sertifikasi AWS Cloud Practitioner Essentials & Alumni SIB Kampus Merdeka Dicoding.
 Mari terhubung melalui jejaring profesional dan media sosial saya.
-&copy; 2026 Qois Abdul Qudus. IT Enthusiast berbasis di Serang, Banten, Indonesia.
+&copy; 2026 Doel Kussoy. IT Enthusiast berbasis di Serang, Banten, Indonesia.
 Kumpulan proyek aplikasi sistem industri, web platforms, dan mobile game development yang telah saya bangun.
 Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Serang. Warga dapat mengirim laporan, melacak status penanganan, dan berkomunikasi dengan dinas terkait.
 Membangun dan memelihara sistem aplikasi web untuk operasional yayasan sekaligus memberikan bimbingan teknis secara privat bagi siswa.
 Lulus dengan gelar Sarjana Komputer. Memegang sertifikasi AWS Cloud Practitioner Essentials & Alumni SIB Kampus Merdeka Dicoding.
 Mari terhubung melalui jejaring profesional dan media sosial saya.
-&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten, Indonesia.
+&copy; 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten, Indonesia.
 Kumpulan proyek aplikasi sistem industri, web platforms, dan mobile game development yang telah saya bangun.
 183:             Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Serang. Warga dapat mengirim laporan, melacak status penanganan, dan berkomunikasi dengan dinas terkait.184:
 Kumpulan proyek aplikasi sistem industri, web platforms, dan mobile game development yang telah saya bangun.
@@ -105,7 +105,7 @@ Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Sera
 Membangun dan memelihara sistem aplikasi web untuk operasional yayasan sekaligus memberikan bimbingan teknis secara privat bagi siswa.
 Lulus dengan gelar Sarjana Komputer. Memegang sertifikasi AWS Cloud Practitioner Essentials & Alumni SIB Kampus Merdeka Dicoding.
 Mari terhubung melalui jejaring profesional dan media sosial saya.
-&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten, Indonesia.
+&copy; 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten, Indonesia.
 198:             Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Serang. Warga dapat mengirim laporan, melacak status penanganan, dan berkomunikasi dengan dinas terkait.199:
 Kumpulan proyek aplikasi sistem industri, web platforms, dan mobile game development yang telah saya bangun.
 Kumpulan proyek aplikasi sistem industri, web+      platforms, dan mobile game development yang telah saya bangun.
@@ -134,7 +134,7 @@ Software Engineering Fundamentals
 Data Visualization & Insights
 Python Basics & Data Structures
 Mari terhubung melalui jejaring profesional dan media sosial saya.
-&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten, Indonesia.
+&copy; 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten, Indonesia.
 268:           Menangani IT secara *end-to-end*. Mengelola jaringan CCTV & pengawasan pabrik 24/7 agar selalu *online* dan sesuai standar. Sebagian besar waktu dialokasikan untuk membangun aplikasi web internal operasional pabrik (pemeliharaan fasilitas, *security patrol logging*, monitoring logistik, dan asesmen kinerja karyawan), serta menangani dukungan teknis *hardware*, *software*, dan jaringan.269:
 278:           Program magang 6 bulan sebagai *Fullstack Developer*. Membangun fitur *frontend* yang responsif dan layanan *backend* (API & *database*), serta aktif mengikuti siklus kerja *Agile* dan *code review* profesional bersama tim *engineering*.279:
 288:           Pekerjaan *freelance* jangka panjang. Membangun dan memelihara beberapa aplikasi web untuk operasional yayasan, sekaligus memberikan bimbingan belajar secara privat untuk siswa.289:
@@ -182,7 +182,7 @@ Data Visualization & Insights
 +            Teknik analisis data, perancangan grafik intuitif, serta penyajian informasi dan wawasan data yang efektif.+
 Python Basics & Data Structures
 +            Penguasaan dasar bahasa pemrograman Python, struktur data, pemrosesan variabel, dan penerapan skrip otomatisasi.+
-Qois Abdul Qudus
+Doel Kussoy
 Licenses &amp; certifications
 Belajar Dasar AI
 Dicoding Indonesia

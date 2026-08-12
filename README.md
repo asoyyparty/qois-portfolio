@@ -1,10 +1,10 @@
-# 🌐 Qois Abdul Qudus - Portfolio Website
+# 🌐 Doel Kussoy - Portfolio Website
 
 [![AWS Certified](https://img.shields.io/badge/AWS-Certified%20Cloud%20Practitioner-orange?style=flat-svg&logo=amazon-aws)](https://www.linkedin.com/in/qoisabdulqudus/details/certifications/)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-qoisabdulqudus.netlify.app-blue?style=flat-svg&logo=netlify)](https://qoisabdulqudus.netlify.app)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-qoisabdulqudus-0A66C2?style=flat-svg&logo=linkedin)](https://www.linkedin.com/in/qoisabdulqudus)
 
-Portofolio web profesional dari **Qois Abdul Qudus, S.Kom** — seorang **IT Infrastructure Officer & Systems Developer** berbasis di Serang, Banten, Indonesia.
+Portofolio web profesional dari **Doel Kussoy, S.Kom** — seorang **IT Infrastructure Officer & Systems Developer** berbasis di Serang, Banten, Indonesia.
 
 Website ini menampilkan rekam jejak profesional, proyek-proyek enterprise & web development, pengalaman kerja, latar belakang pendidikan, serta sertifikasi industri.
 
@@ -90,11 +90,11 @@ qois-portfolio/
 ## 📬 Hubungi Saya
 
 - **Website**: [qoisabdulqudus.netlify.app](https://qoisabdulqudus.netlify.app)
-- **LinkedIn**: [Qois Abdul Qudus](https://www.linkedin.com/in/qoisabdulqudus)
+- **LinkedIn**: [Doel Kussoy](https://www.linkedin.com/in/qoisabdulqudus)
 - **GitHub**: [@doelkussoy](https://github.com/doelkussoy)
 - **Email**: [qoisabdulquduss@gmail.com](mailto:qoisabdulquduss@gmail.com)
 - **WhatsApp**: [+62 851-9530-0828](https://wa.me/6285195300828)
 - **Telegram**: [@doelkussoy](https://t.me/doelkussoy)
 
 ---
-© 2026 Qois Abdul Qudus. All Rights Reserved.
+© 2026 Doel Kussoy. All Rights Reserved.
