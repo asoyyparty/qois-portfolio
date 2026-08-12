@@ -671,8 +671,8 @@ h1, h2, h3, h4 {
   .hero {
     flex-direction: column-reverse;
     text-align: center;
-    padding-top: 80px;
-    gap: 40px;
+    padding-top: 110px;
+    gap: 36px;
   }
   .hero-actions {
     justify-content: center;
@@ -690,15 +690,37 @@ h1, h2, h3, h4 {
 
 @media (max-width: 768px) {
   :root {
-    --space-section: 60px;
+    --space-section: 50px;
     --space-lg: 16px;
     --space-xl: 20px;
   }
 
+  /* GPU Optimization: Disable heavy blur keyframe animation on mobile */
   body::before, body::after {
-    width: 350px;
-    height: 350px;
-    filter: blur(80px);
+    width: 250px;
+    height: 250px;
+    filter: blur(50px);
+    animation: none;
+    opacity: 0.25;
+  }
+
+  .navbar-fixed {
+    background: rgba(8, 9, 13, 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .profile-glow {
+    filter: blur(12px);
+    opacity: 0.5;
+  }
+
+  .section {
+    contain: content;
+  }
+
+  .hero {
+    padding-top: 104px;
   }
 
   .nav-toggle {
@@ -827,8 +849,8 @@ h1, h2, h3, h4 {
   }
 
   .hero {
-    padding-top: 40px;
-    padding-bottom: 60px;
+    padding-top: 96px;
+    padding-bottom: 50px;
   }
 
   .profile-img {
