@@ -30,6 +30,11 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
 }
 
 * {
@@ -44,11 +49,16 @@ body {
   font-family: var(--font-text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   position: relative;
-  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Dynamic Background Glows */
+/* Dynamic Background Glows (GPU Accelerated) */
 body::before, body::after {
   content: '';
   position: fixed;
@@ -58,7 +68,10 @@ body::before, body::after {
   filter: blur(120px);
   z-index: -1;
   opacity: 0.4;
-  animation: float 20s infinite alternate;
+  will-change: transform;
+  transform: translateZ(0);
+  animation: float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
 }
 
 body::before {
@@ -75,9 +88,9 @@ body::after {
 }
 
 @keyframes float {
-  0% { transform: translate(0, 0); }
-  50% { transform: translate(50px, 30px); }
-  100% { transform: translate(-30px, 50px); }
+  0% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(50px, 30px, 0); }
+  100% { transform: translate3d(-30px, 50px, 0); }
 }
 
 /* Typography */
@@ -125,19 +138,25 @@ h1, h2, h3, h4 {
   padding-bottom: var(--space-section);
 }
 
-/* Navbar (Glass) */
+/* Navbar (Glass Fixed Header) */
+.navbar-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(3, 3, 5, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 72px;
-  border-bottom: 1px solid var(--glass-border);
-  position: sticky;
-  top: 0;
-  background: rgba(3, 3, 5, 0.5);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  z-index: 100;
 }
 
 .nav-links {
@@ -197,7 +216,7 @@ h1, h2, h3, h4 {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate3d(-50%, -50%, 0);
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -206,10 +225,11 @@ h1, h2, h3, h4 {
   z-index: 1;
   filter: blur(20px);
   opacity: 0.7;
+  will-change: transform;
 }
 
 @keyframes spin {
-  100% { transform: translate(-50%, -50%) rotate(360deg); }
+  100% { transform: translate3d(-50%, -50%, 0) rotate(360deg); }
 }
 
 .btn {
@@ -331,9 +351,22 @@ h1, h2, h3, h4 {
   opacity: 1;
 }
 
-/* Project Cards Specifics */
+/* Project Cards Specifics with Smooth Filter Animation */
 .project-card {
   padding: 0;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.3s ease, 
+              box-shadow 0.3s ease;
+  will-change: opacity, transform;
+}
+
+.project-card.is-hidden {
+  opacity: 0;
+  transform: translateY(15px) scale(0.96);
+  pointer-events: none;
 }
 
 .project-img {
@@ -507,20 +540,7 @@ h1, h2, h3, h4 {
   color: var(--color-ink-subtle);
 }
 
-/* Navbar (Glass) */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 72px;
-  border-bottom: 1px solid var(--glass-border);
-  position: sticky;
-  top: 0;
-  background: rgba(3, 3, 5, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  z-index: 100;
-}
+/* Navbar Brand */
 
 .nav-brand {
   font-weight: 600;
@@ -544,11 +564,30 @@ h1, h2, h3, h4 {
   font-size: 14px;
   font-weight: 500;
   transition: all 0.3s ease;
+  position: relative;
+  padding: 4px 0;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a.active {
   color: var(--color-ink);
   text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+.nav-links a.active {
+  color: var(--color-primary-hover);
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-primary);
+  border-radius: 2px;
+  box-shadow: 0 0 8px var(--color-primary-hover);
 }
 
 /* Hamburger Toggle Button */
@@ -685,6 +724,8 @@ h1, h2, h3, h4 {
     transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 100;
     box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    will-change: right;
+    transform: translateZ(0);
   }
 
   .nav-links.active {
@@ -693,10 +734,14 @@ h1, h2, h3, h4 {
 
   .nav-links a {
     font-size: 16px;
-    padding: 10px 0;
+    padding: 12px 0;
     width: 100%;
     text-align: left;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-links a.active::after {
+    display: none;
   }
 
   /* Overlay backdrop for mobile menu */
@@ -748,6 +793,7 @@ h1, h2, h3, h4 {
     flex-wrap: nowrap;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    touch-action: pan-x;
   }
 
   .filter-container::-webkit-scrollbar {
@@ -775,6 +821,11 @@ h1, h2, h3, h4 {
 }
 
 @media (max-width: 480px) {
+  .display-xl {
+    font-size: clamp(28px, 8vw, 42px);
+    word-break: break-word;
+  }
+
   .hero {
     padding-top: 40px;
     padding-bottom: 60px;
@@ -821,5 +872,20 @@ h1, h2, h3, h4 {
 
   .social-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .filter-btn {
+    padding: 6px 12px;
+    font-size: 12px;
   }
 }

@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Qois Abdul Qudus - IT Officer & Systems Developer</title>
   <meta name="description"
     content="Portofolio Profesional Qois Abdul Qudus - IT Infrastructure Officer, Fullstack Web & Android Developer.">
@@ -17,24 +17,26 @@
 
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar container">
-    <a href="#" class="nav-brand">Qois Abdul Qudus</a>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <div class="nav-links" id="navLinks">
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#experience">Experience</a>
-      <a href="#education">Education</a>
-      <a href="#certifications">Certifications</a>
-      <a href="#contact">Contact & Socials</a>
-      <a href="https://github.com/doelkussoy" target="_blank">GitHub</a>
-    </div>
-  </nav>
+  <!-- Fixed Navbar -->
+  <header class="navbar-fixed">
+    <nav class="navbar container">
+      <a href="#" class="nav-brand">Qois Abdul Qudus</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
+        <a href="#certifications">Certifications</a>
+        <a href="#contact">Contact & Socials</a>
+        <a href="https://github.com/doelkussoy" target="_blank">GitHub</a>
+      </div>
+    </nav>
+  </header>
   <div class="nav-backdrop" id="navBackdrop"></div>
 
   <!-- Hero Section -->
@@ -69,7 +71,7 @@
     </div>
     <div class="hero-image-wrapper">
       <div class="profile-glow"></div>
-      <img src="profile.png" alt="Qois Abdul Qudus" class="profile-img">
+      <img src="profile.png" alt="Qois Abdul Qudus" class="profile-img" decoding="async" fetchpriority="high">
     </div>
   </header>
 
@@ -91,7 +93,7 @@
       <div class="card project-card" data-category="enterprise">
         <div class="project-img-wrapper">
           <span class="project-badge">Aug 2026 – Present</span>
-          <img src="networkfactory.png" alt="Factory Network Control System PT CBA Chemical Industry" class="project-img">
+          <img src="networkfactory.png" alt="Factory Network Control System PT CBA Chemical Industry" class="project-img" loading="lazy" decoding="async">
         </div>
         <div class="project-content">
           <h3 class="card-title">Factory Network Control System</h3>
@@ -114,7 +116,7 @@
       <div class="card project-card" data-category="enterprise">
         <div class="project-img-wrapper">
           <span class="project-badge">Jun 2026 – Present</span>
-          <img src="itam.png" alt="IT Asset Management (ITAM) Enterprise PT CBA Chemical Industry" class="project-img">
+          <img src="itam.png" alt="IT Asset Management (ITAM) Enterprise PT CBA Chemical Industry" class="project-img" loading="lazy" decoding="async">
         </div>
         <div class="project-content">
           <h3 class="card-title">IT Asset Management (ITAM) Enterprise</h3>
@@ -137,7 +139,7 @@
       <div class="card project-card" data-category="enterprise">
         <div class="project-img-wrapper">
           <span class="project-badge">May 2026 – Present</span>
-          <img src="kotakp3k.png" alt="P3K Digital Monitoring System PT CBA Chemical Industry" class="project-img">
+          <img src="kotakp3k.png" alt="P3K Digital Monitoring System PT CBA Chemical Industry" class="project-img" loading="lazy" decoding="async">
         </div>
         <div class="project-content">
           <h3 class="card-title">P3K Digital Monitoring System</h3>
@@ -159,7 +161,7 @@
       <div class="card project-card" data-category="enterprise">
         <div class="project-img-wrapper">
           <span class="project-badge">Apr 2026 – Present</span>
-          <img src="saranaprasarana.png" alt="Sistem Sarana Prasarana PT CBA Chemical Industry" class="project-img">
+          <img src="saranaprasarana.png" alt="Sistem Sarana Prasarana PT CBA Chemical Industry" class="project-img" loading="lazy" decoding="async">
         </div>
         <div class="project-content">
           <h3 class="card-title">Sistem Sarana Prasarana</h3>
@@ -182,7 +184,7 @@
       <div class="card project-card" data-category="enterprise">
         <div class="project-img-wrapper">
           <span class="project-badge">Sep 2025 – Present</span>
-          <img src="patroli.png" alt="Patroli Keamanan Pabrik PT CBA Chemical Industry" class="project-img">
+          <img src="patroli.png" alt="Patroli Keamanan Pabrik PT CBA Chemical Industry" class="project-img" loading="lazy" decoding="async">
         </div>
         <div class="project-content">
           <h3 class="card-title">Patroli Keamanan Pabrik</h3>
@@ -205,7 +207,7 @@
       <div class="card project-card" data-category="enterprise">
         <div class="project-img-wrapper">
           <span class="project-badge">Aug 2025 – Present</span>
-          <img src="tracking.png" alt="Tracking Bongkar Muat PT CBA Chemical Industry" class="project-img">
+          <img src="tracking.png" alt="Tracking Bongkar Muat PT CBA Chemical Industry" class="project-img" loading="lazy" decoding="async">
         </div>
         <div class="project-content">
           <h3 class="card-title">Tracking Bongkar Muat</h3>
@@ -228,7 +230,7 @@
       <div class="card project-card" data-category="enterprise">
         <div class="project-img-wrapper">
           <span class="project-badge">Dec 2024 – Present</span>
-          <img src="eraport.png" alt="E-Raport System PT CBA Chemical Industry" class="project-img">
+          <img src="eraport.png" alt="E-Raport System PT CBA Chemical Industry" class="project-img" loading="lazy" decoding="async">
         </div>
         <div class="project-content">
           <h3 class="card-title">E-Raport System (Kinerja Karyawan)</h3>
@@ -252,7 +254,7 @@
         <div class="project-img-wrapper">
           <span class="project-badge">May 2025 – Aug 2025</span>
           <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop"
-            alt="Esthetic Cafe" class="project-img">
+            alt="Esthetic Cafe" class="project-img" loading="lazy" decoding="async">
         </div>
         <div class="project-content">
           <h3 class="card-title">Esthetic Cafe - Food Ordering Platform</h3>
@@ -275,7 +277,7 @@
       <div class="card project-card" data-category="web">
         <div class="project-img-wrapper">
           <span class="project-badge">May 2024 – Sep 2024</span>
-          <img src="serenityhub.png" alt="SerenityHub Platform Pengaduan Masyarakat" class="project-img">
+          <img src="serenityhub.png" alt="SerenityHub Platform Pengaduan Masyarakat" class="project-img" loading="lazy" decoding="async">
         </div>
         <div class="project-content">
           <h3 class="card-title">SerenityHub - Website Pengaduan Kota Serang</h3>
@@ -299,7 +301,7 @@
         <div class="project-img-wrapper">
           <span class="project-badge">Jan 2024 – Mar 2024</span>
           <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop"
-            alt="BBQ Al Kahfi" class="project-img">
+            alt="BBQ Al Kahfi" class="project-img" loading="lazy" decoding="async">
         </div>
         <div class="project-content">
           <h3 class="card-title">BBQ Al-Kahfi Serang - Company Profile</h3>
@@ -322,7 +324,7 @@
       <div class="card project-card" data-category="mobile">
         <div class="project-img-wrapper">
           <span class="project-badge">May 2024 – Aug 2024</span>
-          <img src="barudak.jpg" alt="Petualangan Barudak Edu Game" class="project-img">
+          <img src="barudak.jpg" alt="Petualangan Barudak Edu Game" class="project-img" loading="lazy" decoding="async">
         </div>
         <div class="project-content">
           <h3 class="card-title">Petualangan Barudak - Ethnomathematics Edu-Game</h3>
@@ -691,59 +693,106 @@
     </p>
   </footer>
 
-  <!-- Filter & Mobile Nav Script -->
+  <!-- Filter & Mobile Nav & Optimization Script -->
   <script>
-    // Filter Projects Script
+    // Smooth Project Filtering
     const filterButtons = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
 
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
+        if (btn.classList.contains('active')) return;
         filterButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const filter = btn.dataset.filter;
 
         projectCards.forEach(card => {
-          if (filter === 'all' || card.dataset.category === filter) {
+          const isMatch = filter === 'all' || card.dataset.category === filter;
+          if (isMatch) {
             card.style.display = 'flex';
+            requestAnimationFrame(() => {
+              card.classList.remove('is-hidden');
+            });
           } else {
-            card.style.display = 'none';
+            card.classList.add('is-hidden');
+            setTimeout(() => {
+              if (card.classList.contains('is-hidden')) {
+                card.style.display = 'none';
+              }
+            }, 300);
           }
         });
       });
     });
 
-    // Mobile Navigation Drawer Script
+    // Mobile Navigation Drawer
     const navToggle = document.getElementById('navToggle');
     const navLinks = document.getElementById('navLinks');
     const navBackdrop = document.getElementById('navBackdrop');
-    const navLinkItems = navLinks.querySelectorAll('a');
+    const navLinkItems = navLinks ? navLinks.querySelectorAll('a') : [];
 
     function toggleMenu() {
+      const isOpen = navLinks.classList.toggle('active');
       navToggle.classList.toggle('active');
-      navLinks.classList.toggle('active');
-      navBackdrop.classList.toggle('active');
-      document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+      if (navBackdrop) navBackdrop.classList.toggle('active');
+      document.body.style.overflow = isOpen ? 'hidden' : '';
     }
 
     function closeMenu() {
-      navToggle.classList.remove('active');
-      navLinks.classList.remove('active');
-      navBackdrop.classList.remove('active');
+      if (navToggle) navToggle.classList.remove('active');
+      if (navLinks) navLinks.classList.remove('active');
+      if (navBackdrop) navBackdrop.classList.remove('active');
       document.body.style.overflow = '';
     }
 
-    if (navToggle) {
-      navToggle.addEventListener('click', toggleMenu);
+    if (navToggle) navToggle.addEventListener('click', toggleMenu);
+    if (navBackdrop) navBackdrop.addEventListener('click', closeMenu);
+    navLinkItems.forEach(link => link.addEventListener('click', closeMenu));
+
+    // Active Navigation Scrollspy & Smooth Click
+    const sections = document.querySelectorAll('header[id], section[id]');
+    const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+
+    function updateActiveNav() {
+      const scrollPos = window.scrollY + 120;
+      let currentSectionId = '';
+
+      sections.forEach(sec => {
+        const top = sec.offsetTop;
+        const height = sec.offsetHeight;
+        if (scrollPos >= top && scrollPos < top + height) {
+          currentSectionId = sec.getAttribute('id');
+        }
+      });
+
+      if (currentSectionId) {
+        navAnchors.forEach(a => {
+          if (a.getAttribute('href') === `#${currentSectionId}`) {
+            a.classList.add('active');
+          } else {
+            a.classList.remove('active');
+          }
+        });
+      }
     }
 
-    if (navBackdrop) {
-      navBackdrop.addEventListener('click', closeMenu);
-    }
+    window.addEventListener('scroll', updateActiveNav, { passive: true });
+    updateActiveNav();
 
-    navLinkItems.forEach(link => {
-      link.addEventListener('click', closeMenu);
+    navAnchors.forEach(anchor => {
+      anchor.addEventListener('click', function () {
+        const href = this.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          navAnchors.forEach(a => a.classList.remove('active'));
+          this.classList.add('active');
+        }
+      });
     });
+
+    // Prevent Pinch-Zoom & Double-Tap Zooming on Mobile Touch Devices
+    document.addEventListener('gesturestart', (e) => e.preventDefault(), { passive: false });
+    document.addEventListener('gesturechange', (e) => e.preventDefault(), { passive: false });
+    document.addEventListener('gestureend', (e) => e.preventDefault(), { passive: false });
   </script>
 </body>
 
