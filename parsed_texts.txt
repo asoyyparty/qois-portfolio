@@ -1,0 +1,200 @@
+Membangun ekosistem teknologi yang stabil dan mengembangkan solusi web yang inovatif.       Berpengalaman dalam mengelola infrastruktur IT dan menciptakan aplikasi modern.
+Mengelola dan memastikan kelancaran operasional infrastruktur IT perusahaan, menangani *troubleshooting* jaringan, perangkat keras, serta mendukung kebutuhan teknis karyawan untuk menjaga produktivitas.
+Terlibat aktif dalam riset dan publikasi jurnal (fokus pada teknologi pendidikan, game-based learning, dan ethnomathematics). Menerapkan pendekatan komputasi pada pemecahan masalah.
+Pengembangan arsitektur backend yang tangguh untuk sistem internal, fokus pada efisiensi *query* dan keamanan data.
+Eksplorasi teknologi interaktif untuk mendukung implementasi riset *game-based learning* dan *ethnomathematics*.
+&copy; 2026 Qois Abdul Qudus. Designed with Linear Aesthetics.
+31:       Membangun ekosistem teknologi yang stabil dan mengembangkan solusi web yang inovatif. 32:       Berpengalaman dalam mengelola infrastruktur IT dan menciptakan aplikasi modern.33:
+Saya bekerja di berbagai bidang IT, mulai dari mengelola infrastruktur jaringan dan CCTV hingga membangun sistem internal berbasis web dan Android. Saat ini saya adalah IT Officer di PT Centa Brasindo Abadi, tempat saya menangani segala hal dari dukungan infrastruktur hingga pengembangan aplikasi (fasilitas, keamanan, logistik). Saya juga pernah magang sebagai Fullstack Developer di Dicoding Indonesia. Saya senang memahami cara kerja sistem secara *end-to-end* dan terus belajar, terutama di bidang AI.
+Menangani IT secara menyeluruh (*end-to-end*). Mengelola infrastruktur CCTV & pengawasan pabrik, menangani masalah *hardware/software*, serta membangun dan memelihara sistem internal berbasis web untuk pemeliharaan fasilitas, logistik, dan penilaian kinerja karyawan.
+Pekerjaan *freelance* jangka panjang. Membangun dan memelihara beberapa aplikasi web untuk operasional yayasan, sekaligus menjadi tutor privat bagi siswa. Tempat pertama saya mengaplikasikan ilmu kuliah ke proyek nyata.
+Program magang Kampus Merdeka SIB Angkatan 5. Membangun fitur *frontend* responsif dan layanan *backend* (API & database). Terlibat langsung dalam proses *code review* dan siklus kerja *agile* bersama tim *engineering* profesional.
+Pekerjaan *freelance modeling* dan kampanye konten. Mengajarkan saya adaptasi dengan tim kreatif dan bekerja dengan tenggat waktu yang ketat.
+Lulus dengan gelar Sarjana Komputer. Mempelajari fundamental ilmu komputer, pemrograman, dan rekayasa perangkat lunak.
+Berbagai aplikasi operasional pabrik yang digunakan sehari-hari, meliputi sistem pelacakan pemeliharaan fasilitas, *security patrol logging*, monitoring logistik, dan sistem asesmen karyawan.
+&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.
+Game edukasi interaktif berbasis Android berorientasi pada etnomatematika Banten. Telah dipublikasikan secara resmi sebagai jurnal penelitian akademik.
+Freelance pengembang sistem web untuk yayasan dan merangkap sebagai tutor privat yang mengajar murid secara langsung.
+Memiliki beberapa sertifikasi pendukung seperti: AWS Cloud Practitioner Essentials, dan sertifikasi SIB Kampus Merdeka Dicoding.
+&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.
+Saya mengelola infrastruktur IT dan membangun ekosistem digital. Dari pengawasan jaringan & CCTV hingga pengembangan sistem internal pabrik, *fullstack web*, dan aplikasi Android interaktif.
+Kumpulan proyek aplikasi sistem industri, aplikasi web, dan pengembangan game yang telah saya bangun.
+An internal web app for tracking facility and infrastructure maintenance across the plant. The maintenance team uses it to log inspections, record asset condition, and print maintenance history cards, replacing paper-based tracking.
+A system for logging security patrols. Officers record shift schedules, patrol routes, timestamps, and reports with photo evidence and digital signatures, all stored centrally instead of in paper logbooks.
+Web-based application designed to consolidate, record, and optimize the workflow of logistics vehicles within the plant. Monitors stage durations from security check-in to loading, making bottlenecks visible.
+An employee performance tracking system that handles attendance, leave, tardiness, training records, and periodic assessments, with export for official reporting to replace scattered spreadsheets.
+A food ordering platform with live order tracking and an admin panel for managing menu items, built so customers can browse and order without staff manually taking every request.
+A public complaints platform built in partnership with Serang City government. Citizens submit reports, track status, and communicate with departments to increase local government transparency.
+A company profile site for a local business, built to be clean, responsive, and mobile first. Focused on brand credibility and intuitive user navigation.
+Mengelola infrastruktur IT *end-to-end*, pemeliharaan CCTV & server 24/7, serta membangun dan memelihara 4 aplikasi web internal operasional pabrik.
+Membangun antarmuka frontend yang responsif serta mengembangkan arsitektur layanan backend dan API dalam siklus *Agile*.
+Pengembangan sistem web yayasan serta mengajar bimbingan privat untuk siswa.
+Sarjana Komputer. Memiliki sertifikasi AWS Cloud Practitioner Essentials & Dicoding SIB Kampus Merdeka.
+&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.
+34:         Saya mengelola infrastruktur IT dan membangun ekosistem digital. Dari pengawasan jaringan & CCTV hingga pengembangan sistem internal pabrik, *fullstack web*, dan aplikasi Android interaktif.35:
+-        Saya mengelola infrastruktur IT dan membangun ekosistem digital. Dari pengawasan jaringan & CCTV hingga pengembangan sistem internal pabrik, *fullstack web*, dan aplikasi Android interaktif.+        Saya mengelola infrastruktur IT dan membangun ekosistem digital. Dari pengawasan jaringan & CCTV hingga+        pengembangan sistem internal pabrik, *fullstack web*, dan aplikasi Android interaktif.
+Kumpulan proyek aplikasi sistem industri, aplikasi web, dan pengembangan game yang telah saya bangun.
+Kumpulan proyek aplikasi sistem industri, aplikasi+      web, dan pengembangan game yang telah saya bangun.
+-            An internal web app for tracking facility and infrastructure maintenance across the plant. The maintenance team uses it to log inspections, record asset condition, and print maintenance history cards, replacing paper-based tracking.+            An internal web app for tracking facility and infrastructure maintenance across the plant. The maintenance+            team uses it to log inspections, record asset condition, and print maintenance history cards, replacing+            paper-based tracking.
+-            A system for logging security patrols. Officers record shift schedules, patrol routes, timestamps, and reports with photo evidence and digital signatures, all stored centrally instead of in paper logbooks.+            A system for logging security patrols. Officers record shift schedules, patrol routes, timestamps, and+            reports with photo evidence and digital signatures, all stored centrally instead of in paper logbooks.
+-            Web-based application designed to consolidate, record, and optimize the workflow of logistics vehicles within the plant. Monitors stage durations from security check-in to loading, making bottlenecks visible.+            Web-based application designed to consolidate, record, and optimize the workflow of logistics vehicles+            within the plant. Monitors stage durations from security check-in to loading, making bottlenecks visible.
+-            An employee performance tracking system that handles attendance, leave, tardiness, training records, and periodic assessments, with export for official reporting to replace scattered spreadsheets.+            An employee performance tracking system that handles attendance, leave, tardiness, training records, and+            periodic assessments, with export for official reporting to replace scattered spreadsheets.
+-            A food ordering platform with live order tracking and an admin panel for managing menu items, built so customers can browse and order without staff manually taking every request.+            A food ordering platform with live order tracking and an admin panel for managing menu items, built so+            customers can browse and order without staff manually taking every request.
+-            A public complaints platform built in partnership with Serang City government. Citizens submit reports, track status, and communicate with departments to increase local government transparency.+            A public complaints platform built in partnership with Serang City government. Citizens submit reports,+            track status, and communicate with departments to increase local government transparency.
+-            A company profile site for a local business, built to be clean, responsive, and mobile first. Focused on brand credibility and intuitive user navigation.+            A company profile site for a local business, built to be clean, responsive, and mobile first. Focused on+            brand credibility and intuitive user navigation.
++          Mengelola infrastruktur IT *end-to-end*, pemeliharaan CCTV & server 24/7, serta membangun dan memelihara 4+          aplikasi web internal operasional pabrik.
+-          Membangun antarmuka frontend yang responsif serta mengembangkan arsitektur layanan backend dan API dalam siklus *Agile*.+          Membangun antarmuka frontend yang responsif serta mengembangkan arsitektur layanan backend dan API dalam+          siklus *Agile*.
+&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.
+38:         Saya mengelola infrastruktur IT dan membangun ekosistem digital. Dari pengawasan jaringan & CCTV hingga39:         pengembangan sistem internal pabrik, *fullstack web*, dan aplikasi Android interaktif.40:
+Kumpulan proyek aplikasi sistem industri, aplikasi57:       web, dan pengembangan game yang telah saya bangun.
+280:           Pengembangan sistem web yayasan serta mengajar bimbingan privat untuk siswa.281:
+290:           Sarjana Komputer. Memiliki sertifikasi AWS Cloud Practitioner Essentials & Dicoding SIB Kampus Merdeka.291:
+300:       &copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.301:
+Kumpulan proyek aplikasi sistem industri, aplikasi      web, dan pengembangan game yang telah saya bangun.
+An internal web app for tracking facility and infrastructure maintenance across the plant. The maintenance            team uses it to log inspections, record asset condition, and print maintenance history cards, replacing            paper-based tracking.
+A system for logging security patrols. Officers record shift schedules, patrol routes, timestamps, and            reports with photo evidence and digital signatures, all stored centrally instead of in paper logbooks.
+Web-based application designed to consolidate, record, and optimize the workflow of logistics vehicles            within the plant. Monitors stage durations from security check-in to loading, making bottlenecks visible.
+An employee performance tracking system that handles attendance, leave, tardiness, training records, and            periodic assessments, with export for official reporting to replace scattered spreadsheets.
+A food ordering platform with live order tracking and an admin panel for managing menu items, built so            customers can browse and order without staff manually taking every request.
+A public complaints platform built in partnership with Serang City government. Citizens submit reports,            track status, and communicate with departments to increase local government transparency.
+A company profile site for a local business, built to be clean, responsive, and mobile first. Focused on            brand credibility and intuitive user navigation.
+Mengelola infrastruktur IT *end-to-end*, pemeliharaan CCTV & server 24/7, serta membangun dan memelihara 4          aplikasi web internal operasional pabrik.
+Membangun antarmuka frontend yang responsif serta mengembangkan arsitektur layanan backend dan API dalam          siklus *Agile*.
+Pengembangan sistem web yayasan serta mengajar bimbingan privat untuk siswa.
+Sarjana Komputer. Memiliki sertifikasi AWS Cloud Practitioner Essentials & Dicoding SIB Kampus Merdeka.
+Mari terhubung melalui jejaring profesional dan media sosial saya.
+&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.
+Mari terhubung melalui jejaring profesional dan media sosial saya.
+364:       &copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten.365:
+I manage end-to-end IT infrastructure and build scalable digital solutions—ranging from surveillance network operations and plant security systems to enterprise web platforms and interactive Android applications.
+A curated collection of industrial enterprise systems, web applications, and mobile game developments.
+An internal enterprise web application for tracking plant-wide facility and infrastructure maintenance. Enables maintenance teams to log inspections, track asset conditions, and generate historical maintenance records—replacing manual paper workflows.
+A centralized digital platform for logging security operations. Officers record shift schedules, patrol routes, timestamps, and incident reports complete with photo evidence and digital signatures.
+A real-time logistics tracking platform designed to consolidate, record, and optimize vehicle workflows within the plant. Monitors stage durations from gate check-in to loading, identifying operational bottlenecks.
+An HR performance tracking solution handling attendance, leave requests, tardiness, training records, and periodic evaluations with automated official report exports.
+A web-based food ordering platform featuring live order status tracking and an administrative panel for menu management, empowering customers to order directly without manual intervention.
+A public complaints platform developed in partnership with the Serang City Government. Citizens can submit issues, track resolution status, and engage transparently with municipal departments.
+A modern, responsive, mobile-first company profile website crafted to enhance brand credibility and deliver a seamless browsing experience for visitors.
+Managing end-to-end IT infrastructure and 24/7 CCTV surveillance networks while architecting and maintaining 4 core web-based internal applications for plant operations.
+Developed responsive frontend user interfaces and designed robust backend API microservices within an Agile team structure featuring strict code reviews.
+Building and maintaining web platforms for foundation management while delivering one-on-one technical instruction for students.
+Graduated with a Bachelor's Degree in Computer Science. Certified AWS Cloud Practitioner & Kampus Merdeka SIB Alumnus.
+Feel free to reach out via professional networks or social channels.
+&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten, Indonesia.
+Koleksi pilihan proyek sistem industri, aplikasi web, dan pengembangan game mobile.
+Aplikasi web internal perusahaan untuk memantau dan mencatat pemeliharaan fasilitas serta infrastruktur di seluruh area pabrik. Memudahkan tim maintenance mencatat inspeksi, kondisi aset, dan mencetak kartu riwayat pemeliharaan secara digital.
+Platform digital terpusat untuk pencatatan patroli keamanan. Petugas mencatat jadwal shift, rute patroli, stempel waktu, dan laporan kejadian lengkap dengan bukti foto serta tanda tangan digital.
+Platform pelacakan logistik real-time yang dirancang untuk mengonsolidasi, mencatat, dan mengoptimalkan alur kerja kendaraan di area pabrik. Memantau durasi setiap tahapan mulai dari gerbang masuk hingga pemuatan barang.
+Solusi pelacakan kinerja HR yang mengelola kehadiran, pengajuan cuti, keterlambatan, riwayat pelatihan, serta evaluasi berkala karyawan lengkap dengan fitur ekspor laporan resmi.
+Platform pemesanan makanan berbasis web dengan fitur pelacakan status pesanan secara langsung dan panel admin manajemen menu, memudahkan pelanggan memesan tanpa perlu pelayanan manual.
+Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Serang. Masyarakat dapat menyampaikan laporan, memantau status penyelesaian, dan berkomunikasi langsung dengan dinas terkait.
+Membangun dan memelihara platform web untuk operasional yayasan sekaligus memberikan bimbingan teknis secara langsung untuk para siswa.
+Lulus dengan gelar Sarjana Komputer. Pemegang sertifikasi AWS Cloud Practitioner Essentials & Alumni SIB Kampus Merdeka Dicoding.
+Mari terhubung melalui jejaring profesional dan media sosial saya.
+&copy; 2026 Qois Abdul Qudus. IT Enthusiast berbasis di Serang, Banten, Indonesia.
+Kumpulan proyek aplikasi sistem industri, web platforms, dan mobile game development yang telah saya bangun.
+Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Serang. Warga dapat mengirim laporan, melacak status penanganan, dan berkomunikasi dengan dinas terkait.
+Membangun dan memelihara sistem aplikasi web untuk operasional yayasan sekaligus memberikan bimbingan teknis secara privat bagi siswa.
+Lulus dengan gelar Sarjana Komputer. Memegang sertifikasi AWS Cloud Practitioner Essentials & Alumni SIB Kampus Merdeka Dicoding.
+Mari terhubung melalui jejaring profesional dan media sosial saya.
+&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten, Indonesia.
+Kumpulan proyek aplikasi sistem industri, web platforms, dan mobile game development yang telah saya bangun.
+183:             Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Serang. Warga dapat mengirim laporan, melacak status penanganan, dan berkomunikasi dengan dinas terkait.184:
+Kumpulan proyek aplikasi sistem industri, web platforms, dan mobile game development yang telah saya bangun.
+Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Serang. Warga dapat mengirim laporan, melacak status penanganan, dan berkomunikasi dengan dinas terkait.
+Membangun dan memelihara sistem aplikasi web untuk operasional yayasan sekaligus memberikan bimbingan teknis secara privat bagi siswa.
+Lulus dengan gelar Sarjana Komputer. Memegang sertifikasi AWS Cloud Practitioner Essentials & Alumni SIB Kampus Merdeka Dicoding.
+Mari terhubung melalui jejaring profesional dan media sosial saya.
+&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten, Indonesia.
+198:             Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Serang. Warga dapat mengirim laporan, melacak status penanganan, dan berkomunikasi dengan dinas terkait.199:
+Kumpulan proyek aplikasi sistem industri, web platforms, dan mobile game development yang telah saya bangun.
+Kumpulan proyek aplikasi sistem industri, web+      platforms, dan mobile game development yang telah saya bangun.
+-            Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Serang. Warga dapat mengirim laporan, melacak status penanganan, dan berkomunikasi dengan dinas terkait.+            Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Serang. Warga dapat mengirim+            laporan, melacak status penanganan, dan berkomunikasi dengan dinas terkait.
+-          Membangun dan memelihara sistem aplikasi web untuk operasional yayasan sekaligus memberikan bimbingan teknis secara privat bagi siswa.+          Membangun dan memelihara sistem aplikasi web untuk operasional yayasan sekaligus memberikan bimbingan teknis+          secara privat bagi siswa.
+-          Lulus dengan gelar Sarjana Komputer. Memegang sertifikasi AWS Cloud Practitioner Essentials & Alumni SIB Kampus Merdeka Dicoding.+          Lulus dengan gelar Sarjana Komputer. Memegang sertifikasi AWS Cloud Practitioner Essentials & Alumni SIB+          Kampus Merdeka Dicoding.
+Mari terhubung melalui jejaring profesional dan media sosial saya.
+Mari terhubung melalui jejaring profesional dan media+      sosial saya.
+Kumpulan proyek aplikasi sistem industri, web59:       platforms, dan mobile game development yang telah saya bangun.
+301:           Membangun dan memelihara sistem aplikasi web untuk operasional yayasan sekaligus memberikan bimbingan teknis302:           secara privat bagi siswa.303:
+301:           Membangun dan memelihara sistem aplikasi web untuk operasional yayasan sekaligus memberikan bimbingan teknis302:           secara privat bagi siswa.303:
+312:           Lulus dengan gelar Sarjana Komputer. Memegang sertifikasi AWS Cloud Practitioner Essentials & Alumni SIB313:           Kampus Merdeka Dicoding.314:
+Mari terhubung melalui jejaring profesional dan media323:       sosial saya.
+Kumpulan proyek aplikasi sistem industri, web platforms, dan mobile game development yang telah saya bangun.
+Platform pengaduan publik yang dibangun bekerja sama dengan Pemerintah Kota Serang. Warga dapat mengirim laporan, melacak status penanganan, dan berkomunikasi dengan dinas terkait.
+Menangani IT secara *end-to-end*. Mengelola jaringan CCTV & pengawasan pabrik 24/7 agar selalu *online* dan sesuai standar. Sebagian besar waktu dialokasikan untuk membangun aplikasi web internal operasional pabrik (pemeliharaan fasilitas, *security patrol logging*, monitoring logistik, dan asesmen kinerja karyawan), serta menangani dukungan teknis *hardware*, *software*, dan jaringan.
+Program magang 6 bulan sebagai *Fullstack Developer*. Membangun fitur *frontend* yang responsif dan layanan *backend* (API & *database*), serta aktif mengikuti siklus kerja *Agile* dan *code review* profesional bersama tim *engineering*.
+Pekerjaan *freelance* jangka panjang. Membangun dan memelihara beberapa aplikasi web untuk operasional yayasan, sekaligus memberikan bimbingan belajar secara privat untuk siswa.
+Peran *sales* lapangan dalam memasarkan produk Smartfren secara langsung kepada pelanggan. Memberikan fondasi yang kuat dalam komunikasi dan pencapaian target sebelum sepenuhnya fokus di bidang IT.
+Pekerjaan *freelance modeling* untuk *brand modest fashion*, berfokus pada *photoshoot* dan konten kampanye. Melatih kemampuan kolaborasi dengan tim kreatif serta kerja adaptif sesuai tenggat waktu.
+Bachelor's degree in Computer Science. Mempelajari rekayasa perangkat lunak, arsitektur komputasi, dan penyelesaian masalah berbasis teknologi.
+Sertifikasi resmi dalam pengembangaan perangkat lunak, komputasi awan, dan analisis data.
+Belajar Dasar AWS Cloud Platform
+Studi Independen Bersertifikat Fullstack Developer
+Software Engineering Fundamentals
+Data Visualization & Insights
+Python Basics & Data Structures
+Mari terhubung melalui jejaring profesional dan media sosial saya.
+&copy; 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten, Indonesia.
+268:           Menangani IT secara *end-to-end*. Mengelola jaringan CCTV & pengawasan pabrik 24/7 agar selalu *online* dan sesuai standar. Sebagian besar waktu dialokasikan untuk membangun aplikasi web internal operasional pabrik (pemeliharaan fasilitas, *security patrol logging*, monitoring logistik, dan asesmen kinerja karyawan), serta menangani dukungan teknis *hardware*, *software*, dan jaringan.269:
+278:           Program magang 6 bulan sebagai *Fullstack Developer*. Membangun fitur *frontend* yang responsif dan layanan *backend* (API & *database*), serta aktif mengikuti siklus kerja *Agile* dan *code review* profesional bersama tim *engineering*.279:
+288:           Pekerjaan *freelance* jangka panjang. Membangun dan memelihara beberapa aplikasi web untuk operasional yayasan, sekaligus memberikan bimbingan belajar secara privat untuk siswa.289:
+298:           Peran *sales* lapangan dalam memasarkan produk Smartfren secara langsung kepada pelanggan. Memberikan fondasi yang kuat dalam komunikasi dan pencapaian target sebelum sepenuhnya fokus di bidang IT.299:
+308:           Pekerjaan *freelance modeling* untuk *brand modest fashion*, berfokus pada *photoshoot* dan konten kampanye. Melatih kemampuan kolaborasi dengan tim kreatif serta kerja adaptif sesuai tenggat waktu.309:
+323:           Bachelor's degree in Computer Science. Mempelajari rekayasa perangkat lunak, arsitektur komputasi, dan penyelesaian masalah berbasis teknologi.324:
+Menangani IT secara *end-to-end*. Mengelola jaringan CCTV & pengawasan pabrik 24/7 agar selalu *online* dan sesuai standar. Sebagian besar waktu dialokasikan untuk membangun aplikasi web internal operasional pabrik (pemeliharaan fasilitas, *security patrol logging*, monitoring logistik, dan asesmen kinerja karyawan), serta menangani dukungan teknis *hardware*, *software*, dan jaringan.
+Program magang 6 bulan sebagai *Fullstack Developer*. Membangun fitur *frontend* yang responsif dan layanan *backend* (API & *database*), serta aktif mengikuti siklus kerja *Agile* dan *code review* profesional bersama tim *engineering*.
+Pekerjaan *freelance* jangka panjang. Membangun dan memelihara beberapa aplikasi web untuk operasional yayasan, sekaligus memberikan bimbingan belajar secara privat untuk siswa.
+Peran *sales* lapangan dalam memasarkan produk Smartfren secara langsung kepada pelanggan. Memberikan fondasi yang kuat dalam komunikasi dan pencapaian target sebelum sepenuhnya fokus di bidang IT.
+Pekerjaan *freelance modeling* untuk *brand modest fashion*, berfokus pada *photoshoot* dan konten kampanye. Melatih kemampuan kolaborasi dengan tim kreatif serta kerja adaptif sesuai tenggat waktu.
+339:           Bachelor's degree in Computer Science. Mempelajari rekayasa perangkat lunak, arsitektur komputasi, dan penyelesaian masalah berbasis teknologi.340:
+Sertifikasi resmi dalam pengembangaan perangkat lunak, komputasi awan, dan analisis data.
+Belajar Dasar AWS Cloud Platform
+Studi Independen Bersertifikat Fullstack Developer
+Software Engineering Fundamentals
+Data Visualization & Insights
+Sertifikasi resmi dalam pengembangaan perangkat lunak, komputasi awan, dan analisis data.
+Belajar Dasar AWS Cloud Platform
+Studi Independen Bersertifikat Fullstack Developer
+Software Engineering Fundamentals
+Data Visualization & Insights
+Python Basics & Data Structures
+Sertifikasi resmi dan kredensial profesional yang telah divalidasi oleh institusi global & nasional.
+Dasar-dasar arsitektur komputasi awan AWS, keamanan cloud, layanan komputasi, dan manajemen infrastruktur cloud modern.
+Program Studi Independen Bersertifikat intensif 6 bulan yang berfokus pada kurikulum Fullstack Web Development & Microservices Architecture.
+Fondasi rekayasa perangkat lunak, logika algoritma, alur kerja pengembangan software, dan best practices sintaks.
+Teknik analisis data, perancangan grafik intuitif, serta penyajian informasi dan wawasan data yang efektif.
+Penguasaan dasar bahasa pemrograman Python, struktur data, pemrosesan variabel, dan penerapan skrip otomatisasi.
+Sertifikasi resmi dalam pengembangaan perangkat lunak, komputasi awan, dan analisis data.
+Belajar Dasar AWS Cloud Platform
+Studi Independen Bersertifikat Fullstack Developer
+Software Engineering Fundamentals
+Data Visualization & Insights
+Python Basics & Data Structures
+Sertifikasi resmi dalam pengembangaan perangkat lunak, komputasi awan, dan analisis data.
+Sertifikasi resmi dan kredensial profesional yang telah divalidasi oleh institusi global & nasional.
+Belajar Dasar AWS Cloud Platform
++            Dasar-dasar arsitektur komputasi awan AWS, keamanan cloud, layanan komputasi, dan manajemen infrastruktur cloud modern.+
+Studi Independen Bersertifikat Fullstack Developer
++            Program Studi Independen Bersertifikat intensif 6 bulan yang berfokus pada kurikulum Fullstack Web Development & Microservices Architecture.+
+Software Engineering Fundamentals
++            Fondasi rekayasa perangkat lunak, logika algoritma, alur kerja pengembangan software, dan best practices sintaks.+
+Data Visualization & Insights
++            Teknik analisis data, perancangan grafik intuitif, serta penyajian informasi dan wawasan data yang efektif.+
+Python Basics & Data Structures
++            Penguasaan dasar bahasa pemrograman Python, struktur data, pemrosesan variabel, dan penerapan skrip otomatisasi.+
+Qois Abdul Qudus
+Licenses &amp; certifications
+Belajar Dasar AI
+Dicoding Indonesia
+Issued Nov 2025 · Expires Nov 2028
+Credential ID 6RPNG7NO8Z2M
+Belajar Dasar AI
+Introduction to Financial Literacy
+Dicoding Indonesia
+Issued Nov 2025 · Expires Nov 2028
+Credential ID MEPJ2O0QWP3V
+Introduction to Financial Literacy
+Belajar Penerapan Data Science dengan Microsoft Fabric
+Dicoding Indonesia
+Issued Nov 2025 · Expires Nov 2028
+Credential ID 2VX35034JPYQ
