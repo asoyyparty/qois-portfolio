@@ -34,16 +34,19 @@ Website ini menampilkan rekam jejak profesional, proyek-proyek enterprise & web 
 ## 🛠️ Proyek Unggulan (*Featured Projects*)
 
 ### 🏢 Enterprise Systems (PT Centa Brasindo Abadi Chemical Industry)
-1. **Sistem Sarana Prasarana** — Memantau & mencatat pemeliharaan fasilitas pabrik serta digitalisasi kartu riwayat aset. ([Live App](https://saranaprasarana.cbapabrik.com/))
-2. **Patroli Keamanan Pabrik** — Pencatatan log patroli keamanan terpusat dengan *timestamp*, bukti foto, dan tanda tangan digital. ([Live App](https://patrolikeamanan.cbapabrik.com/))
-3. **Tracking Bongkar Muat** — Pelacakan logistik real-time untuk optimalisasi alur kendaraan dari *gate check-in* hingga pemuatan barang. ([Live App](https://tracking.cbapabrik.com/))
-4. **E-Raport System (Kinerja Karyawan)** — Sistem manajemen SDM untuk kehadiran, cuti, dan evaluasi kinerja berkala. ([Live App](https://eraport.cbapabrik.com/))
+1. **Factory Network Control System** — Monitoring & kontrol perangkat jaringan pabrik real-time berbasis web (LAN). ([Live App](https://networkfactory.cbapabrik.com/))
+2. **IT Asset Management (ITAM) Enterprise** — Sistem manajemen aset IT & ticketing helpdesk komprehensif berbasis Laravel 12. ([Live App](https://itam.cbapabrik.com/))
+3. **P3K Digital Monitoring System** — Manajemen inventaris cerdas pemantauan kotak P3K digital di seluruh area pabrik. ([Live App](https://kotakp3k.cbapabrik.com/))
+4. **Sistem Sarana Prasarana** — Memantau & mencatat pemeliharaan fasilitas pabrik serta digitalisasi kartu riwayat aset. ([Live App](https://saranaprasarana.cbapabrik.com/))
+5. **Patroli Keamanan Pabrik** — Pencatatan log patroli keamanan terpusat dengan *timestamp*, bukti foto, dan tanda tangan digital. ([Live App](https://patrolikeamanan.cbapabrik.com/))
+6. **Tracking Bongkar Muat** — Pelacakan logistik real-time untuk optimalisasi alur kendaraan dari *gate check-in* hingga pemuatan barang. ([Live App](https://tracking.cbapabrik.com/))
+7. **E-Raport System (Kinerja Karyawan)** — Sistem manajemen SDM untuk kehadiran, cuti, dan evaluasi kinerja berkala. ([Live App](https://eraport.cbapabrik.com/))
 
 ### 🌐 Web Applications & Mobile Dev
-5. **Esthetic Cafe** — Platform pemesanan makanan berbasis web dengan fitur *live order tracking* & admin panel. ([Live Site](https://estheticcafe.my.id))
-6. **SerenityHub** — Platform pengaduan publik kolaborasi Pemkot Serang & Universitas Bina Bangsa. ([Live App](https://serenityhub.cbapabrik.com/))
-7. **BBQ Al-Kahfi Serang** — Website profil perusahaan yang responsif dan mobile-first. ([Live Site](https://bbqalkahfiserang.com/))
-8. **Petualangan Barudak** — Game edukasi etnomatematika interaktif berbasis Android (Dipublikasikan di *Histogram: Jurnal Pendidikan Matematika 2024*). ([Publikasi Jurnal](https://garuda.kemdiktisaintek.go.id/documents/detail/4509823))
+8. **Esthetic Cafe** — Platform pemesanan makanan berbasis web dengan fitur *live order tracking* & admin panel. ([Live Site](https://estheticcafe.my.id))
+9. **SerenityHub** — Platform pengaduan publik kolaborasi Pemkot Serang & Universitas Bina Bangsa. ([Live App](https://serenityhub.cbapabrik.com/))
+10. **BBQ Al-Kahfi Serang** — Website profil perusahaan yang responsif dan mobile-first. ([Live Site](https://bbqalkahfiserang.com/))
+11. **Petualangan Barudak** — Game edukasi etnomatematika interaktif berbasis Android (Dipublikasikan di *Histogram: Jurnal Pendidikan Matematika 2024*). ([Publikasi Jurnal](https://garuda.kemdiktisaintek.go.id/documents/detail/4509823))
 
 ---
 
@@ -70,13 +73,16 @@ qois-portfolio/
 ├── styles.css            # Custom CSS Tokens, Glassmorphism, Responsive Grid
 ├── README.md             # Dokumentasi Proyek
 ├── .gitignore            # Git Ignore File
-├── profile.png           # Foto Profil
-├── saranaprasarana.png   # Preview Screenshot Proyek
-├── patroli.png           # Preview Screenshot Proyek
-├── tracking.png          # Preview Screenshot Proyek
-├── eraport.png          # Preview Screenshot Proyek
-├── serenityhub.png       # Preview Screenshot Proyek
-└── barudak.jpg           # Preview Screenshot Game Edukasi
+├── profile.png           # Foto Profil (Favicon & Profile Header)
+├── networkfactory.png    # Preview Factory Network Control System
+├── itam.png              # Preview IT Asset Management Enterprise
+├── kotakp3k.png          # Preview P3K Digital Monitoring System
+├── saranaprasarana.png   # Preview Sistem Sarana Prasarana
+├── patroli.png           # Preview Patroli Keamanan Pabrik
+├── tracking.png          # Preview Tracking Bongkar Muat
+├── eraport.png          # Preview E-Raport System
+├── serenityhub.png       # Preview SerenityHub Platform
+└── barudak.jpg           # Preview Game Edukasi Petualangan Barudak
 ```
 
 ---
