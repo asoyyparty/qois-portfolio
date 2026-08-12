@@ -1907,7 +1907,13 @@
   // INITIALIZATION ON DOM READY
   document.addEventListener('DOMContentLoaded', () => {
     currentData = getSiteData();
-    renderAll();
+    
+    // Optimasi: Hanya render ulang DOM jika ada data custom di localStorage.
+    // Jika tidak ada, biarkan HTML bawaan (index.html) tampil apa adanya agar loading sangat cepat.
+    if (localStorage.getItem(STORAGE_KEY)) {
+      renderAll();
+    }
+    
     initAdminUI();
   });
 
