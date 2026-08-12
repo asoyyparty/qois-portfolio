@@ -675,7 +675,7 @@
       <svg class="admin-fab-icon" viewBox="0 0 24 24">
         <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
       </svg>
-      <span>Admin Panel</span>
+      <span>Pemilik</span>
     `;
     document.body.appendChild(fab);
 
@@ -718,10 +718,10 @@
   function renderLoginCard(container) {
     container.innerHTML = `
       <div class="admin-login-card">
-        <h3 class="admin-login-title">🔐 Panel Admin Security</h3>
-        <p class="admin-login-subtitle">Masukkan Kata Sandi / PIN Admin untuk melanjutkan</p>
+        <h3 class="admin-login-title">🔐 Panel Pemilik</h3>
+        <p class="admin-login-subtitle">Masukkan Kata Sandi / PIN untuk melanjutkan</p>
         <div class="admin-form-group">
-          <input type="password" id="admin-pass-input" class="admin-input" placeholder="Masukkan Kata Sandi (default: admin123)" autofocus>
+          <input type="password" id="admin-pass-input" class="admin-input" placeholder="Masukkan Kata Sandi" autofocus>
         </div>
         <div style="display: flex; gap: 10px; margin-top: 20px;">
           <button type="button" class="admin-btn admin-btn-secondary" style="flex:1;" id="admin-login-cancel">Batal</button>
@@ -805,9 +805,17 @@
         tabBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         activeTab = btn.dataset.tab;
+        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         renderActiveTabContent();
       });
     });
+
+    const activeBtn = container.querySelector('.admin-tab-btn.active');
+    if (activeBtn) {
+      setTimeout(() => {
+        activeBtn.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
+      }, 50);
+    }
 
     renderActiveTabContent();
   }
@@ -938,11 +946,15 @@
         <option value="${c.id}" ${p.category === c.id ? 'selected' : ''}>${escapeHtml(c.label)}</option>
       `).join('');
 
+      // On mobile/desktop, index 0 is open, others start collapsed for ultra clean view
+      const isCollapsed = index > 0;
+
       return `
-        <div class="admin-card-item" data-index="${index}">
-          <div class="admin-card-header">
+        <div class="admin-card-item ${isCollapsed ? 'collapsed' : ''}" data-index="${index}">
+          <div class="admin-card-header" title="Klik untuk buka/tutup rincian">
             <div class="admin-card-item-title">
-              <span>🚀 #${index + 1} - ${escapeHtml(p.title || 'Proyek Tanpa Judul')}</span>
+              <span class="admin-card-chevron">▼</span>
+              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">🚀 #${index + 1} - ${escapeHtml(p.title || 'Proyek Tanpa Judul')}</span>
             </div>
             <div class="admin-card-actions">
               ${index > 0 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-project-up-btn" data-index="${index}" title="Naikkan">⬆️</button>` : ''}
@@ -951,54 +963,56 @@
             </div>
           </div>
 
-          <div class="admin-row">
-            <div class="admin-form-group">
-              <label class="admin-label">Judul Proyek</label>
-              <input type="text" class="admin-input proj-title" value="${escapeHtml(p.title || '')}">
+          <div class="admin-card-body">
+            <div class="admin-row">
+              <div class="admin-form-group">
+                <label class="admin-label">Judul Proyek</label>
+                <input type="text" class="admin-input proj-title" value="${escapeHtml(p.title || '')}">
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-label">Perusahaan / Instansi Associated</label>
+                <input type="text" class="admin-input proj-company" value="${escapeHtml(p.company || '')}">
+              </div>
             </div>
-            <div class="admin-form-group">
-              <label class="admin-label">Perusahaan / Instansi Associated</label>
-              <input type="text" class="admin-input proj-company" value="${escapeHtml(p.company || '')}">
-            </div>
-          </div>
 
-          <div class="admin-row">
-            <div class="admin-form-group">
-              <label class="admin-label">Badge Periode (Waktu)</label>
-              <input type="text" class="admin-input proj-badge" value="${escapeHtml(p.badge || '')}">
+            <div class="admin-row">
+              <div class="admin-form-group">
+                <label class="admin-label">Badge Periode (Waktu)</label>
+                <input type="text" class="admin-input proj-badge" value="${escapeHtml(p.badge || '')}">
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-label">Kategori Filter</label>
+                <select class="admin-select proj-category">
+                  ${categoryOptions}
+                </select>
+              </div>
             </div>
-            <div class="admin-form-group">
-              <label class="admin-label">Kategori Filter</label>
-              <select class="admin-select proj-category">
-                ${categoryOptions}
-              </select>
-            </div>
-          </div>
 
-          <div class="admin-form-group">
-            <label class="admin-label">Deskripsi Singkat</label>
-            <textarea class="admin-textarea proj-desc">${escapeHtml(p.description || '')}</textarea>
-          </div>
-
-          <div class="admin-row">
             <div class="admin-form-group">
-              <label class="admin-label">Tech Stack (pisahkan dengan koma)</label>
-              <input type="text" class="admin-input proj-tech" value="${escapeHtml((p.techStack || []).join(', '))}">
+              <label class="admin-label">Deskripsi Singkat</label>
+              <textarea class="admin-textarea proj-desc">${escapeHtml(p.description || '')}</textarea>
             </div>
-            <div class="admin-form-group">
-              <label class="admin-label">Tautan Proyek (URL)</label>
-              <input type="text" class="admin-input proj-link-url" value="${escapeHtml(p.linkUrl || '')}">
-            </div>
-          </div>
 
-          <div class="admin-form-group">
-            <label class="admin-label">Gambar Proyek (URL atau Upload File)</label>
-            <input type="text" class="admin-input proj-img-url" value="${escapeHtml(p.image || '')}">
-            <div class="admin-img-preview-box">
-              <img src="${escapeHtml(p.image || '')}" class="admin-img-preview proj-img-preview" alt="Preview">
-              <div class="admin-file-input-wrapper">
-                <button type="button" class="admin-btn admin-btn-secondary">📁 Upload Gambar Proyek</button>
-                <input type="file" class="proj-img-file-input" accept="image/*">
+            <div class="admin-row">
+              <div class="admin-form-group">
+                <label class="admin-label">Tech Stack (pisahkan dengan koma)</label>
+                <input type="text" class="admin-input proj-tech" value="${escapeHtml((p.techStack || []).join(', '))}">
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-label">Tautan Proyek (URL)</label>
+                <input type="text" class="admin-input proj-link-url" value="${escapeHtml(p.linkUrl || '')}">
+              </div>
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-label">Gambar Proyek (URL atau Upload File)</label>
+              <input type="text" class="admin-input proj-img-url" value="${escapeHtml(p.image || '')}">
+              <div class="admin-img-preview-box">
+                <img src="${escapeHtml(p.image || '')}" class="admin-img-preview proj-img-preview" alt="Preview">
+                <div class="admin-file-input-wrapper">
+                  <button type="button" class="admin-btn admin-btn-secondary">📁 Upload Gambar Proyek</button>
+                  <input type="file" class="proj-img-file-input" accept="image/*">
+                </div>
               </div>
             </div>
           </div>
@@ -1007,12 +1021,15 @@
     }).join('');
 
     container.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+      <div class="admin-section-topbar">
         <div>
           <h3 class="admin-section-title">🚀 Kelola Proyek Portfolio (${projects.length})</h3>
           <p class="admin-section-desc">Tambah, ubah, urutkan, atau hapus proyek aplikasi yang ditampilkan di portofolio.</p>
         </div>
-        <button type="button" class="admin-btn admin-btn-primary" id="add-project-btn">➕ Tambah Proyek Baru</button>
+        <div class="admin-section-topbar-actions">
+          <button type="button" class="admin-btn admin-btn-secondary" id="toggle-all-projects-btn">↔️ Buka / Tutup Semua</button>
+          <button type="button" class="admin-btn admin-btn-primary" id="add-project-btn">➕ Tambah Proyek Baru</button>
+        </div>
       </div>
 
       <form id="projects-form">
@@ -1021,36 +1038,58 @@
         </div>
 
         <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
-          <button type="submit" class="admin-btn admin-btn-primary">💾 Simpan Semua Proyek</button>
+          <button type="submit" class="admin-btn admin-btn-primary" style="width:100%;">💾 Simpan Semua Proyek</button>
         </div>
       </form>
     `;
 
-    // Bind Image Upload & Reorder & Delete Events
     const listContainer = document.getElementById('projects-list-container');
 
+    // Accordion Header Click Listener
     listContainer.querySelectorAll('.admin-card-item').forEach(card => {
+      const header = card.querySelector('.admin-card-header');
+      if (header) {
+        header.addEventListener('click', (e) => {
+          if (e.target.closest('.admin-card-actions')) return;
+          card.classList.toggle('collapsed');
+        });
+      }
+
       const fileInput = card.querySelector('.proj-img-file-input');
       const urlInput = card.querySelector('.proj-img-url');
       const imgPreview = card.querySelector('.proj-img-preview');
 
-      fileInput.addEventListener('change', function () {
-        if (this.files && this.files[0]) {
-          processImageFile(this.files[0], (base64Url) => {
-            urlInput.value = base64Url;
-            imgPreview.src = base64Url;
-          });
-        }
-      });
+      if (fileInput && urlInput && imgPreview) {
+        fileInput.addEventListener('change', function () {
+          if (this.files && this.files[0]) {
+            processImageFile(this.files[0], (base64Url) => {
+              urlInput.value = base64Url;
+              imgPreview.src = base64Url;
+            });
+          }
+        });
 
-      urlInput.addEventListener('input', function () {
-        imgPreview.src = this.value;
-      });
+        urlInput.addEventListener('input', function () {
+          imgPreview.src = this.value;
+        });
+      }
     });
+
+    // Expand/Collapse All Button
+    let allCollapsed = true;
+    const toggleAllBtn = document.getElementById('toggle-all-projects-btn');
+    if (toggleAllBtn) {
+      toggleAllBtn.addEventListener('click', () => {
+        const cards = listContainer.querySelectorAll('.admin-card-item');
+        cards.forEach(c => c.classList.toggle('collapsed', !allCollapsed));
+        allCollapsed = !allCollapsed;
+      });
+    }
 
     // Delete Button
     listContainer.querySelectorAll('.delete-project-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
         if (confirm('Yakin ingin menghapus proyek ini?')) {
           currentData.projects.splice(idx, 1);
@@ -1062,7 +1101,8 @@
 
     // Move Up / Down
     listContainer.querySelectorAll('.move-project-up-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
         if (idx > 0) {
           const temp = currentData.projects[idx];
@@ -1074,7 +1114,8 @@
     });
 
     listContainer.querySelectorAll('.move-project-down-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
         if (idx < currentData.projects.length - 1) {
           const temp = currentData.projects[idx];
@@ -1179,10 +1220,11 @@
   function renderTabCertifications(container) {
     const certs = currentData.certifications || [];
     let itemsHtml = certs.map((c, i) => `
-      <div class="admin-card-item" data-index="${i}">
-        <div class="admin-card-header">
+      <div class="admin-card-item ${i > 0 ? 'collapsed' : ''}" data-index="${i}">
+        <div class="admin-card-header" title="Klik untuk buka/tutup rincian">
           <div class="admin-card-item-title">
-            <span>📜 #${i + 1} - ${escapeHtml(c.title || 'Sertifikat')}</span>
+            <span class="admin-card-chevron">▼</span>
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">📜 #${i + 1} - ${escapeHtml(c.title || 'Sertifikat')}</span>
           </div>
           <div class="admin-card-actions">
             ${i > 0 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon cert-up-btn" data-index="${i}">⬆️</button>` : ''}
@@ -1191,42 +1233,47 @@
           </div>
         </div>
 
-        <div class="admin-row">
-          <div class="admin-form-group">
-            <label class="admin-label">Penerbit / Meta (mis: Dicoding • ID: 123)</label>
-            <input type="text" class="admin-input cert-meta" value="${escapeHtml(c.meta || '')}">
+        <div class="admin-card-body">
+          <div class="admin-row">
+            <div class="admin-form-group">
+              <label class="admin-label">Penerbit / Meta (mis: Dicoding • ID: 123)</label>
+              <input type="text" class="admin-input cert-meta" value="${escapeHtml(c.meta || '')}">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Nama Sertifikasi</label>
+              <input type="text" class="admin-input cert-title" value="${escapeHtml(c.title || '')}">
+            </div>
           </div>
-          <div class="admin-form-group">
-            <label class="admin-label">Nama Sertifikasi</label>
-            <input type="text" class="admin-input cert-title" value="${escapeHtml(c.title || '')}">
-          </div>
-        </div>
 
-        <div class="admin-form-group">
-          <label class="admin-label">Keterangan Singkat</label>
-          <textarea class="admin-textarea cert-desc">${escapeHtml(c.description || '')}</textarea>
-        </div>
-
-        <div class="admin-row">
           <div class="admin-form-group">
-            <label class="admin-label">Link Verifikasi / Kredensial (URL)</label>
-            <input type="text" class="admin-input cert-link" value="${escapeHtml(c.linkUrl || '')}">
+            <label class="admin-label">Keterangan Singkat</label>
+            <textarea class="admin-textarea cert-desc">${escapeHtml(c.description || '')}</textarea>
           </div>
-          <div class="admin-form-group">
-            <label class="admin-label">Teks Tombol Link (mis: Verify Credential ↗)</label>
-            <input type="text" class="admin-input cert-link-text" value="${escapeHtml(c.linkText || 'Show Credential ↗')}">
+
+          <div class="admin-row">
+            <div class="admin-form-group">
+              <label class="admin-label">Link Verifikasi / Kredensial (URL)</label>
+              <input type="text" class="admin-input cert-link" value="${escapeHtml(c.linkUrl || '')}">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Teks Tombol Link (mis: Verify Credential ↗)</label>
+              <input type="text" class="admin-input cert-link-text" value="${escapeHtml(c.linkText || 'Show Credential ↗')}">
+            </div>
           </div>
         </div>
       </div>
     `).join('');
 
     container.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+      <div class="admin-section-topbar">
         <div>
           <h3 class="admin-section-title">📜 Kelola Sertifikasi & Lisensi (${certs.length})</h3>
           <p class="admin-section-desc">Atur kredensial profesional dan sertifikasi resmi Anda.</p>
         </div>
-        <button type="button" class="admin-btn admin-btn-primary" id="add-cert-btn">➕ Tambah Sertifikat</button>
+        <div class="admin-section-topbar-actions">
+          <button type="button" class="admin-btn admin-btn-secondary" id="toggle-all-certs-btn">↔️ Buka / Tutup Semua</button>
+          <button type="button" class="admin-btn admin-btn-primary" id="add-cert-btn">➕ Tambah Sertifikat</button>
+        </div>
       </div>
 
       <form id="cert-form">
@@ -1234,15 +1281,38 @@
           ${itemsHtml}
         </div>
         <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
-          <button type="submit" class="admin-btn admin-btn-primary">💾 Simpan Semua Sertifikasi</button>
+          <button type="submit" class="admin-btn admin-btn-primary" style="width:100%;">💾 Simpan Semua Sertifikasi</button>
         </div>
       </form>
     `;
 
     const listContainer = document.getElementById('cert-list-container');
 
+    // Accordion Header Toggle
+    listContainer.querySelectorAll('.admin-card-item').forEach(card => {
+      const header = card.querySelector('.admin-card-header');
+      if (header) {
+        header.addEventListener('click', (e) => {
+          if (e.target.closest('.admin-card-actions')) return;
+          card.classList.toggle('collapsed');
+        });
+      }
+    });
+
+    // Expand/Collapse All
+    let allCollapsed = true;
+    const toggleAllBtn = document.getElementById('toggle-all-certs-btn');
+    if (toggleAllBtn) {
+      toggleAllBtn.addEventListener('click', () => {
+        const cards = listContainer.querySelectorAll('.admin-card-item');
+        cards.forEach(c => c.classList.toggle('collapsed', !allCollapsed));
+        allCollapsed = !allCollapsed;
+      });
+    }
+
     listContainer.querySelectorAll('.cert-del-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
         currentData.certifications.splice(idx, 1);
         renderTabCertifications(container);
@@ -1250,7 +1320,8 @@
     });
 
     listContainer.querySelectorAll('.cert-up-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
         if (idx > 0) {
           const temp = currentData.certifications[idx];
@@ -1262,7 +1333,8 @@
     });
 
     listContainer.querySelectorAll('.cert-down-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
         if (idx < currentData.certifications.length - 1) {
           const temp = currentData.certifications[idx];
@@ -1311,56 +1383,62 @@
   function renderTabSocials(container) {
     const socials = currentData.socials || [];
     let itemsHtml = socials.map((s, i) => `
-      <div class="admin-card-item" data-index="${i}">
-        <div class="admin-card-header">
+      <div class="admin-card-item ${i > 0 ? 'collapsed' : ''}" data-index="${i}">
+        <div class="admin-card-header" title="Klik untuk buka/tutup rincian">
           <div class="admin-card-item-title">
-            <span>🌐 #${i + 1} - ${escapeHtml(s.platform)}</span>
+            <span class="admin-card-chevron">▼</span>
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">🌐 #${i + 1} - ${escapeHtml(s.platform)}</span>
           </div>
           <div class="admin-card-actions">
             <button type="button" class="admin-btn admin-btn-danger admin-btn-icon soc-del-btn" data-index="${i}">🗑️</button>
           </div>
         </div>
 
-        <div class="admin-row">
-          <div class="admin-form-group">
-            <label class="admin-label">Nama Platform / Media</label>
-            <input type="text" class="admin-input soc-platform" value="${escapeHtml(s.platform || '')}">
+        <div class="admin-card-body">
+          <div class="admin-row">
+            <div class="admin-form-group">
+              <label class="admin-label">Nama Platform / Media</label>
+              <input type="text" class="admin-input soc-platform" value="${escapeHtml(s.platform || '')}">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Username / Teks Tampilan</label>
+              <input type="text" class="admin-input soc-handle" value="${escapeHtml(s.handle || '')}">
+            </div>
           </div>
-          <div class="admin-form-group">
-            <label class="admin-label">Username / Teks Tampilan</label>
-            <input type="text" class="admin-input soc-handle" value="${escapeHtml(s.handle || '')}">
-          </div>
-        </div>
 
-        <div class="admin-row">
-          <div class="admin-form-group">
-            <label class="admin-label">Tautan / Link URL</label>
-            <input type="text" class="admin-input soc-url" value="${escapeHtml(s.url || '')}">
-          </div>
-          <div class="admin-form-group">
-            <label class="admin-label">Ikon Sosial</label>
-            <select class="admin-select soc-icon">
-              <option value="linkedin" ${s.iconType === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
-              <option value="github" ${s.iconType === 'github' ? 'selected' : ''}>GitHub</option>
-              <option value="website" ${s.iconType === 'website' ? 'selected' : ''}>Website</option>
-              <option value="whatsapp" ${s.iconType === 'whatsapp' ? 'selected' : ''}>WhatsApp / Telepon</option>
-              <option value="email" ${s.iconType === 'email' ? 'selected' : ''}>Email</option>
-              <option value="telegram" ${s.iconType === 'telegram' ? 'selected' : ''}>Telegram</option>
-              <option value="instagram" ${s.iconType === 'instagram' ? 'selected' : ''}>Instagram</option>
-              <option value="twitter" ${s.iconType === 'twitter' ? 'selected' : ''}>X (Twitter)</option>
-            </select>
+          <div class="admin-row">
+            <div class="admin-form-group">
+              <label class="admin-label">Tautan / Link URL</label>
+              <input type="text" class="admin-input soc-url" value="${escapeHtml(s.url || '')}">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Ikon Sosial</label>
+              <select class="admin-select soc-icon">
+                <option value="linkedin" ${s.iconType === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
+                <option value="github" ${s.iconType === 'github' ? 'selected' : ''}>GitHub</option>
+                <option value="website" ${s.iconType === 'website' ? 'selected' : ''}>Website</option>
+                <option value="whatsapp" ${s.iconType === 'whatsapp' ? 'selected' : ''}>WhatsApp / Telepon</option>
+                <option value="email" ${s.iconType === 'email' ? 'selected' : ''}>Email</option>
+                <option value="telegram" ${s.iconType === 'telegram' ? 'selected' : ''}>Telegram</option>
+                <option value="instagram" ${s.iconType === 'instagram' ? 'selected' : ''}>Instagram</option>
+                <option value="twitter" ${s.iconType === 'twitter' ? 'selected' : ''}>X (Twitter)</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
     `).join('');
 
     container.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+      <div class="admin-section-topbar">
         <div>
           <h3 class="admin-section-title">🌐 Kelola Kontak & Sosial Media</h3>
           <p class="admin-section-desc">Atur link kontak dan jejaring sosial yang tampil di bagian bawah portofolio.</p>
         </div>
-        <button type="button" class="admin-btn admin-btn-primary" id="add-soc-btn">➕ Tambah Tautan Kontak</button>
+        <div class="admin-section-topbar-actions">
+          <button type="button" class="admin-btn admin-btn-secondary" id="toggle-all-soc-btn">↔️ Buka / Tutup Semua</button>
+          <button type="button" class="admin-btn admin-btn-primary" id="add-soc-btn">➕ Tambah Tautan Kontak</button>
+        </div>
       </div>
 
       <form id="soc-form">
@@ -1368,15 +1446,38 @@
           ${itemsHtml}
         </div>
         <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
-          <button type="submit" class="admin-btn admin-btn-primary">💾 Simpan Kontak & Sosial</button>
+          <button type="submit" class="admin-btn admin-btn-primary" style="width:100%;">💾 Simpan Kontak & Sosial</button>
         </div>
       </form>
     `;
 
     const listContainer = document.getElementById('soc-list-container');
 
+    // Accordion Header Toggle
+    listContainer.querySelectorAll('.admin-card-item').forEach(card => {
+      const header = card.querySelector('.admin-card-header');
+      if (header) {
+        header.addEventListener('click', (e) => {
+          if (e.target.closest('.admin-card-actions')) return;
+          card.classList.toggle('collapsed');
+        });
+      }
+    });
+
+    // Expand/Collapse All
+    let allCollapsed = true;
+    const toggleAllBtn = document.getElementById('toggle-all-soc-btn');
+    if (toggleAllBtn) {
+      toggleAllBtn.addEventListener('click', () => {
+        const cards = listContainer.querySelectorAll('.admin-card-item');
+        cards.forEach(c => c.classList.toggle('collapsed', !allCollapsed));
+        allCollapsed = !allCollapsed;
+      });
+    }
+
     listContainer.querySelectorAll('.soc-del-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
         currentData.socials.splice(idx, 1);
         renderTabSocials(container);
@@ -1606,10 +1707,11 @@
     const items = opts.items || [];
 
     let itemsHtml = items.map((item, i) => `
-      <div class="admin-card-item" data-index="${i}">
-        <div class="admin-card-header">
+      <div class="admin-card-item ${i > 0 ? 'collapsed' : ''}" data-index="${i}">
+        <div class="admin-card-header" title="Klik untuk buka/tutup rincian">
           <div class="admin-card-item-title">
-            <span>#${i + 1} - ${escapeHtml(item.title || 'Item')}</span>
+            <span class="admin-card-chevron">▼</span>
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">#${i + 1} - ${escapeHtml(item.title || 'Item')}</span>
           </div>
           <div class="admin-card-actions">
             ${i > 0 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-item-up-btn" data-index="${i}">⬆️</button>` : ''}
@@ -1618,36 +1720,41 @@
           </div>
         </div>
 
-        <div class="admin-row">
-          <div class="admin-form-group">
-            <label class="admin-label">Periode / Lokasi Meta</label>
-            <input type="text" class="admin-input item-meta" value="${escapeHtml(item.meta || '')}">
+        <div class="admin-card-body">
+          <div class="admin-row">
+            <div class="admin-form-group">
+              <label class="admin-label">Periode / Lokasi Meta</label>
+              <input type="text" class="admin-input item-meta" value="${escapeHtml(item.meta || '')}">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Judul / Posisi / Gelar</label>
+              <input type="text" class="admin-input item-title" value="${escapeHtml(item.title || '')}">
+            </div>
           </div>
+
           <div class="admin-form-group">
-            <label class="admin-label">Judul / Posisi / Gelar</label>
-            <input type="text" class="admin-input item-title" value="${escapeHtml(item.title || '')}">
+            <label class="admin-label">Nama Perusahaan / Institusi</label>
+            <input type="text" class="admin-input item-company" value="${escapeHtml(item.company || '')}">
           </div>
-        </div>
 
-        <div class="admin-form-group">
-          <label class="admin-label">Nama Perusahaan / Institusi</label>
-          <input type="text" class="admin-input item-company" value="${escapeHtml(item.company || '')}">
-        </div>
-
-        <div class="admin-form-group">
-          <label class="admin-label">Deskripsi Rincian</label>
-          <textarea class="admin-textarea item-desc">${escapeHtml(item.description || '')}</textarea>
+          <div class="admin-form-group">
+            <label class="admin-label">Deskripsi Rincian</label>
+            <textarea class="admin-textarea item-desc">${escapeHtml(item.description || '')}</textarea>
+          </div>
         </div>
       </div>
     `).join('');
 
     container.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+      <div class="admin-section-topbar">
         <div>
           <h3 class="admin-section-title">${opts.title} (${items.length})</h3>
           <p class="admin-section-desc">${opts.desc}</p>
         </div>
-        <button type="button" class="admin-btn admin-btn-primary" id="add-list-item-btn">➕ Tambah Item</button>
+        <div class="admin-section-topbar-actions">
+          <button type="button" class="admin-btn admin-btn-secondary" id="toggle-all-list-btn">↔️ Buka / Tutup Semua</button>
+          <button type="button" class="admin-btn admin-btn-primary" id="add-list-item-btn">➕ Tambah Item</button>
+        </div>
       </div>
 
       <form id="generic-list-form">
@@ -1655,15 +1762,38 @@
           ${itemsHtml}
         </div>
         <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
-          <button type="submit" class="admin-btn admin-btn-primary">💾 Simpan Perubahan</button>
+          <button type="submit" class="admin-btn admin-btn-primary" style="width:100%;">💾 Simpan Semua Perubahan</button>
         </div>
       </form>
     `;
 
     const listContainer = document.getElementById('generic-list-container');
 
+    // Accordion Header Toggle
+    listContainer.querySelectorAll('.admin-card-item').forEach(card => {
+      const header = card.querySelector('.admin-card-header');
+      if (header) {
+        header.addEventListener('click', (e) => {
+          if (e.target.closest('.admin-card-actions')) return;
+          card.classList.toggle('collapsed');
+        });
+      }
+    });
+
+    // Expand/Collapse All
+    let allCollapsed = true;
+    const toggleAllBtn = document.getElementById('toggle-all-list-btn');
+    if (toggleAllBtn) {
+      toggleAllBtn.addEventListener('click', () => {
+        const cards = listContainer.querySelectorAll('.admin-card-item');
+        cards.forEach(c => c.classList.toggle('collapsed', !allCollapsed));
+        allCollapsed = !allCollapsed;
+      });
+    }
+
     listContainer.querySelectorAll('.del-item-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
         items.splice(idx, 1);
         opts.onSave(items);
@@ -1672,7 +1802,8 @@
     });
 
     listContainer.querySelectorAll('.move-item-up-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
         if (idx > 0) {
           const temp = items[idx];
@@ -1685,7 +1816,8 @@
     });
 
     listContainer.querySelectorAll('.move-item-down-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
         if (idx < items.length - 1) {
           const temp = items[idx];
