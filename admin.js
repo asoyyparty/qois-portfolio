@@ -400,6 +400,43 @@
     }
   }
 
+  // Custom UI Confirm Modal
+  function showConfirmModal(message, onConfirm) {
+    const overlay = document.createElement('div');
+    overlay.className = 'admin-modal-overlay';
+    overlay.style.display = 'flex';
+    overlay.style.zIndex = '10001';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    
+    const modal = document.createElement('div');
+    modal.className = 'admin-modal-content';
+    modal.style.maxWidth = '400px';
+    modal.style.textAlign = 'center';
+    modal.style.padding = '32px';
+    
+    modal.innerHTML = `
+      <h3 style="color: #fff; margin-bottom: 16px; font-size: 20px;">Konfirmasi Tindakan</h3>
+      <p style="color: var(--color-ink-muted); margin-bottom: 32px; line-height: 1.5;">${escapeHtml(message)}</p>
+      <div style="display: flex; gap: 16px; justify-content: center;">
+        <button class="admin-btn admin-btn-secondary" id="confirm-cancel-btn">Batal</button>
+        <button class="admin-btn admin-btn-danger" id="confirm-ok-btn">Ya, Lanjutkan</button>
+      </div>
+    `;
+    
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    
+    document.getElementById('confirm-cancel-btn').addEventListener('click', () => {
+      document.body.removeChild(overlay);
+    });
+    
+    document.getElementById('confirm-ok-btn').addEventListener('click', () => {
+      document.body.removeChild(overlay);
+      if (onConfirm) onConfirm();
+    });
+  }
+
   // Toast Helper
   function showToast(message, type = 'success') {
     let container = document.getElementById('admin-toast-container');
@@ -1273,11 +1310,11 @@
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
-        if (confirm('Yakin ingin menghapus proyek ini?')) {
+        showConfirmModal('Yakin ingin menghapus proyek ini?', () => {
           currentData.projects.splice(idx, 1);
           renderTabProjects(container);
           showToast('Proyek berhasil dihapus', 'danger');
-        }
+        });
       });
     });
 
@@ -1804,12 +1841,12 @@
     const clearBtn = document.getElementById('clear-inbox-btn');
     if (clearBtn) {
       clearBtn.addEventListener('click', () => {
-        if (confirm('Apakah Anda yakin ingin menghapus seluruh histori pesan ini?')) {
+        showConfirmModal('Apakah Anda yakin ingin menghapus seluruh histori pesan ini?', () => {
           currentData.messages = [];
           saveSiteData(currentData);
           renderTabInbox(container);
           showToast('Inbox berhasil dibersihkan!', 'success');
-        }
+        });
       });
     }
   }
@@ -1962,13 +1999,13 @@
 
     // Reset Defaults
     document.getElementById('reset-default-btn').addEventListener('click', () => {
-      if (confirm('Apakah Anda yakin ingin mengembalikan seluruh konten ke tampilan awal bawaan?')) {
+      showConfirmModal('Apakah Anda yakin ingin mengembalikan seluruh konten ke tampilan awal bawaan?', () => {
         localStorage.removeItem(STORAGE_KEY);
         currentData = JSON.parse(JSON.stringify(DEFAULT_DATA));
         renderAll();
         showToast('Konten telah di-reset ke data bawaan awal!', 'success');
         renderActiveTabContent();
-      }
+      });
     });
   }
 
@@ -2065,9 +2102,11 @@
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
-        items.splice(idx, 1);
-        opts.onSave(items);
-        renderGenericListEditor(container, opts);
+        showConfirmModal('Yakin ingin menghapus item ini?', () => {
+          items.splice(idx, 1);
+          opts.onSave(items);
+          renderGenericListEditor(container, opts);
+        });
       });
     });
 
