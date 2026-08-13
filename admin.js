@@ -769,30 +769,30 @@
         respText.innerHTML = '';
         typingIndicator.style.display = 'inline-block';
 
-        const sysPrompt = \`Anda adalah asisten AI yang bertindak sebagai representasi profesional dari Qois Abdul Qudus.
+        const sysPrompt = `Anda adalah asisten AI yang bertindak sebagai representasi profesional dari Qois Abdul Qudus.
 Tugas Anda: Membaca Job Description (JD) berikut, membandingkannya dengan profil Qois, lalu menuliskan **Cover Letter** (Surat Lamaran) yang sangat persuasif, profesional, dan menyoroti secara logis mengapa Qois sangat cocok dengan posisi tersebut berdasarkan pengalaman nyatanya.
 
 Profil Singkat Qois:
-\${JSON.stringify(currentData.hero, null, 2)}
+${JSON.stringify(currentData.hero, null, 2)}
 Pengalaman:
-\${JSON.stringify(currentData.experience, null, 2)}
+${JSON.stringify(currentData.experience, null, 2)}
 Proyek:
-\${JSON.stringify(currentData.projects, null, 2)}
+${JSON.stringify(currentData.projects, null, 2)}
 Sertifikasi:
-\${JSON.stringify(currentData.certifications, null, 2)}
+${JSON.stringify(currentData.certifications, null, 2)}
 
 Job Description dari Rekruter:
-\${jdText}
+${jdText}
 
 Instruksi Tambahan:
 - Tuliskan dalam format Cover Letter langsung (Dear Hiring Manager, dst).
 - Gunakan bahasa Indonesia baku yang elegan, sopan, namun percaya diri (bukan terkesan mengemis).
 - Buat maksimal 3-4 paragraf yang padat dan jelas.
 - Secara eksplisit sebutkan kecocokan antara syarat di JD dengan pengalaman/proyek Qois (jangan mengarang skill yang tidak ada di profil Qois).
-- Jika ada skill di JD yang tidak dimiliki Qois, tekankan kemampuan Qois untuk belajar cepat beradaptasi.\`;
+- Jika ada skill di JD yang tidak dimiliki Qois, tekankan kemampuan Qois untuk belajar cepat beradaptasi.`;
 
         try {
-          const response = await fetch(\`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=\${apiKey}\`, {
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
