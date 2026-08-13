@@ -427,11 +427,18 @@
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
     
-    document.getElementById('confirm-cancel-btn').addEventListener('click', () => {
+    const cancelBtn = overlay.querySelector('#confirm-cancel-btn');
+    const okBtn = overlay.querySelector('#confirm-ok-btn');
+
+    cancelBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       document.body.removeChild(overlay);
     });
     
-    document.getElementById('confirm-ok-btn').addEventListener('click', () => {
+    okBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       document.body.removeChild(overlay);
       if (onConfirm) onConfirm();
     });
