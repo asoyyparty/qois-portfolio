@@ -19,7 +19,7 @@
       pageTitle: 'Qois Abdul Qudus - IT Officer & Systems Developer',
       metaDescription: 'Portofolio Profesional Qois Abdul Qudus - IT Infrastructure Officer, Fullstack Web & Android Developer.',
       geminiApiKey: '',
-      jsonbinId: '',
+      jsonbinId: '6a7d76f2da38895dfede6a6f',
       jsonbinKey: ''
     },
     hero: {
