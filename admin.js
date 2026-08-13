@@ -364,14 +364,17 @@
   }
 
   // Save site data to localStorage and JSONBin
-  async function saveSiteData(data) {
+  async function saveSiteData(data, silent = false) {
     currentData = data;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    renderAll(); // Update DOM immediately
+    
+    if (!silent) {
+      renderAll(); // Update DOM immediately
+    }
 
     // Push to JSONBin.io if configured
     if (data.settings && data.settings.jsonbinId && data.settings.jsonbinKey) {
-      showToast('Menyimpan ke Cloud (JSONBin)...', 'success');
+      if (!silent) showToast('Menyimpan ke Cloud (JSONBin)...', 'success');
       try {
         const response = await fetch(`https://api.jsonbin.io/v3/b/${data.settings.jsonbinId}`, {
           method: 'PUT',
@@ -382,16 +385,18 @@
           body: JSON.stringify(data)
         });
 
-        if (response.ok) {
-          showToast('Data berhasil disimpan ke Cloud!', 'success');
-        } else {
-          showToast('Gagal menyimpan ke Cloud. Pastikan Master Key benar.', 'danger');
+        if (!silent) {
+          if (response.ok) {
+            showToast('Data berhasil disimpan ke Cloud!', 'success');
+          } else {
+            showToast('Gagal menyimpan ke Cloud. Pastikan Master Key benar.', 'danger');
+          }
         }
       } catch (err) {
-        showToast('Koneksi terputus saat menyimpan ke Cloud.', 'danger');
+        if (!silent) showToast('Koneksi terputus saat menyimpan ke Cloud.', 'danger');
       }
     } else {
-      showToast('Semua perubahan berhasil disimpan secara lokal!', 'success');
+      if (!silent) showToast('Semua perubahan berhasil disimpan secara lokal!', 'success');
     }
   }
 
@@ -743,7 +748,7 @@
           message: message,
           date: new Date().toISOString()
         });
-        saveSiteData(currentData);
+        saveSiteData(currentData, true);
 
         if (!apiKey) {
           respContainer.style.display = 'flex';
