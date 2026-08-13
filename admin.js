@@ -961,6 +961,7 @@
               <button class="admin-tab-btn ${activeTab === 'certifications' ? 'active' : ''}" data-tab="certifications">📜 Sertifikasi</button>
               <button class="admin-tab-btn ${activeTab === 'socials' ? 'active' : ''}" data-tab="socials">🌐 Kontak & Sosmed</button>
               <button class="admin-tab-btn ${activeTab === 'theme' ? 'active' : ''}" data-tab="theme">🎨 Tema & Tampilan</button>
+              <button class="admin-tab-btn ${activeTab === 'inbox' ? 'active' : ''}" data-tab="inbox">✉️ Inbox Pesan</button>
               <button class="admin-tab-btn ${activeTab === 'backup' ? 'active' : ''}" data-tab="backup">⚙️ Backup & Pengaturan</button>
             </div>
 
@@ -1011,6 +1012,7 @@
     else if (activeTab === 'certifications') renderTabCertifications(area);
     else if (activeTab === 'socials') renderTabSocials(area);
     else if (activeTab === 'theme') renderTabTheme(area);
+    else if (activeTab === 'inbox') renderTabInbox(area);
     else if (activeTab === 'backup') renderTabBackup(area);
   }
 
