@@ -16,11 +16,14 @@
       password: 'admin123',
       primaryColor: '#5e6ad2',
       primaryHoverColor: '#828fff',
-      pageTitle: 'Doel Kussoy - IT Officer & Systems Developer',
-      metaDescription: 'Portofolio Profesional Doel Kussoy - IT Infrastructure Officer, Fullstack Web & Android Developer.'
+      pageTitle: 'Qois Abdul Qudus - IT Officer & Systems Developer',
+      metaDescription: 'Portofolio Profesional Qois Abdul Qudus - IT Infrastructure Officer, Fullstack Web & Android Developer.',
+      geminiApiKey: '',
+      jsonbinId: '',
+      jsonbinKey: ''
     },
     hero: {
-      name: 'Doel Kussoy',
+      name: 'Qois Abdul Qudus',
       headline: 'IT Infrastructure Officer & Systems Developer',
       bio: 'Spesialis infrastruktur IT dan pengembang sistem digital berstandar industri. Berpengalaman menangani operasional jaringan CCTV & keamanan pabrik 24/7, serta merancang arsitektur aplikasi web enterprise, full-stack web development, dan solusi Android interaktif yang skalabel.',
       profileImage: 'profile.png',
@@ -314,7 +317,7 @@
       { id: 's8', platform: 'X (Twitter)', handle: '@doelkussoy', url: 'https://x.com/doelkussoy', iconType: 'twitter' }
     ],
     footer: {
-      text: '© 2026 Doel Kussoy. IT Enthusiast based in Serang, Banten, Indonesia.'
+      text: '© 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten, Indonesia.'
     }
   };
 
@@ -322,25 +325,73 @@
   let currentData = null;
 
   // Retrieve site data from localStorage or default
-  function getSiteData() {
+  async function getSiteData() {
+    let data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    
+    // First, try local storage
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        const parsed = JSON.parse(stored);
-        return { ...DEFAULT_DATA, ...parsed };
+        data = { ...data, ...JSON.parse(stored) };
       }
     } catch (e) {
       console.error('Failed to parse stored portfolio data:', e);
     }
-    return JSON.parse(JSON.stringify(DEFAULT_DATA));
+
+    // Then try JSONBin.io
+    if (data.settings && data.settings.jsonbinId) {
+      try {
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${data.settings.jsonbinId}?meta=false`, {
+          headers: {
+            'X-Master-Key': data.settings.jsonbinKey || ''
+          }
+        });
+        if (response.ok) {
+          const cloudData = await response.json();
+          data = { ...data, ...cloudData };
+          // Cache the latest cloud data locally
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        } else {
+          console.error("Failed to fetch from JSONBin:", response.statusText);
+        }
+      } catch (err) {
+        console.error("Network error fetching from JSONBin:", err);
+      }
+    }
+    
+    return data;
   }
 
-  // Save site data to localStorage and trigger re-render
-  function saveSiteData(data) {
+  // Save site data to localStorage and JSONBin
+  async function saveSiteData(data) {
     currentData = data;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    renderAll();
-    showToast('Semua perubahan berhasil disimpan!', 'success');
+    renderAll(); // Update DOM immediately
+
+    // Push to JSONBin.io if configured
+    if (data.settings && data.settings.jsonbinId && data.settings.jsonbinKey) {
+      showToast('Menyimpan ke Cloud (JSONBin)...', 'success');
+      try {
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${data.settings.jsonbinId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': data.settings.jsonbinKey
+          },
+          body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+          showToast('Data berhasil disimpan ke Cloud!', 'success');
+        } else {
+          showToast('Gagal menyimpan ke Cloud. Pastikan Master Key benar.', 'danger');
+        }
+      } catch (err) {
+        showToast('Koneksi terputus saat menyimpan ke Cloud.', 'danger');
+      }
+    } else {
+      showToast('Semua perubahan berhasil disimpan secara lokal!', 'success');
+    }
   }
 
   // Toast Helper
@@ -407,7 +458,7 @@
 
     // Brand Name in Navbar
     const navBrand = document.querySelector('.nav-brand');
-    if (navBrand) navBrand.textContent = name || 'Doel Kussoy';
+    if (navBrand) navBrand.textContent = name || 'Qois Abdul Qudus';
 
     let statsHtml = '';
     if (stats && Array.isArray(stats)) {
@@ -631,12 +682,123 @@
     }).join('');
 
     contactSection.innerHTML = `
-      <h2 class="display-lg" style="margin-bottom: 16px;">Connect & Socials</h2>
-      <p style="color: var(--color-ink-muted); margin-bottom: 32px;">Mari terhubung melalui jejaring profesional dan media sosial saya.</p>
-      <div class="social-grid">
-        ${itemsHtml}
+      <div class="contact-wrapper">
+        <!-- Smart Contact Form -->
+        <div class="contact-form-side">
+          <h2 class="display-lg" style="margin-bottom: 16px;">Tinggalkan Pesan</h2>
+          <p style="color: var(--color-ink-muted); margin-bottom: 32px;">Pesan Anda akan direspons otomatis oleh asisten AI cerdas kami.</p>
+          
+          <form id="smart-contact-form" class="smart-contact-form">
+            <div class="form-group">
+              <label for="contact-name">Nama Anda</label>
+              <input type="text" id="contact-name" class="form-input" placeholder="Masukkan nama..." required>
+            </div>
+            <div class="form-group">
+              <label for="contact-msg">Pesan / Tawaran</label>
+              <textarea id="contact-msg" class="form-textarea" placeholder="Hai Qois, kami tertarik untuk menawari Anda posisi..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" id="contact-submit-btn">Kirim Pesan ke AI 🚀</button>
+          </form>
+
+          <div id="ai-response-container" class="ai-response-container" style="display: none;">
+            <div class="ai-bubble">
+              <div class="ai-avatar">🤖</div>
+              <div class="ai-message">
+                <span id="ai-response-text"></span>
+                <span id="ai-typing-indicator" class="typing-indicator"><span>.</span><span>.</span><span>.</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Socials -->
+        <div class="contact-social-side">
+          <h2 class="display-lg" style="margin-bottom: 16px;">Connect & Socials</h2>
+          <p style="color: var(--color-ink-muted); margin-bottom: 32px;">Mari terhubung melalui jejaring profesional dan media sosial saya.</p>
+          <div class="social-grid">
+            ${itemsHtml}
+          </div>
+        </div>
       </div>
     `;
+
+    // Smart Contact Form Logic
+    const contactForm = document.getElementById('smart-contact-form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const apiKey = currentData.settings?.geminiApiKey || DEFAULT_DATA.settings.geminiApiKey;
+        const name = document.getElementById('contact-name').value;
+        const message = document.getElementById('contact-msg').value;
+        const respContainer = document.getElementById('ai-response-container');
+        const respText = document.getElementById('ai-response-text');
+        const typingIndicator = document.getElementById('ai-typing-indicator');
+        const submitBtn = document.getElementById('contact-submit-btn');
+
+        if (!apiKey) {
+          respContainer.style.display = 'flex';
+          typingIndicator.style.display = 'none';
+          respText.innerHTML = "<em>Mohon maaf, asisten AI sedang offline (API Key belum dikonfigurasi di Panel Pemilik). Pesan Anda tetap kami hargai.</em>";
+          return;
+        }
+
+        // Tampilkan loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Mengirim...";
+        respContainer.style.display = 'flex';
+        respText.innerHTML = "";
+        typingIndicator.style.display = 'inline-block';
+
+        // Buat prompt untuk AI
+        const promptText = `
+        Anda adalah asisten virtual cerdas untuk portofolio Qois Abdul Qudus.
+        Profil Qois: ${currentData.hero?.headline}. ${currentData.hero?.bio}.
+        Pengirim pesan: ${name}
+        Pesan: "${message}"
+        Tugas Anda:
+        Berikan balasan singkat, ramah, dan profesional dalam bahasa Indonesia. 
+        Ucapkan terima kasih kepada ${name}. Jika pesannya berisi tawaran proyek atau pekerjaan, tunjukkan ketertarikan dan sampaikan bahwa Qois akan segera membalasnya via email. Jangan terlalu panjang, maksimal 3 kalimat.
+        `;
+
+        try {
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: promptText }] }]
+            })
+          });
+
+          const data = await response.json();
+          typingIndicator.style.display = 'none';
+          
+          if (data.candidates && data.candidates[0].content.parts[0].text) {
+            let replyText = data.candidates[0].content.parts[0].text;
+            // Typewriter effect
+            let i = 0;
+            respText.innerHTML = '';
+            const typeWriter = setInterval(() => {
+              if (i < replyText.length) {
+                respText.innerHTML += replyText.charAt(i);
+                i++;
+              } else {
+                clearInterval(typeWriter);
+              }
+            }, 30);
+          } else {
+            respText.innerHTML = "Terima kasih atas pesannya! Qois akan segera merespons.";
+          }
+        } catch (error) {
+          typingIndicator.style.display = 'none';
+          respText.innerHTML = "Maaf, terjadi kesalahan saat menghubungi asisten AI. Qois akan segera mengecek pesan Anda.";
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = "Kirim Pesan ke AI 🚀";
+        }
+      });
+    }
   }
 
   function renderFooter() {
@@ -644,10 +806,11 @@
     if (!footerEl || !currentData.footer) return;
 
     footerEl.innerHTML = `
-      <p style="color: var(--color-ink-subtle); font-size: 14px;">
-        ${escapeHtml(currentData.footer.text || '')}
-      </p>
-    `;
+            <p style = "color: var(--color-ink-subtle); font-size: 14px;" >
+            ${ escapeHtml(currentData.footer.text || '')
+        }
+      </p >
+          `;
   }
 
   function renderAll() {
@@ -666,18 +829,22 @@
   let activeTab = 'hero';
 
   function initAdminUI() {
-    // Inject Floating Admin Button
-    const fab = document.createElement('button');
-    fab.className = 'admin-fab';
-    fab.id = 'admin-fab-btn';
-    fab.title = 'Buka Panel Admin';
-    fab.innerHTML = `
-      <svg class="admin-fab-icon" viewBox="0 0 24 24">
-        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-      </svg>
-      <span>Pemilik</span>
-    `;
-    document.body.appendChild(fab);
+    // Attach event to hardcoded Admin Button in Navbar
+    const ownerBtn = document.getElementById('ownerBtn');
+    if (ownerBtn) {
+      ownerBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openAdminModal();
+      });
+    }
+
+    // Secret shortcut to open Admin Panel: Alt + Q
+    document.addEventListener('keydown', (e) => {
+      if (e.altKey && !e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === 'q') {
+        e.preventDefault();
+        openAdminModal();
+      }
+    });
 
     // Inject Backdrop Container for Modal/Login
     const backdrop = document.createElement('div');
@@ -685,9 +852,7 @@
     backdrop.id = 'admin-modal-backdrop';
     document.body.appendChild(backdrop);
 
-    fab.addEventListener('click', () => {
-      openAdminModal();
-    });
+
   }
 
   function isAuthorized() {
@@ -717,7 +882,7 @@
 
   function renderLoginCard(container) {
     container.innerHTML = `
-      <div class="admin-login-card">
+          <div class="admin-login-card" >
         <h3 class="admin-login-title">🔐 Panel Pemilik</h3>
         <p class="admin-login-subtitle">Masukkan Kata Sandi / PIN untuk melanjutkan</p>
         <div class="admin-form-group">
@@ -727,8 +892,8 @@
           <button type="button" class="admin-btn admin-btn-secondary" style="flex:1;" id="admin-login-cancel">Batal</button>
           <button type="button" class="admin-btn admin-btn-primary" style="flex:1;" id="admin-login-submit">Masuk</button>
         </div>
-      </div>
-    `;
+      </div >
+          `;
 
     const passInput = document.getElementById('admin-pass-input');
     const submitBtn = document.getElementById('admin-login-submit');
@@ -757,8 +922,8 @@
 
   function renderAdminPanel(container) {
     container.innerHTML = `
-      <div class="admin-panel-container">
-        <!-- Header -->
+          <div class="admin-panel-container" >
+        <!--Header -->
         <div class="admin-header">
           <div class="admin-header-title">
             <span>⚙️ Panel Pengelola Tampilan</span>
@@ -770,27 +935,27 @@
           </div>
         </div>
 
-        <!-- Body -->
-        <div class="admin-body">
-          <!-- Sidebar Navigation -->
-          <div class="admin-sidebar">
-            <button class="admin-tab-btn ${activeTab === 'hero' ? 'active' : ''}" data-tab="hero">👤 Hero & Profil</button>
-            <button class="admin-tab-btn ${activeTab === 'projects' ? 'active' : ''}" data-tab="projects">🚀 Projects (${currentData.projects.length})</button>
-            <button class="admin-tab-btn ${activeTab === 'experience' ? 'active' : ''}" data-tab="experience">💼 Pengalaman</button>
-            <button class="admin-tab-btn ${activeTab === 'education' ? 'active' : ''}" data-tab="education">🎓 Pendidikan</button>
-            <button class="admin-tab-btn ${activeTab === 'certifications' ? 'active' : ''}" data-tab="certifications">📜 Sertifikasi</button>
-            <button class="admin-tab-btn ${activeTab === 'socials' ? 'active' : ''}" data-tab="socials">🌐 Kontak & Sosmed</button>
-            <button class="admin-tab-btn ${activeTab === 'theme' ? 'active' : ''}" data-tab="theme">🎨 Tema & Tampilan</button>
-            <button class="admin-tab-btn ${activeTab === 'backup' ? 'active' : ''}" data-tab="backup">⚙️ Backup & Pengaturan</button>
-          </div>
+        <!--Body -->
+          <div class="admin-body">
+            <!-- Sidebar Navigation -->
+            <div class="admin-sidebar">
+              <button class="admin-tab-btn ${activeTab === 'hero' ? 'active' : ''}" data-tab="hero">👤 Hero & Profil</button>
+              <button class="admin-tab-btn ${activeTab === 'projects' ? 'active' : ''}" data-tab="projects">🚀 Projects (${currentData.projects.length})</button>
+              <button class="admin-tab-btn ${activeTab === 'experience' ? 'active' : ''}" data-tab="experience">💼 Pengalaman</button>
+              <button class="admin-tab-btn ${activeTab === 'education' ? 'active' : ''}" data-tab="education">🎓 Pendidikan</button>
+              <button class="admin-tab-btn ${activeTab === 'certifications' ? 'active' : ''}" data-tab="certifications">📜 Sertifikasi</button>
+              <button class="admin-tab-btn ${activeTab === 'socials' ? 'active' : ''}" data-tab="socials">🌐 Kontak & Sosmed</button>
+              <button class="admin-tab-btn ${activeTab === 'theme' ? 'active' : ''}" data-tab="theme">🎨 Tema & Tampilan</button>
+              <button class="admin-tab-btn ${activeTab === 'backup' ? 'active' : ''}" data-tab="backup">⚙️ Backup & Pengaturan</button>
+            </div>
 
-          <!-- Main Content Area -->
-          <div class="admin-content" id="admin-content-area">
-            <!-- Dynamic Content Form -->
+            <!-- Main Content Area -->
+            <div class="admin-content" id="admin-content-area">
+              <!-- Dynamic Content Form -->
+            </div>
           </div>
-        </div>
-      </div>
-    `;
+      </div >
+          `;
 
     document.getElementById('admin-close-btn').addEventListener('click', closeAdminModal);
     document.getElementById('admin-logout-btn').addEventListener('click', () => {
@@ -842,7 +1007,7 @@
     const stats = hero.stats || [];
 
     let statsInputsHtml = stats.map((st, i) => `
-      <div class="admin-row" style="margin-bottom:12px; align-items:center;">
+          <div class="admin-row" style = "margin-bottom:12px; align-items:center;" >
         <div>
           <label class="admin-label">Angka Stat #${i + 1}</label>
           <input type="text" class="admin-input" id="hero-stat-num-${i}" value="${escapeHtml(st.num || '')}">
@@ -855,11 +1020,11 @@
           <input type="checkbox" id="hero-stat-high-${i}" ${st.highlight ? 'checked' : ''}>
           <label for="hero-stat-high-${i}" style="color:#d0d5e0; font-size:13px;">Highlight Accent</label>
         </div>
-      </div>
-    `).join('');
+      </div >
+          `).join('');
 
     container.innerHTML = `
-      <h3 class="admin-section-title">👤 Kelola Hero & Profil Utama</h3>
+          <h3 class="admin-section-title" >👤 Kelola Hero & Profil Utama</h3 >
       <p class="admin-section-desc">Ubah nama lengkap, headline profesi, deskripsi bio, stat angka cepat, dan foto profil Anda.</p>
 
       <form id="hero-form">
@@ -898,7 +1063,7 @@
           <button type="submit" class="admin-btn admin-btn-primary">💾 Simpan Perubahan Hero</button>
         </div>
       </form>
-    `;
+        `;
 
     // Handle File Upload Preview
     const fileInput = document.getElementById('hero-img-file-input');
@@ -927,9 +1092,9 @@
       currentData.hero.profileImage = document.getElementById('hero-profile-img-url').value;
 
       stats.forEach((st, i) => {
-        st.num = document.getElementById(`hero-stat-num-${i}`).value;
-        st.label = document.getElementById(`hero-stat-label-${i}`).value;
-        st.highlight = document.getElementById(`hero-stat-high-${i}`).checked;
+        st.num = document.getElementById(`hero - stat - num - ${ i } `).value;
+        st.label = document.getElementById(`hero - stat - label - ${ i } `).value;
+        st.highlight = document.getElementById(`hero - stat - high - ${ i } `).checked;
       });
 
       saveSiteData(currentData);
@@ -943,14 +1108,14 @@
 
     let projectCardsHtml = projects.map((p, index) => {
       const categoryOptions = categories.filter(c => c.id !== 'all').map(c => `
-        <option value="${c.id}" ${p.category === c.id ? 'selected' : ''}>${escapeHtml(c.label)}</option>
-      `).join('');
+          <option value = "${c.id}" ${ p.category === c.id ? 'selected' : '' }> ${ escapeHtml(c.label) }</option >
+            `).join('');
 
       // On mobile/desktop, index 0 is open, others start collapsed for ultra clean view
       const isCollapsed = index > 0;
 
       return `
-        <div class="admin-card-item ${isCollapsed ? 'collapsed' : ''}" data-index="${index}">
+            <div class="admin-card-item ${isCollapsed ? 'collapsed' : ''}" data - index="${index}" >
           <div class="admin-card-header" title="Klik untuk buka/tutup rincian">
             <div class="admin-card-item-title">
               <span class="admin-card-chevron">▼</span>
@@ -958,7 +1123,7 @@
             </div>
             <div class="admin-card-actions">
               ${index > 0 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-project-up-btn" data-index="${index}" title="Naikkan">⬆️</button>` : ''}
-              ${index < projects.length - 1 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-project-down-btn" data-index="${index}" title="Turunkan">⬇️</button>` : ''}
+              ${index <projects.length - 1 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-project-down-btn" data-index="${index}" title="Turunkan">⬇️</button>` : ''}
               <button type="button" class="admin-btn admin-btn-danger admin-btn-icon delete-project-btn" data-index="${index}" title="Hapus Proyek">🗑️ Hapus</button>
             </div>
           </div>
@@ -1016,12 +1181,12 @@
               </div>
             </div>
           </div>
-        </div>
-      `;
+        </div >
+          `;
     }).join('');
 
     container.innerHTML = `
-      <div class="admin-section-topbar">
+          <div class="admin-section-topbar" >
         <div>
           <h3 class="admin-section-title">🚀 Kelola Proyek Portfolio (${projects.length})</h3>
           <p class="admin-section-desc">Tambah, ubah, urutkan, atau hapus proyek aplikasi yang ditampilkan di portofolio.</p>
@@ -1030,18 +1195,18 @@
           <button type="button" class="admin-btn admin-btn-secondary" id="toggle-all-projects-btn">↔️ Buka / Tutup Semua</button>
           <button type="button" class="admin-btn admin-btn-primary" id="add-project-btn">➕ Tambah Proyek Baru</button>
         </div>
-      </div>
+      </div >
 
-      <form id="projects-form">
-        <div id="projects-list-container">
-          ${projectCardsHtml}
-        </div>
+          <form id="projects-form">
+            <div id="projects-list-container">
+              ${projectCardsHtml}
+            </div>
 
-        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
-          <button type="submit" class="admin-btn admin-btn-primary" style="width:100%;">💾 Simpan Semua Proyek</button>
-        </div>
-      </form>
-    `;
+            <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+              <button type="submit" class="admin-btn admin-btn-primary" style="width:100%;">💾 Simpan Semua Proyek</button>
+            </div>
+          </form>
+        `;
 
     const listContainer = document.getElementById('projects-list-container');
 
@@ -1220,7 +1385,7 @@
   function renderTabCertifications(container) {
     const certs = currentData.certifications || [];
     let itemsHtml = certs.map((c, i) => `
-      <div class="admin-card-item ${i > 0 ? 'collapsed' : ''}" data-index="${i}">
+          <div class="admin-card-item ${i > 0 ? 'collapsed' : ''}" data - index="${i}" >
         <div class="admin-card-header" title="Klik untuk buka/tutup rincian">
           <div class="admin-card-item-title">
             <span class="admin-card-chevron">▼</span>
@@ -1261,11 +1426,11 @@
             </div>
           </div>
         </div>
-      </div>
-    `).join('');
+      </div >
+          `).join('');
 
     container.innerHTML = `
-      <div class="admin-section-topbar">
+          <div class="admin-section-topbar" >
         <div>
           <h3 class="admin-section-title">📜 Kelola Sertifikasi & Lisensi (${certs.length})</h3>
           <p class="admin-section-desc">Atur kredensial profesional dan sertifikasi resmi Anda.</p>
@@ -1274,17 +1439,17 @@
           <button type="button" class="admin-btn admin-btn-secondary" id="toggle-all-certs-btn">↔️ Buka / Tutup Semua</button>
           <button type="button" class="admin-btn admin-btn-primary" id="add-cert-btn">➕ Tambah Sertifikat</button>
         </div>
-      </div>
+      </div >
 
-      <form id="cert-form">
-        <div id="cert-list-container">
-          ${itemsHtml}
-        </div>
-        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
-          <button type="submit" class="admin-btn admin-btn-primary" style="width:100%;">💾 Simpan Semua Sertifikasi</button>
-        </div>
-      </form>
-    `;
+          <form id="cert-form">
+            <div id="cert-list-container">
+              ${itemsHtml}
+            </div>
+            <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+              <button type="submit" class="admin-btn admin-btn-primary" style="width:100%;">💾 Simpan Semua Sertifikasi</button>
+            </div>
+          </form>
+        `;
 
     const listContainer = document.getElementById('cert-list-container');
 
@@ -1383,7 +1548,7 @@
   function renderTabSocials(container) {
     const socials = currentData.socials || [];
     let itemsHtml = socials.map((s, i) => `
-      <div class="admin-card-item ${i > 0 ? 'collapsed' : ''}" data-index="${i}">
+          <div class="admin-card-item ${i > 0 ? 'collapsed' : ''}" data - index="${i}" >
         <div class="admin-card-header" title="Klik untuk buka/tutup rincian">
           <div class="admin-card-item-title">
             <span class="admin-card-chevron">▼</span>
@@ -1426,11 +1591,11 @@
             </div>
           </div>
         </div>
-      </div>
-    `).join('');
+      </div >
+          `).join('');
 
     container.innerHTML = `
-      <div class="admin-section-topbar">
+          <div class="admin-section-topbar" >
         <div>
           <h3 class="admin-section-title">🌐 Kelola Kontak & Sosial Media</h3>
           <p class="admin-section-desc">Atur link kontak dan jejaring sosial yang tampil di bagian bawah portofolio.</p>
@@ -1439,17 +1604,17 @@
           <button type="button" class="admin-btn admin-btn-secondary" id="toggle-all-soc-btn">↔️ Buka / Tutup Semua</button>
           <button type="button" class="admin-btn admin-btn-primary" id="add-soc-btn">➕ Tambah Tautan Kontak</button>
         </div>
-      </div>
+      </div >
 
-      <form id="soc-form">
-        <div id="soc-list-container">
-          ${itemsHtml}
-        </div>
-        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
-          <button type="submit" class="admin-btn admin-btn-primary" style="width:100%;">💾 Simpan Kontak & Sosial</button>
-        </div>
-      </form>
-    `;
+          <form id="soc-form">
+            <div id="soc-list-container">
+              ${itemsHtml}
+            </div>
+            <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+              <button type="submit" class="admin-btn admin-btn-primary" style="width:100%;">💾 Simpan Kontak & Sosial</button>
+            </div>
+          </form>
+        `;
 
     const listContainer = document.getElementById('soc-list-container');
 
@@ -1522,7 +1687,7 @@
     const footer = currentData.footer || {};
 
     container.innerHTML = `
-      <h3 class="admin-section-title">🎨 Kustomisasi Tema & Tampilan</h3>
+          <h3 class="admin-section-title" >🎨 Kustomisasi Tema & Tampilan</h3 >
       <p class="admin-section-desc">Sesuaikan warna aksen utama, judul tab browser, serta footer halaman.</p>
 
       <form id="theme-form">
@@ -1613,6 +1778,34 @@
         </form>
       </div>
 
+      <!-- API Integrations Section -->
+      <div class="admin-card-item" style="margin-bottom: 32px;">
+        <h4 style="color:#fff; font-size:16px; margin-bottom:12px;">🤖 Integrasi AI (Google Gemini API)</h4>
+        <p style="color:#a0a5b1; font-size:13.5px; margin-bottom:20px;">
+          Masukkan API Key dari Google AI Studio untuk mengaktifkan fitur Smart Contact Form. Biarkan kosong jika fitur AI ingin dinonaktifkan.
+        </p>
+        <form id="api-integration-form">
+          <div class="admin-form-group">
+            <label class="admin-label">Gemini API Key</label>
+            <input type="password" id="gemini-api-key" class="admin-input" placeholder="AIzaSy..." value="${settings.geminiApiKey || ''}">
+          </div>
+          
+          <div class="admin-row" style="margin-top: 16px;">
+            <div class="admin-form-group">
+              <label class="admin-label">JSONBin.io Bin ID</label>
+              <input type="text" id="jsonbin-id" class="admin-input" placeholder="Contoh: 64a7f9b8..." value="${settings.jsonbinId || ''}">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">JSONBin.io Master Key</label>
+              <input type="password" id="jsonbin-key" class="admin-input" placeholder="Contoh: $2b$10$..." value="${settings.jsonbinKey || ''}">
+            </div>
+          </div>
+          <p style="color:#a0a5b1; font-size:12px; margin-top:8px;">Dengan JSONBin, perubahan yang Anda simpan akan tampil untuk semua orang di internet.</p>
+
+          <button type="submit" class="admin-btn admin-btn-primary" style="margin-top:16px;">💾 Simpan Konfigurasi Integrasi</button>
+        </form>
+      </div>
+
       <!-- Backup Export/Import Section -->
       <div class="admin-card-item">
         <h4 style="color:#fff; font-size:16px; margin-bottom:12px;">💾 Export & Import Data Website (JSON)</h4>
@@ -1653,6 +1846,21 @@
       showToast('Kata sandi admin berhasil diperbarui!', 'success');
       document.getElementById('new-admin-pass').value = '';
       document.getElementById('confirm-admin-pass').value = '';
+    });
+
+    // API Integration Handler
+    document.getElementById('api-integration-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const apiKey = document.getElementById('gemini-api-key').value;
+      const jsonbinId = document.getElementById('jsonbin-id').value;
+      const jsonbinKey = document.getElementById('jsonbin-key').value;
+      
+      currentData.settings.geminiApiKey = apiKey.trim();
+      currentData.settings.jsonbinId = jsonbinId.trim();
+      currentData.settings.jsonbinKey = jsonbinKey.trim();
+      saveSiteData(currentData);
+      
+      showToast('Konfigurasi API berhasil disimpan!', 'success');
     });
 
     // Export JSON
@@ -1905,16 +2113,26 @@
   }
 
   // INITIALIZATION ON DOM READY
-  document.addEventListener('DOMContentLoaded', () => {
-    currentData = getSiteData();
+  async function initApp() {
+    currentData = await getSiteData();
     
-    // Optimasi: Hanya render ulang DOM jika ada data custom di localStorage.
-    // Jika tidak ada, biarkan HTML bawaan (index.html) tampil apa adanya agar loading sangat cepat.
-    if (localStorage.getItem(STORAGE_KEY)) {
+    // Periksa apakah ada perubahan data dari aslinya
+    const isCustomData = localStorage.getItem(STORAGE_KEY) || (currentData.settings && currentData.settings.jsonbinId);
+    const isDataModified = JSON.stringify(currentData) !== JSON.stringify(DEFAULT_DATA);
+    
+    // Render ulang DOM hanya jika data cloud/local berbeda dengan default HTML statis.
+    // Ini mencegah kedipan (flicker) gambar saat website baru pertama kali dibuka.
+    if (isCustomData && isDataModified) {
       renderAll();
     }
     
     initAdminUI();
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    initApp();
+  }
 
 })();
