@@ -403,9 +403,15 @@
   // Custom UI Confirm Modal
   function showConfirmModal(message, onConfirm) {
     const overlay = document.createElement('div');
-    overlay.className = 'admin-modal-overlay';
+    overlay.className = 'admin-confirm-overlay'; // Use distinct class name
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.85)';
     overlay.style.display = 'flex';
-    overlay.style.zIndex = '10001';
+    overlay.style.zIndex = '100000'; // Make sure it's above everything
     overlay.style.alignItems = 'center';
     overlay.style.justifyContent = 'center';
     
