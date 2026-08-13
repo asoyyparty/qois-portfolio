@@ -318,7 +318,8 @@
     ],
     footer: {
       text: '© 2026 Qois Abdul Qudus. IT Enthusiast based in Serang, Banten, Indonesia.'
-    }
+    },
+    messages: []
   };
 
   // State
@@ -327,7 +328,7 @@
   // Retrieve site data from localStorage or default
   async function getSiteData() {
     let data = JSON.parse(JSON.stringify(DEFAULT_DATA));
-    
+
     // First, try local storage
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -358,7 +359,7 @@
         console.error("Network error fetching from JSONBin:", err);
       }
     }
-    
+
     return data;
   }
 
@@ -380,7 +381,7 @@
           },
           body: JSON.stringify(data)
         });
-        
+
         if (response.ok) {
           showToast('Data berhasil disimpan ke Cloud!', 'success');
         } else {
@@ -690,8 +691,8 @@
           
           <form id="smart-contact-form" class="smart-contact-form">
             <div class="form-group">
-              <label for="contact-name">Nama Anda</label>
-              <input type="text" id="contact-name" class="form-input" placeholder="Masukkan nama..." required>
+              <label for="contact-name">Email Anda</label>
+              <input type="text" id="contact-name" class="form-input" placeholder="Masukkan email..." required>
             </div>
             <div class="form-group">
               <label for="contact-msg">Pesan / Tawaran</label>
@@ -735,6 +736,15 @@
         const typingIndicator = document.getElementById('ai-typing-indicator');
         const submitBtn = document.getElementById('contact-submit-btn');
 
+        // Simpan pesan ke history
+        if (!currentData.messages) currentData.messages = [];
+        currentData.messages.push({
+          name: name,
+          message: message,
+          date: new Date().toISOString()
+        });
+        saveSiteData(currentData);
+
         if (!apiKey) {
           respContainer.style.display = 'flex';
           typingIndicator.style.display = 'none';
@@ -773,7 +783,7 @@
 
           const data = await response.json();
           typingIndicator.style.display = 'none';
-          
+
           if (data.candidates && data.candidates[0].content.parts[0].text) {
             let replyText = data.candidates[0].content.parts[0].text;
             // Typewriter effect
@@ -807,8 +817,8 @@
 
     footerEl.innerHTML = `
             <p style = "color: var(--color-ink-subtle); font-size: 14px;" >
-            ${ escapeHtml(currentData.footer.text || '')
-        }
+            ${escapeHtml(currentData.footer.text || '')
+      }
       </p >
           `;
   }
@@ -1108,7 +1118,7 @@
 
     let projectCardsHtml = projects.map((p, index) => {
       const categoryOptions = categories.filter(c => c.id !== 'all').map(c => `
-          <option value = "${c.id}" ${ p.category === c.id ? 'selected' : '' }> ${ escapeHtml(c.label) }</option >
+          <option value = "${c.id}" ${p.category === c.id ? 'selected' : ''}> ${escapeHtml(c.label)}</option >
             `).join('');
 
       // On mobile/desktop, index 0 is open, others start collapsed for ultra clean view
@@ -1123,7 +1133,7 @@
             </div>
             <div class="admin-card-actions">
               ${index > 0 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-project-up-btn" data-index="${index}" title="Naikkan">⬆️</button>` : ''}
-              ${index <projects.length - 1 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-project-down-btn" data-index="${index}" title="Turunkan">⬇️</button>` : ''}
+              ${index < projects.length - 1 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-project-down-btn" data-index="${index}" title="Turunkan">⬇️</button>` : ''}
               <button type="button" class="admin-btn admin-btn-danger admin-btn-icon delete-project-btn" data-index="${index}" title="Hapus Proyek">🗑️ Hapus</button>
             </div>
           </div>
@@ -1751,6 +1761,51 @@
       saveSiteData(currentData);
     });
   }
+  // 7.5 INBOX TAB
+  function renderTabInbox(container) {
+    const messages = currentData.messages || [];
+
+    let msgsHtml = '<p class="admin-section-desc">Belum ada pesan masuk.</p>';
+    if (messages.length > 0) {
+      msgsHtml = messages.slice().reverse().map((m, i) => {
+        const dateStr = new Date(m.date).toLocaleString('id-ID');
+        return `
+          <div class="admin-card-item" style="margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <strong style="color: #fff; font-size: 15px;">${escapeHtml(m.name)}</strong>
+              <span style="color: var(--color-ink-muted); font-size: 12px;">${dateStr}</span>
+            </div>
+            <p style="color: #ccc; font-size: 14px; margin: 0; white-space: pre-wrap;">${escapeHtml(m.message)}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    container.innerHTML = `
+      <h3 class="admin-section-title">✉️ Kotak Masuk (Pesan AI)</h3>
+      <p class="admin-section-desc">Daftar pesan dari pengunjung yang menggunakan form Smart Contact.</p>
+      
+      <div class="admin-row" style="margin-bottom: 24px;">
+        <button type="button" class="admin-btn admin-btn-danger" id="clear-inbox-btn">🗑️ Bersihkan Semua Pesan</button>
+      </div>
+
+      <div class="inbox-list">
+        ${msgsHtml}
+      </div>
+    `;
+
+    const clearBtn = document.getElementById('clear-inbox-btn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (confirm('Apakah Anda yakin ingin menghapus seluruh histori pesan ini?')) {
+          currentData.messages = [];
+          saveSiteData(currentData);
+          renderTabInbox(container);
+          showToast('Inbox berhasil dibersihkan!', 'success');
+        }
+      });
+    }
+  }
 
   // 8. BACKUP & SETTINGS TAB
   function renderTabBackup(container) {
@@ -1854,12 +1909,12 @@
       const apiKey = document.getElementById('gemini-api-key').value;
       const jsonbinId = document.getElementById('jsonbin-id').value;
       const jsonbinKey = document.getElementById('jsonbin-key').value;
-      
+
       currentData.settings.geminiApiKey = apiKey.trim();
       currentData.settings.jsonbinId = jsonbinId.trim();
       currentData.settings.jsonbinKey = jsonbinKey.trim();
       saveSiteData(currentData);
-      
+
       showToast('Konfigurasi API berhasil disimpan!', 'success');
     });
 
@@ -2115,17 +2170,17 @@
   // INITIALIZATION ON DOM READY
   async function initApp() {
     currentData = await getSiteData();
-    
+
     // Periksa apakah ada perubahan data dari aslinya
     const isCustomData = localStorage.getItem(STORAGE_KEY) || (currentData.settings && currentData.settings.jsonbinId);
     const isDataModified = JSON.stringify(currentData) !== JSON.stringify(DEFAULT_DATA);
-    
+
     // Render ulang DOM hanya jika data cloud/local berbeda dengan default HTML statis.
     // Ini mencegah kedipan (flicker) gambar saat website baru pertama kali dibuka.
     if (isCustomData && isDataModified) {
       renderAll();
     }
-    
+
     initAdminUI();
   }
 
