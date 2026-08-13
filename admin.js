@@ -374,7 +374,6 @@
 
     // Push to JSONBin.io if configured
     if (data.settings && data.settings.jsonbinId && data.settings.jsonbinKey) {
-      if (!silent) showToast('Menyimpan ke Cloud (JSONBin)...', 'success');
       try {
         const response = await fetch(`https://api.jsonbin.io/v3/b/${data.settings.jsonbinId}`, {
           method: 'PUT',
@@ -385,18 +384,12 @@
           body: JSON.stringify(data)
         });
 
-        if (!silent) {
-          if (response.ok) {
-            showToast('Data berhasil disimpan ke Cloud!', 'success');
-          } else {
-            showToast('Gagal menyimpan ke Cloud. Pastikan Master Key benar.', 'danger');
-          }
+        if (!silent && !response.ok) {
+          showToast('Gagal menyimpan ke Cloud. Pastikan Master Key benar.', 'danger');
         }
       } catch (err) {
         if (!silent) showToast('Koneksi terputus saat menyimpan ke Cloud.', 'danger');
       }
-    } else {
-      if (!silent) showToast('Semua perubahan berhasil disimpan secara lokal!', 'success');
     }
   }
 
