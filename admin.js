@@ -553,7 +553,7 @@
     if (!projectsSection || !currentData.projects) return;
 
     const categories = currentData.filterCategories || [];
-    const projects = currentData.projects;
+    const projects = (currentData.projects || []).filter(p => !p.isHidden);
 
     let filterBtnsHtml = categories.map((cat, idx) => `
       <button class="filter-btn ${idx === 0 ? 'active' : ''}" data-filter="${cat.id}">
@@ -638,7 +638,7 @@
     const expSection = document.getElementById('experience');
     if (!expSection || !currentData.experience) return;
 
-    let itemsHtml = currentData.experience.map(item => `
+    let itemsHtml = (currentData.experience || []).filter(item => !item.isHidden).map(item => `
       <div class="card">
         <div class="card-meta">${escapeHtml(item.meta || '')}</div>
         <h3 class="card-title">${escapeHtml(item.title || '')}</h3>
@@ -661,7 +661,7 @@
     const eduSection = document.getElementById('education');
     if (!eduSection || !currentData.education) return;
 
-    let itemsHtml = currentData.education.map(item => `
+    let itemsHtml = (currentData.education || []).filter(item => !item.isHidden).map(item => `
       <div class="card">
         <div class="card-meta">${escapeHtml(item.meta || '')}</div>
         <h3 class="card-title">${escapeHtml(item.title || '')}</h3>
@@ -684,7 +684,7 @@
     const certSection = document.getElementById('certifications');
     if (!certSection || !currentData.certifications) return;
 
-    const certs = currentData.certifications;
+    const certs = (currentData.certifications || []).filter(c => !c.isHidden);
     let itemsHtml = certs.map(cert => `
       <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
         <div>
@@ -715,7 +715,7 @@
     const contactSection = document.getElementById('contact');
     if (!contactSection || !currentData.socials) return;
 
-    let itemsHtml = currentData.socials.map(s => {
+    let itemsHtml = (currentData.socials || []).filter(s => !s.isHidden).map(s => {
       const iconSvg = SOCIAL_ICONS[s.iconType] || SOCIAL_ICONS.website;
       return `
         <a href="${escapeHtml(s.url)}" target="_blank" class="social-card">
@@ -1158,6 +1158,7 @@
       });
 
       saveSiteData(currentData);
+      showToast('Profil Beranda berhasil disimpan!', 'success');
     });
   }
 
@@ -1184,6 +1185,7 @@
             <div class="admin-card-actions">
               ${index > 0 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-project-up-btn" data-index="${index}" title="Naikkan">⬆️</button>` : ''}
               ${index < projects.length - 1 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-project-down-btn" data-index="${index}" title="Turunkan">⬇️</button>` : ''}
+              <button type="button" class="admin-btn admin-btn-secondary admin-btn-icon proj-hide-btn" data-index="${index}" title="${p.isHidden ? 'Tampilkan di Portfolio' : 'Sembunyikan dari Portfolio'}">${p.isHidden ? '👁️‍🗨️' : '👁️'}</button>
               <button type="button" class="admin-btn admin-btn-danger admin-btn-icon delete-project-btn" data-index="${index}" title="Hapus Proyek">🗑️ Hapus</button>
             </div>
           </div>
@@ -1351,6 +1353,21 @@
       });
     });
 
+    // Hide Button
+    listContainer.querySelectorAll('.proj-hide-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isHidden = this.textContent.includes('👁️‍🗨️');
+        if (isHidden) {
+          this.textContent = '👁️';
+          this.title = 'Sembunyikan dari Portfolio';
+        } else {
+          this.textContent = '👁️‍🗨️';
+          this.title = 'Tampilkan di Portfolio';
+        }
+      });
+    });
+
     // Add Project Button
     document.getElementById('add-project-btn').addEventListener('click', () => {
       currentData.projects.unshift({
@@ -1373,6 +1390,7 @@
     document.getElementById('projects-form').addEventListener('submit', function (e) {
       e.preventDefault();
       const cardNodes = listContainer.querySelectorAll('.admin-card-item');
+      const hideBtns = listContainer.querySelectorAll('.proj-hide-btn');
       const updatedProjects = [];
 
       cardNodes.forEach((card, i) => {
@@ -1390,12 +1408,14 @@
           techStack: techStack,
           linkUrl: card.querySelector('.proj-link-url').value,
           linkText: orig.linkText || 'Visit App ↗',
-          image: card.querySelector('.proj-img-url').value
+          image: card.querySelector('.proj-img-url').value,
+          isHidden: hideBtns[i] ? hideBtns[i].textContent.includes('👁️‍🗨️') : false
         });
       });
 
       currentData.projects = updatedProjects;
       saveSiteData(currentData);
+      showToast('Semua Proyek berhasil disimpan!', 'success');
     });
   }
 
@@ -1454,6 +1474,7 @@
           <div class="admin-card-actions">
             ${i > 0 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon cert-up-btn" data-index="${i}">⬆️</button>` : ''}
             ${i < certs.length - 1 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon cert-down-btn" data-index="${i}">⬇️</button>` : ''}
+            <button type="button" class="admin-btn admin-btn-secondary admin-btn-icon cert-hide-btn" data-index="${i}" title="${c.isHidden ? 'Tampilkan' : 'Sembunyikan'}">${c.isHidden ? '👁️‍🗨️' : '👁️'}</button>
             <button type="button" class="admin-btn admin-btn-danger admin-btn-icon cert-del-btn" data-index="${i}">🗑️</button>
           </div>
         </div>
@@ -1539,8 +1560,11 @@
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
-        currentData.certifications.splice(idx, 1);
-        renderTabCertifications(container);
+        showConfirmModal('Yakin ingin menghapus sertifikasi ini?', () => {
+          currentData.certifications.splice(idx, 1);
+          renderTabCertifications(container);
+          showToast('Sertifikasi berhasil dihapus', 'danger');
+        });
       });
     });
 
@@ -1570,6 +1594,20 @@
       });
     });
 
+    listContainer.querySelectorAll('.cert-hide-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isHidden = this.textContent.includes('👁️‍🗨️');
+        if (isHidden) {
+          this.textContent = '👁️';
+          this.title = 'Sembunyikan';
+        } else {
+          this.textContent = '👁️‍🗨️';
+          this.title = 'Tampilkan';
+        }
+      });
+    });
+
     document.getElementById('add-cert-btn').addEventListener('click', () => {
       currentData.certifications.unshift({
         id: 'cert_' + Date.now(),
@@ -1587,6 +1625,8 @@
       const cardNodes = listContainer.querySelectorAll('.admin-card-item');
       const updated = [];
 
+      const hideBtns = listContainer.querySelectorAll('.cert-hide-btn');
+
       cardNodes.forEach((card, i) => {
         const orig = currentData.certifications[i] || {};
         updated.push({
@@ -1595,12 +1635,14 @@
           title: card.querySelector('.cert-title').value,
           description: card.querySelector('.cert-desc').value,
           linkUrl: card.querySelector('.cert-link').value,
-          linkText: card.querySelector('.cert-link-text').value
+          linkText: card.querySelector('.cert-link-text').value,
+          isHidden: hideBtns[i] ? hideBtns[i].textContent.includes('👁️‍🗨️') : false
         });
       });
 
       currentData.certifications = updated;
       saveSiteData(currentData);
+      showToast('Sertifikasi berhasil disimpan!', 'success');
     });
   }
 
@@ -1615,6 +1657,9 @@
             <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">🌐 #${i + 1} - ${escapeHtml(s.platform)}</span>
           </div>
           <div class="admin-card-actions">
+            ${i > 0 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon soc-up-btn" data-index="${i}">⬆️</button>` : ''}
+            ${i < socials.length - 1 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon soc-down-btn" data-index="${i}">⬇️</button>` : ''}
+            <button type="button" class="admin-btn admin-btn-secondary admin-btn-icon soc-hide-btn" data-index="${i}" title="${s.isHidden ? 'Tampilkan' : 'Sembunyikan'}">${s.isHidden ? '👁️‍🗨️' : '👁️'}</button>
             <button type="button" class="admin-btn admin-btn-danger admin-btn-icon soc-del-btn" data-index="${i}">🗑️</button>
           </div>
         </div>
@@ -1704,8 +1749,51 @@
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         const idx = parseInt(this.dataset.index, 10);
-        currentData.socials.splice(idx, 1);
-        renderTabSocials(container);
+        showConfirmModal('Yakin ingin menghapus tautan sosial ini?', () => {
+          currentData.socials.splice(idx, 1);
+          renderTabSocials(container);
+          showToast('Tautan sosial berhasil dihapus', 'danger');
+        });
+      });
+    });
+
+    listContainer.querySelectorAll('.soc-up-btn').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const idx = parseInt(this.dataset.index, 10);
+        if (idx > 0) {
+          const temp = currentData.socials[idx];
+          currentData.socials[idx] = currentData.socials[idx - 1];
+          currentData.socials[idx - 1] = temp;
+          renderTabSocials(container);
+        }
+      });
+    });
+
+    listContainer.querySelectorAll('.soc-down-btn').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const idx = parseInt(this.dataset.index, 10);
+        if (idx < currentData.socials.length - 1) {
+          const temp = currentData.socials[idx];
+          currentData.socials[idx] = currentData.socials[idx + 1];
+          currentData.socials[idx + 1] = temp;
+          renderTabSocials(container);
+        }
+      });
+    });
+
+    listContainer.querySelectorAll('.soc-hide-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isHidden = this.textContent.includes('👁️‍🗨️');
+        if (isHidden) {
+          this.textContent = '👁️';
+          this.title = 'Sembunyikan';
+        } else {
+          this.textContent = '👁️‍🗨️';
+          this.title = 'Tampilkan';
+        }
       });
     });
 
@@ -1724,6 +1812,7 @@
       e.preventDefault();
       const cardNodes = listContainer.querySelectorAll('.admin-card-item');
       const updated = [];
+      const hideBtns = listContainer.querySelectorAll('.soc-hide-btn');
 
       cardNodes.forEach((card, i) => {
         const orig = currentData.socials[i] || {};
@@ -1732,12 +1821,14 @@
           platform: card.querySelector('.soc-platform').value,
           handle: card.querySelector('.soc-handle').value,
           url: card.querySelector('.soc-url').value,
-          iconType: card.querySelector('.soc-icon').value
+          iconType: card.querySelector('.soc-icon').value,
+          isHidden: hideBtns[i] ? hideBtns[i].textContent.includes('👁️‍🗨️') : false
         });
       });
 
       currentData.socials = updated;
       saveSiteData(currentData);
+      showToast('Kontak & Sosial berhasil disimpan!', 'success');
     });
   }
 
@@ -1809,6 +1900,7 @@
       currentData.footer.text = document.getElementById('theme-footer-text').value;
 
       saveSiteData(currentData);
+      showToast('Pengaturan Tema berhasil disimpan!', 'success');
     });
   }
   // 7.5 INBOX TAB
@@ -2029,6 +2121,7 @@
           <div class="admin-card-actions">
             ${i > 0 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-item-up-btn" data-index="${i}">⬆️</button>` : ''}
             ${i < items.length - 1 ? `<button type="button" class="admin-btn admin-btn-secondary admin-btn-icon move-item-down-btn" data-index="${i}">⬇️</button>` : ''}
+            <button type="button" class="admin-btn admin-btn-secondary admin-btn-icon item-hide-btn" data-index="${i}" title="${item.isHidden ? 'Tampilkan' : 'Sembunyikan'}">${item.isHidden ? '👁️‍🗨️' : '👁️'}</button>
             <button type="button" class="admin-btn admin-btn-danger admin-btn-icon del-item-btn" data-index="${i}">🗑️</button>
           </div>
         </div>
@@ -2112,6 +2205,7 @@
           items.splice(idx, 1);
           opts.onSave(items);
           renderGenericListEditor(container, opts);
+          showToast('Data berhasil dihapus', 'danger');
         });
       });
     });
@@ -2144,6 +2238,20 @@
       });
     });
 
+    listContainer.querySelectorAll('.item-hide-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isHidden = this.textContent.includes('👁️‍🗨️');
+        if (isHidden) {
+          this.textContent = '👁️';
+          this.title = 'Sembunyikan';
+        } else {
+          this.textContent = '👁️‍🗨️';
+          this.title = 'Tampilkan';
+        }
+      });
+    });
+
     document.getElementById('add-list-item-btn').addEventListener('click', () => {
       items.unshift({ ...opts.newItemTemplate, id: 'item_' + Date.now() });
       opts.onSave(items);
@@ -2154,6 +2262,7 @@
       e.preventDefault();
       const cardNodes = listContainer.querySelectorAll('.admin-card-item');
       const updated = [];
+      const hideBtns = listContainer.querySelectorAll('.item-hide-btn');
 
       cardNodes.forEach((card, i) => {
         const orig = items[i] || {};
@@ -2162,11 +2271,13 @@
           meta: card.querySelector('.item-meta').value,
           title: card.querySelector('.item-title').value,
           company: card.querySelector('.item-company').value,
-          description: card.querySelector('.item-desc').value
+          description: card.querySelector('.item-desc').value,
+          isHidden: hideBtns[i] ? hideBtns[i].textContent.includes('👁️‍🗨️') : false
         });
       });
 
       opts.onSave(updated);
+      showToast('Data list berhasil disimpan!', 'success');
     });
   }
 

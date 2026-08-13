@@ -823,6 +823,11 @@
         }
       });
 
+      // Catch edge case: scrolled to the absolute bottom of the document
+      if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight - 50) {
+        currentSectionId = sections[sections.length - 1].getAttribute('id');
+      }
+
       if (currentSectionId) {
         navAnchors.forEach(a => {
           if (a.getAttribute('href') === `#${currentSectionId}`) {
