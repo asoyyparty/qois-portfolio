@@ -596,6 +596,14 @@
         ${filterBtnsHtml}
       </div>
 
+      <div class="semantic-search-container" style="margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="semantic-search-input" class="form-input" style="flex: 1;" placeholder="Cari cerdas (misal: aplikasi kasir berbasis web, react native)...">
+          <button type="button" id="semantic-search-btn" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; min-width: 100px;">Cari ✨</button>
+        </div>
+        <div id="semantic-search-status" style="text-align: center; margin-top: 12px; font-size: 14px; color: var(--color-ink-muted); min-height: 20px;"></div>
+      </div>
+
       <div class="grid-2">
         ${projectCardsHtml}
       </div>
@@ -615,6 +623,12 @@
         filterButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const filter = btn.dataset.filter;
+        
+        // Reset search input if active
+        const searchInput = document.getElementById('semantic-search-input');
+        const searchStatus = document.getElementById('semantic-search-status');
+        if (searchInput) searchInput.value = '';
+        if (searchStatus) searchStatus.textContent = '';
 
         projectCards.forEach(card => {
           const isMatch = filter === 'all' || card.dataset.category === filter;
@@ -632,6 +646,110 @@
         });
       });
     });
+
+    const searchBtn = document.getElementById('semantic-search-btn');
+    const searchInput = document.getElementById('semantic-search-input');
+    const searchStatus = document.getElementById('semantic-search-status');
+
+    if (searchBtn && searchInput) {
+      searchBtn.addEventListener('click', async () => {
+        const query = searchInput.value.trim();
+        if (!query) {
+          const activeFilterBtn = document.querySelector('.filter-btn[data-filter="all"]');
+          if (activeFilterBtn) activeFilterBtn.click();
+          if (searchStatus) searchStatus.textContent = '';
+          return;
+        }
+
+        const apiKey = currentData.settings?.geminiApiKey || DEFAULT_DATA.settings.geminiApiKey;
+        if (!apiKey) {
+          searchStatus.innerHTML = "<span style='color: var(--color-danger);'>Mohon maaf, API Key AI belum dikonfigurasi.</span>";
+          return;
+        }
+
+        searchBtn.disabled = true;
+        searchBtn.innerHTML = 'Mencari... <span class="typing-indicator" style="margin:0; padding:0; height:auto;"><span>.</span><span>.</span><span>.</span></span>';
+        searchStatus.textContent = "AI sedang membaca dan menganalisis seluruh proyek...";
+        
+        // Deactivate filter buttons visually to show we are in AI search mode
+        filterButtons.forEach(b => b.classList.remove('active'));
+        
+        const projectsList = (currentData.projects || []).filter(p => !p.isHidden).map(p => ({
+          title: p.title,
+          description: p.description,
+          techStack: p.techStack
+        }));
+
+        const sysPrompt = `Anda adalah mesin pencari semantik cerdas (Semantic Search AI) untuk portofolio Qois.
+Pengguna mencari: "${query}"
+
+Daftar proyek yang tersedia:
+${JSON.stringify(projectsList)}
+
+Tugas Anda:
+Pilih proyek mana saja yang RELEVAN dengan niat/kata kunci pencarian pengguna.
+Kembalikan respons Anda HANYA berupa array JSON berisi judul proyek yang relevan secara persis (contoh: ["Judul Proyek 1", "Judul Proyek 2"]). 
+Jika tidak ada proyek yang cocok sama sekali, kembalikan array kosong [].
+TIDAK BOLEH ADA TEKS TAMBAHAN SELAIN JSON ARRAY. JANGAN GUNAKAN FORMAT MARKDOWN (jangan gunakan \`\`\`json). KEMBALIKAN RAW JSON SAJA.`;
+
+        try {
+           const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: sysPrompt }] }]
+              })
+            });
+
+            const data = await response.json();
+            if (data.candidates && data.candidates[0].content.parts[0].text) {
+               const resultText = data.candidates[0].content.parts[0].text.trim();
+               // Extract JSON array robustly
+               const match = resultText.match(/\[.*\]/s);
+               if (match) {
+                 const matchedTitles = JSON.parse(match[0]);
+                 
+                 let matchCount = 0;
+                 projectCards.forEach(card => {
+                    const cardTitle = card.querySelector('.card-title').textContent.trim();
+                    if (matchedTitles.includes(cardTitle)) {
+                      card.style.display = 'flex';
+                      requestAnimationFrame(() => card.classList.remove('is-hidden'));
+                      matchCount++;
+                    } else {
+                      card.classList.add('is-hidden');
+                      setTimeout(() => {
+                        if (card.classList.contains('is-hidden')) card.style.display = 'none';
+                      }, 300);
+                    }
+                 });
+                 
+                 if (matchCount > 0) {
+                   searchStatus.innerHTML = `<span style="color: var(--color-primary);">✨ AI menemukan ${matchCount} proyek yang relevan.</span>`;
+                 } else {
+                   searchStatus.innerHTML = "<em>Tidak ditemukan proyek yang cocok dengan pencarian Anda.</em>";
+                 }
+               } else {
+                 searchStatus.innerHTML = "<em>Gagal memproses hasil dari AI.</em>";
+               }
+            }
+        } catch (e) {
+            console.error(e);
+            searchStatus.innerHTML = "<span style='color: var(--color-danger);'>Terjadi kesalahan jaringan atau AI saat mencari.</span>";
+        } finally {
+            searchBtn.disabled = false;
+            searchBtn.innerHTML = 'Cari ✨';
+        }
+      });
+      
+      // Allow pressing Enter in search input
+      searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          searchBtn.click();
+        }
+      });
+    }
   }
 
   function renderExperience() {
