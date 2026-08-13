@@ -1092,9 +1092,9 @@
       currentData.hero.profileImage = document.getElementById('hero-profile-img-url').value;
 
       stats.forEach((st, i) => {
-        st.num = document.getElementById(`hero - stat - num - ${ i } `).value;
-        st.label = document.getElementById(`hero - stat - label - ${ i } `).value;
-        st.highlight = document.getElementById(`hero - stat - high - ${ i } `).checked;
+        st.num = document.getElementById(`hero-stat-num-${i}`).value;
+        st.label = document.getElementById(`hero-stat-label-${i}`).value;
+        st.highlight = document.getElementById(`hero-stat-high-${i}`).checked;
       });
 
       saveSiteData(currentData);
