@@ -697,7 +697,7 @@
           <form id="smart-contact-form" class="smart-contact-form">
             <div class="form-group">
               <label for="contact-name">Email Anda</label>
-              <input type="text" id="contact-name" class="form-input" placeholder="Masukkan email..." required>
+              <input type="email" id="contact-name" class="form-input" placeholder="Masukkan email..." required>
             </div>
             <div class="form-group">
               <label for="contact-msg">Pesan / Tawaran</label>
