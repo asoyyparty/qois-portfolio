@@ -711,6 +711,128 @@
     `;
   }
 
+  function renderAIRecruiter() {
+    const section = document.getElementById('ai-recruiter');
+    if (!section) return;
+
+    section.innerHTML = `
+      <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 40px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        <div style="display: flex; flex-wrap: wrap; gap: 40px;">
+          <div style="flex: 1; min-width: 300px;">
+            <h2 class="display-lg" style="margin-bottom: 16px;">AI Cover Letter Generator 🤖</h2>
+            <p style="color: var(--color-ink-muted); margin-bottom: 24px;">Khusus untuk Rekruter: Tempelkan (paste) Job Description lowongan Anda di sini. AI akan menganalisis kecocokan profil saya dan langsung membuatkan Cover Letter khusus untuk posisi tersebut.</p>
+            
+            <form id="ai-recruiter-form" class="smart-contact-form" style="display: block;">
+              <div class="form-group">
+                <textarea id="recruiter-jd" class="form-textarea" placeholder="Dibutuhkan spesialis IT dengan pengalaman infrastruktur..." required style="min-height: 150px; font-size: 14px;"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" id="recruiter-submit-btn" style="width: 100%; display: flex; justify-content: center; gap: 8px;">Cocokkan dengan Skill Qois ✨</button>
+            </form>
+          </div>
+          
+          <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column;">
+            <div id="ai-recruiter-response-container" class="ai-response-container" style="display: none; flex: 1; margin-top: 0; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.03);">
+              <div class="ai-bubble" style="max-width: 100%; width: 100%;">
+                <div class="ai-avatar">🤖</div>
+                <div class="ai-message" style="width: 100%;">
+                  <span id="ai-recruiter-response-text" style="white-space: pre-wrap; display: block; line-height: 1.6; font-size: 14.5px;"></span>
+                  <span id="ai-recruiter-typing-indicator" class="typing-indicator"><span>.</span><span>.</span><span>.</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const form = document.getElementById('ai-recruiter-form');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const apiKey = currentData.settings?.geminiApiKey || DEFAULT_DATA.settings.geminiApiKey;
+        const jdText = document.getElementById('recruiter-jd').value;
+        const respContainer = document.getElementById('ai-recruiter-response-container');
+        const respText = document.getElementById('ai-recruiter-response-text');
+        const typingIndicator = document.getElementById('ai-recruiter-typing-indicator');
+        const submitBtn = document.getElementById('recruiter-submit-btn');
+
+        if (!apiKey) {
+          respContainer.style.display = 'flex';
+          typingIndicator.style.display = 'none';
+          respText.innerHTML = "<em>Mohon maaf, API Key AI belum dikonfigurasi.</em>";
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Menganalisis Kecocokan... <span class="typing-indicator" style="margin:0; padding:0; height:auto;"><span>.</span><span>.</span><span>.</span></span>';
+        respContainer.style.display = 'flex';
+        respText.innerHTML = '';
+        typingIndicator.style.display = 'inline-block';
+
+        const sysPrompt = \`Anda adalah asisten AI yang bertindak sebagai representasi profesional dari Qois Abdul Qudus.
+Tugas Anda: Membaca Job Description (JD) berikut, membandingkannya dengan profil Qois, lalu menuliskan **Cover Letter** (Surat Lamaran) yang sangat persuasif, profesional, dan menyoroti secara logis mengapa Qois sangat cocok dengan posisi tersebut berdasarkan pengalaman nyatanya.
+
+Profil Singkat Qois:
+\${JSON.stringify(currentData.hero, null, 2)}
+Pengalaman:
+\${JSON.stringify(currentData.experience, null, 2)}
+Proyek:
+\${JSON.stringify(currentData.projects, null, 2)}
+Sertifikasi:
+\${JSON.stringify(currentData.certifications, null, 2)}
+
+Job Description dari Rekruter:
+\${jdText}
+
+Instruksi Tambahan:
+- Tuliskan dalam format Cover Letter langsung (Dear Hiring Manager, dst).
+- Gunakan bahasa Indonesia baku yang elegan, sopan, namun percaya diri (bukan terkesan mengemis).
+- Buat maksimal 3-4 paragraf yang padat dan jelas.
+- Secara eksplisit sebutkan kecocokan antara syarat di JD dengan pengalaman/proyek Qois (jangan mengarang skill yang tidak ada di profil Qois).
+- Jika ada skill di JD yang tidak dimiliki Qois, tekankan kemampuan Qois untuk belajar cepat beradaptasi.\`;
+
+        try {
+          const response = await fetch(\`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=\${apiKey}\`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: sysPrompt }] }]
+            })
+          });
+
+          const data = await response.json();
+          typingIndicator.style.display = 'none';
+
+          if (data.candidates && data.candidates[0].content.parts[0].text) {
+            let replyText = data.candidates[0].content.parts[0].text;
+            let i = 0;
+            respText.innerHTML = '';
+            
+            // Fast typewriter effect
+            const typeWriter = setInterval(() => {
+              if (i < replyText.length) {
+                const char = replyText.charAt(i);
+                respText.innerHTML += char === '\\n' ? '<br>' : char;
+                i++;
+              } else {
+                clearInterval(typeWriter);
+              }
+            }, 10); // Very fast typing
+          } else {
+             respText.innerHTML = "<em>Gagal menganalisis. AI memberikan respons kosong.</em>";
+          }
+        } catch (err) {
+          typingIndicator.style.display = 'none';
+          respText.innerHTML = '<em>Terjadi kesalahan jaringan saat menghubungi AI. Silakan coba lagi.</em>';
+          console.error(err);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = 'Cocokkan dengan Skill Qois ✨';
+        }
+      });
+    }
+  }
+
   function renderSocials() {
     const contactSection = document.getElementById('contact');
     if (!contactSection || !currentData.socials) return;
@@ -878,6 +1000,7 @@
     renderExperience();
     renderEducation();
     renderCertifications();
+    renderAIRecruiter();
     renderSocials();
     renderFooter();
   }
